@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예윤미 | Portfolio 🚀</title>
+</head>
+<body bgcolor="#f7fafc">
+
+    <!-- 1. 메인 컨테이너 (전체 폭 중앙 정렬 및 배경 카드 느낌) -->
+    <table border="0" align="center" width="850" cellpadding="0" cellspacing="0">
+        <tr>
+            <td>
+
+                <!-- [HEADER] 히어로 블루 박스 헤더 -->
+                <table border="0" width="100%" cellpadding="30" cellspacing="0" bgcolor="#1a365d">
+                    <tr>
+                        <!-- 프로필 사진 -->
+                        <td width="160" align="center" valign="middle">
+                            <img src="https://scontent-nrt1-2.cdninstagram.com/v/t51.75761-15/472309845_18309896293201298_4693046388988482361_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ig_cache_key=MzUzNzk5NDQ4Mzg2MDI3MTYxNQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=unl4NBC1AxUQ7kNvwHmuyYV&_nc_oc=Adrnq88gOvCU0CgQoe1wZ_bl0evbhSRNKqwdH4yJhBmlYlVOWU4ooyps7FTciPoCdko&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-nrt1-2.cdninstagram.com&_nc_gid=YEQs5YrhYiVdhnMW_Iyv6Q&_nc_ss=7a22e&oh=00_AQBVXc_Uqm2Ri-usVKOUsN7IERtZL54G73WgPQ6ZPga6bA&oe=6A678AD1" alt="예윤미 프로필 사진" width="140" height="140" style="border-radius: 50%;">
+                        </td>
+                        <!-- 헤더 정보 -->
+                        <td valign="middle">
+                            <font color="#ffffff">
+                                <h1 style="margin: 0; font-size: 28px;">예윤미 <small><font color="#cbd5e0" size="3">(Ye Yun-mi)</font></small></h1>
+                                <p style="margin: 10px 0 15px 0;">
+                                    <b>💡 "미디어의 시선으로 스토리를 읽고, 코드의 구조로 가치를 전달하는 개발자"</b></span>
+                                </p>
+                                <font color="#e2e8f0" size="2">
+                                    📧 <b>Email:</b> <a href="mailto:yym6763a@gmail.com"><font color="#63b3ed">yym6763a@gmail.com</font></a> &nbsp;|&nbsp; 
+                                    🐙 <b>GitHub:</b> <a href="https://github.com/yym6763a-cpu" target="_blank"><font color="#63b3ed">github.com/yym6763a-cpu</font></a>
+                                </font>
+                            </font>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- [NAVIGATION] 블루 포인트 서브 바 -->
+                <table border="0" width="100%" cellpadding="12" cellspacing="0" bgcolor="#2b6cb0">
+                    <tr>
+                        <td align="center">
+                            <font color="#ffffff">
+                                <a href="#about"><font color="#ffffff"><b>🙋‍♀️ [About]</b></font></a> &nbsp;|&nbsp;
+                                <a href="#education"><font color="#ffffff"><b>🎓 [Education]</b></font></a> &nbsp;|&nbsp;
+                                <a href="#skills"><font color="#ffffff"><b>🛠️ [Tech]</b></font></a> &nbsp;|&nbsp;
+                           
+                                <a href="#media"><font color="#ffffff"><b>🎬 [Media]</b></font></a> &nbsp;|&nbsp;
+                                <a href="#experience"><font color="#ffffff"><b>📜 [Experience]</b></font></a>
+                            </font>
+                        </td>
+                    </tr>
+                </table>
+
+                <br>
+
+                <!-- [MAIN CONTENT] 흰색 카드 영역 -->
+                <table border="0" width="100%" cellpadding="25" cellspacing="0" bgcolor="#ffffff">
+                    <tr>
+                        <td>
+
+                            <!-- 1. ABOUT ME (자기소개 카드) -->
+                            <section id="about">
+                                <table border="0" width="100%" cellpadding="8" cellspacing="0" style="border-left: 5px solid #2b6cb0; background-color: #ebf8ff;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="margin: 0;"><font color="#1a365d">🙋‍♀️ About Me (자기소개)</font></h2>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <p style="line-height: 1.7;">
+                                    미디어커뮤니케이션을 전공하며 <span style="background-color: #ebf8ff; border-bottom: 2px solid #3182ce;">트렌드 기획 기사 작성 및 AI 미디어 콘텐츠 제작</span> 경험을 쌓아왔습니다.<br>
+                                    스토리텔링 감각을 바탕으로 "사용자가 직접 경험하는 인터랙티브 웹 플랫폼"을 만드는 개발자로 성장하고 있습니다.
+                                </p>
+                                <ul>
+                                    <li style="margin-bottom: 6px;"><b>🎯 핵심 가치:</b> 코드 한 줄을 작성하더라도 <span style="background-color: #ebf8ff; border-bottom: 2px solid #3182ce;">"왜 이 구조가 사용자에게 최선인가?"</span>를 고민합니다.</li>
+                                    <li style="margin-bottom: 6px;"><b>🔍 문제 해결:</b> 발생한 오류의 원인을 파악할 때까지 파고들어 기록하고 해결합니다.</li>
+                                    <li><b>🤝 실행력 & 마감 준수:</b> 기획 기사와 콘텐츠 제작 마감을 완수해 온 경험으로, 프로젝트 일정을 엄수합니다.</li>
+                                </ul>
+                            </section>
+
+                            <br><br>
+
+                            <!-- ★ 2. EDUCATION & MAJOR (학력 및 전공 - 신규 추가) ★ -->
+                            <section id="education">
+                                <table border="0" width="100%" cellpadding="8" cellspacing="0" style="border-left: 5px solid #2b6cb0; background-color: #ebf8ff;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="margin: 0;"><font color="#1a365d">🎓 Education & Major (학력 및 전공)</font></h2>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <table border="1" cellpadding="10" cellspacing="0" width="100%" bordercolor="#cbd5e0" style="border-collapse: collapse;">
+                                    <thead>
+                                        <tr bgcolor="#ebf8ff">
+                                            <th width="30%" align="left"><font color="#2b6cb0">전공 구분</font></th>
+                                            <th width="70%" align="left"><font color="#2b6cb0">상세내역 및 세부 전공</font></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><b>🏫 주전공</b></td>
+                                            <td>
+                                                <b>미디어커뮤니케이션학과</b><br>
+                                                <font color="#4a5568" size="2">
+                                                    • 콘텐츠 기획, 취재 및 기획 기사 작성<br>
+                                                    • 미디어 트렌드 분석 및 글로벌 문화 분석
+                                                </font>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+                            <br><br>
+
+                            <!-- 3. TECH STACK (기술 스택 카드) -->
+                            <section id="skills">
+                                <table border="0" width="100%" cellpadding="8" cellspacing="0" style="border-left: 5px solid #2b6cb0; background-color: #ebf8ff;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="margin: 0;"><font color="#1a365d">🛠️ Tech Stack (기술 스택)</font></h2>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <table border="1" cellpadding="10" cellspacing="0" width="100%" bordercolor="#cbd5e0" style="border-collapse: collapse;">
+                                    <thead>
+                                        <tr bgcolor="#ebf8ff">
+                                            <th width="30%" align="left"><font color="#2b6cb0">구분</font></th>
+                                            <th width="70%" align="left"><font color="#2b6cb0">사용 기술 및 언어</font></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><b>🎨 Frontend</b></td>
+                                            <td>HTML5</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>⚙️ Tools & VCS</b></td>
+                                            <td> GitHub, VS Code</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+                            <br><br>
+
+                           
+
+                            <br><br>
+
+                            <!-- 5. MEDIA VIDEO (대표 영상 카드) -->
+                            <section id="media">
+                                <table border="0" width="100%" cellpadding="8" cellspacing="0" style="border-left: 5px solid #2b6cb0; background-color: #ebf8ff;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="margin: 0;"><font color="#1a365d">🎬 Featured Video (대표 영상)</font></h2>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br>
+                                
+
+                                <h3>▶️ 1. 영상 </h3>
+                                <video src="https://www.w3schools.com/html/mov_bbb.mp4" controls width="100%">
+                                    사용 중인 브라우저가 비디오 태그를 지원하지 않습니다.
+                                </video>
+                              
+
+                                <br>
+
+                                
+                                </iframe>
+                            </section>
+
+                            <br><br>
+
+                            <!-- 6. EXPERIENCE (경험 및 활동 카드) -->
+                            <section id="experience">
+                                <table border="0" width="100%" cellpadding="8" cellspacing="0" style="border-left: 5px solid #2b6cb0; background-color: #ebf8ff;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="margin: 0;"><font color="#1a365d">📜 Experience & Activity (경험 및 활동)</font></h2>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <table border="1" cellpadding="10" cellspacing="0" width="100%" bordercolor="#cbd5e0" style="border-collapse: collapse;">
+                                    <thead>
+                                        <tr bgcolor="#ebf8ff">
+                                            <th width="25%" align="center"><font color="#2b6cb0">기간</font></th>
+                                            <th width="35%" align="left"><font color="#2b6cb0">활동 / 교육명</font></th>
+                                            <th width="45%" align="left"><font color="#2b6cb0">상세 내용</font></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td align="center">2026.07 ~ 2026.12</td>
+                                            <td><b>K-move 일본 IT & AI 과정</b></td>
+                                            <td>HTML, CSS, JS 기본기 습득 및 포트폴리오 완수 및 일본어 능력 향상</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- [FOOTER] 하단 푸터 바 -->
+                <table border="0" width="100%" cellpadding="15" cellspacing="0" bgcolor="#1a365d">
+                    <tr>
+                        <td align="center">
+                            <font color="#a0aec0" size="2">
+                                &copy; 2026 Ye Yun-mi. All rights reserved. 🎈
+                            </font>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
