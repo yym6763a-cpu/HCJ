@@ -80,10 +80,6 @@ Google Apps Script(GAS)와 구글 스프레드시트를 연동하여 제작한 *
 
 
 
-
-
-
-
 # 🏝️ 무인도 생존 성향 테스트
 
 Google Apps Script(GAS)와 Google Sheets를 연동하여 제작한 스낵형 인터랙티브 심리테스트 웹앱입니다.
