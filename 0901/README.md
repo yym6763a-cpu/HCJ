@@ -70,7 +70,7 @@ Google Apps Script(GAS)와 Google Sheets API를 연동하여 제작한 **인터�
 │
 └── README.md               # 프로젝트 종합 안내 문서
 
-
+-
 
 # 🎓 교육 만족도 설문조사 웹앱
 
@@ -152,7 +152,7 @@ Google Apps Script(GAS)와 구글 스프레드시트를 연동하여 제작한 *
 ├── Code.gs           # 스프레드시트 연동, 데이터 변환 및 저장 백엔드 로직
 └── README.md         # 프로젝트 문서
 
-
+-
 
 # 🏝️ 무인도 생존 성향 테스트
 
