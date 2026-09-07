@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>釜山 案内 | BUSAN GUIDE</title>
+<style>
+  :root{
+    --white:#ffffff;
+    --pink-bg:#f7d6e7;
+    --pink:#f0a8cf;
+    --navy:#5b6f9e;
+    --ink:#241f2b;
+    --sub:#6b6a72;
+    --card:#ffffff;
+    --border:#e9e5ea;
+    --line1:#f0a233;
+    --line2:#4f8f3d;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--pink-bg);
+    color:var(--ink);
+    font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;
+    line-height:1.7;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:20px;
+    padding:18px 30px 0;
+    max-width:1100px;
+    margin:0 auto;
+    font-size:11px;
+    color:var(--sub);
+    letter-spacing:.05em;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.06em;
+    color:var(--navy);
+    margin-right:auto;
+  }
+  .logo svg{ width:18px;height:18px; }
+
+  /* ---------- HERO ---------- */
+  .hero-wrap{
+    padding:14px 20px 40px;
+  }
+  .hero{
+    position:relative;
+    max-width:1100px;
+    margin:0 auto;
+    background:var(--white);
+    border:1px solid rgba(91,111,158,.15);
+    border-radius:28px;
+    padding:26px 30px 30px;
+  }
+  .badge{
+    position:absolute;
+    top:22px;
+    left:22px;
+    background:var(--navy);
+    color:var(--white);
+    font-size:10px;
+    font-weight:700;
+    padding:5px 10px;
+    border-radius:4px;
+    transform:rotate(-3deg);
+    z-index:5;
+  }
+  .hero-title{
+    display:flex;
+    gap:20px;
+    align-items:stretch;
+    margin-bottom:18px;
+  }
+  .vtitle{
+    writing-mode:vertical-rl;
+    font-size:21px;
+    font-weight:700;
+    letter-spacing:.16em;
+    color:var(--ink);
+    padding-top:30px;
+    flex:none;
+  }
+  .vtitle .en{
+    display:block;
+    font-size:10.5px;
+    font-weight:400;
+    color:var(--sub);
+    letter-spacing:.1em;
+    margin-top:12px;
+  }
+  .hero-photo{
+    position:relative;
+    flex:1;
+    min-width:0;
+    border-radius:18px;
+    overflow:hidden;
+    aspect-ratio:16/8;
+  }
+  .hero-photo img{
+    width:100%;height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  /* ---------- COURSE PREVIEW ---------- */
+  .pickup{
+    background:var(--white);
+    padding:60px 20px 90px;
+    position:relative;
+  }
+  .section-header{
+    margin:0 0 30px 6px;
+    transform:rotate(-3deg);
+    display:inline-block;
+  }
+  .pickup-title{
+    font-family:Georgia,"Times New Roman",serif;
+    font-style:italic;
+    font-size:42px;
+    color:var(--navy);
+    line-height:1;
+  }
+  .pickup-subtitle{
+    display:block;
+    font-size:13px;
+    font-style:italic; /* 서브 타이틀에도 기울임꼴 적용 */
+    color:var(--sub);
+    margin-top:8px;
+    font-weight:500;
+    letter-spacing:0.05em;
+  }
+  .pickup-grid{
+    max-width:1100px;
+    margin:0 auto;
+    position:relative;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px 40px;
+  }
+  .pickup-grid::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:-10px;
+    bottom:-10px;
+    width:2px;
+    background:repeating-linear-gradient(var(--navy),var(--navy) 6px,transparent 6px,transparent 12px);
+    opacity:.5;
+  }
+  @media(max-width:700px){ .pickup-grid{grid-template-columns:1fr;} .pickup-grid::before{display:none;} }
+
+  .pcard{
+    background:var(--card);
+    border:1px solid rgba(240,168,207,.5);
+    border-radius:12px;
+    padding:14px;
+    display:flex;
+    gap:12px;
+    box-shadow:0 6px 0 rgba(0,0,0,.05);
+  }
+  .pcard .ph{
+    width:78px;height:78px;
+    border-radius:8px;
+    flex:none;
+    object-fit:cover;
+    background:#ddd;
+  }
+  .pcard b{
+    font-size:13.5px;
+    display:block;
+    margin-bottom:4px;
+  }
+  .pcard span{
+    font-size:12px;
+    color:var(--sub);
+  }
+  .pline{
+    font-size:10px;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:20px;
+    color:#fff;
+    display:inline-block;
+    margin-bottom:6px;
+  }
+  .pline.l1{background:var(--line1);}
+  .pline.l2{background:var(--line2);}
+
+  .checkmore{
+    position:absolute;
+    right:28px;
+    bottom:-30px;
+    width:76px;height:76px;
+    border-radius:50%;
+    background:var(--navy);
+    color:#fff;
+    font-size:10.5px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    line-height:1.3;
+    cursor:pointer;
+  }
+
+  /* ---------- MAP SECTION ---------- */
+  .mapsec{
+    max-width:820px;
+    margin:0 auto;
+    padding:80px 20px 60px;
+  }
+  .mapsec > .kicker{
+    font-size:12px;
+    letter-spacing:.12em;
+    color:var(--sub);
+    text-align:center;
+    margin-bottom:6px;
+  }
+  .mapsec > h2{
+    text-align:center;
+    font-size:24px;
+    margin:0 0 46px;
+  }
+
+  footer{
+    background:var(--navy);
+    color:#f2f4f9;
+    padding:34px 20px;
+    text-align:center;
+    font-size:11.5px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <svg viewBox="0 0 40 40" fill="none"><path d="M4 6h20l12 14-12 14H4V6z" fill="var(--navy)"/></svg>
+    BUSAN GUIDE
+  </div>
+  <a href="#course-preview">COURSE PREVIEW</a>
+  <a href="#map">地下鉄MAP</a>
+</nav>
+
+<div class="hero-wrap">
+  <div class="hero">
+    <span class="badge">GUIDE</span>
+    <div class="hero-title">
+      <div class="vtitle">釜山案内<span class="en">BUSAN<br>TRAVEL</span></div>
+      <div class="hero-photo">
+        <img src="https://images.unsplash.com/photo-1546874177-9e664107314e?w=1200&q=80" alt="Busan">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ---------- COURSE PREVIEW ---------- -->
+<section class="pickup" id="course-preview">
+  <div class="section-header">
+    <div class="pickup-title">Course Preview</div>
+    <span class="pickup-subtitle">~ 路線図で巡る5つのテーマ旅 ~</span>
+  </div>
+
+  <div class="pickup-grid">
+
+    <!-- 코스 1: 레트로 골목 산책 (부산역 참고) -->
+    <div class="pcard">
+      <img class="ph" src="https://images.unsplash.com/photo-1546874177-9e664107314e?w=300&q=80" alt="レトロ街歩き">
+      <div>
+        <span class="pline l1">1号線 ・ 釜山駅周辺</span>
+        <b>釜山到着！レトロ街歩き</b>
+        <span>山と海が見渡せる草梁イバグギルを巡る、釜山旅のスタートコース。</span>
+      </div>
+    </div>
+
+    <!-- 코스 2: 감성 카페 & 스몰 쇼핑 (전포역 참고) -->
+    <div class="pcard">
+      <img class="ph" src="https://images.unsplash.com/photo-1538485399081-7191377e8241?w=300&q=80" alt="オシャレカフェ">
+      <div>
+        <span class="pline l2">2号線 ・ 田浦カフェ街</span>
+        <b>オシャレカフェ＆トレンド</b>
+        <span>隠れ家カフェや個性派雑貨店を散策する話題のトレンドコース。</span>
+      </div>
+    </div>
+
+    <!-- 코스 3: 활기 가득 로컬 미식 탐방 (남포역 참고) -->
+    <div class="pcard">
+      <img class="ph" src="https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=300&q=80" alt="ローカルグルメ">
+      <div>
+        <span class="pline l1">1号線 ・ 南浦エリア</span>
+        <b>活気あふれる！ローカルグルメ</b>
+        <span>海鮮市場と活気ある屋台街で釜山名物を食べ歩く満腹コース。</span>
+      </div>
+    </div>
+
+    <!-- 코스 4: 오션뷰 & 환상의 야경 (광안역 참고) -->
+    <div class="pcard">
+      <img class="ph" src="https://images.unsplash.com/photo-1601918774946-25832a4be0d6?w=300&q=80" alt="ロマンチック夜景">
+      <div>
+        <span class="pline l2">2号線 ・ 広安里ビーチ</span>
+        <b>オーシャンビュー＆ロマンチック夜景</b>
+        <span>広安大橋のライトアップと波音を楽しむナイトヒーリングコース。</span>
+      </div>
+    </div>
+
+    <!-- 코스 5: 힐링 온천 & 한적한 휴식 (온천장역 참고) -->
+    <div class="pcard">
+      <img class="ph" src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=300&q=80" alt="伝統温泉">
+      <div>
+        <span class="pline l1">1号線 ・ 温泉場エリア</span>
+        <b>癒やしの伝統温泉＆リフレッシュ</b>
+        <span>歴史ある温泉と野外足湯で旅の疲れをほぐすリラックスコース。</span>
+      </div>
+    </div>
+
+  </div>
+  <a href="#map" class="checkmore">MAP<br>MORE</a>
+</section>
+
+<!-- ---------- MAP SECTION ---------- -->
+<section class="mapsec" id="map">
+  <div class="kicker">SUBWAY MAP</div>
+  <h2>地下鉄 案内</h2>
+  <p style="text-align: center; color: var(--sub);">路線図から駅を選択して旅行情報を確認してください。</p>
+</section>
+
+<footer>
+  BUSAN TRAVEL GUIDE &copy; PARTY RANGERS. All Rights Reserved.
+</footer>
+
+</body>
+</html>
