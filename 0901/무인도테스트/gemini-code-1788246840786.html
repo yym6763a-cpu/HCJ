@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>무인도 생존 성향 테스트</title>
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --primary-light: #e8f5e9;
+      --accent-color: #ff9800;
+      --bg-color: #f4f6f8;
+      --card-bg: #ffffff;
+      --text-main: #263238;
+      --text-muted: #607d8b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", Roboto, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .container {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 440px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      padding: 32px 24px;
+      position: relative;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background-color: #eceff1;
+      border-radius: 3px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--primary-color);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .badge {
+      display: inline-block;
+      align-self: flex-start;
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 22px;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    p.subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .input-group input {
+      padding: 12px 16px;
+      border: 1.5px solid #cfd8dc;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-group input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .btn-main {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background 0.2s;
+    }
+
+    .btn-main:hover {
+      background-color: #256628;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-card {
+      background: #fafafa;
+      border: 1.5px solid #eceff1;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 15px;
+      line-height: 1.4;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .option-card:hover {
+      border-color: var(--primary-color);
+      background-color: var(--primary-light);
+    }
+
+    .result-box {
+      background: #fbfbfb;
+      border: 1px solid #e0e0e0;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .result-icon {
+      font-size: 44px;
+      margin-bottom: 10px;
+    }
+
+    .result-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+
+    .result-desc {
+      font-size: 14px;
+      color: #455a64;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .status-msg {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 1. 시작 화면 -->
+  <section id="startScreen" class="screen active">
+    <span class="badge">SURVIVAL TEST</span>
+    <h1>눈을 떠보니 미지의 무인도에 표류했다! 🏝️</h1>
+    <p class="subtitle">당신의 생존 본능과 판단력은 어느 쪽일까요? 4가지 돌발 상황을 거쳐 나의 생존 유형을 확인해 보세요.</p>
+    
+    <div class="input-group">
+      <label for="userName">탐험가 이름 (닉네임)</label>
+      <input type="text" id="userName" placeholder="이름을 입력하세요" />
+    </div>
+    
+    <div class="input-group">
+      <label for="userEmail">결과 보관용 이메일 (선택)</label>
+      <input type="email" id="userEmail" placeholder="example@email.com" />
+    </div>
+
+    <button class="btn-main" onclick="startTest()">생존 테스트 시작하기</button>
+  </section>
+
+  <!-- 2. 문항 화면 -->
+  <section id="quizScreen" class="screen">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span class="badge" id="questionStep">Q1</span>
+    <h1 id="questionTitle">질문 제목</h1>
+    <p class="subtitle" id="questionDesc">상황 설명</p>
+    
+    <div class="options-list" id="optionsContainer">
+      <!-- 문항 옵션 -->
+    </div>
+  </section>
+
+  <!-- 3. 결과 화면 -->
+  <section id="resultScreen" class="screen">
+    <span class="badge">TEST RESULT</span>
+    <h1 id="resultHeader">당신의 생존 유형은?</h1>
+    
+    <div class="result-box">
+      <div class="result-icon" id="resIcon">⛺</div>
+      <div class="result-title" id="resTitle">유형 타이틀</div>
+      <p class="result-desc" id="resDesc">유형 설명</p>
+    </div>
+
+    <button class="btn-main" onclick="restartTest()">다시 테스트하기</button>
+    <div class="status-msg" id="syncStatus">결과를 기록하는 중...</div>
+  </section>
+</div>
+
+<script>
+  const questions = [
+    {
+      step: 'Q1',
+      title: '눈을 떠보니 해변가에 널브러져 있다. 가장 먼저 할 행동은?',
+      desc: '주변에는 파도 소리와 낯선 새소리만 들려옵니다.',
+      options: [
+        { text: '섬 전체 지형을 파악하기 위해 높은 언덕으로 올라간다.', tag: 'STRATEGY' },
+        { text: '즉시 물과 먹을 수 있는 열매부터 확보하러 나선다.', tag: 'PRACTICAL' },
+        { text: '해변에 구조 요청 신호(SOS)를 대형으로 새긴다.', tag: 'HOPE' }
+      ]
+    },
+    {
+      step: 'Q2',
+      title: '해가 지기 시작했다. 첫날 밤을 보낼 은신처를 찾을 때?',
+      desc: '바람이 차가워지고 야생동물의 울음소리가 들립니다.',
+      options: [
+        { text: '비바람을 확실히 막을 수 있는 튼튼한 동굴을 수색한다.', tag: 'STRATEGY' },
+        { text: '나뭇가지와 큰 잎을 엮어 즉각 임시 움집을 제작한다.', tag: 'PRACTICAL' },
+        { text: '시야가 확보되는 탁 트인 곳에 불을 피우고 경계한다.', tag: 'HOPE' }
+      ]
+    },
+    {
+      step: 'Q3',
+      title: '정체불명의 고대 유적 상자를 발견했다!',
+      desc: '열면 유용한 도구가 나올 수도 있지만 함정일 수도 있습니다.',
+      options: [
+        { text: '함정 장치가 있는지 주변을 신중히 조사한 후 연다.', tag: 'STRATEGY' },
+        { text: '지금 가진 도구(돌/나뭇가지)로 조심스럽게 비틀어 열어본다.', tag: 'PRACTICAL' },
+        { text: '위험을 감수하기보단 안전한 생존 자원부터 챙긴다.', tag: 'HOPE' }
+      ]
+    },
+    {
+      step: 'Q4',
+      title: '저 멀리 수평선에 작은 배 그림자가 스쳐 지나간다.',
+      desc: '순식간에 시야에서 사라질 수 있는 결정적인 순간입니다.',
+      options: [
+        { text: '배의 진행 방향을 분석해 최단거리 해안 포인트로 달린다.', tag: 'STRATEGY' },
+        { text: '즉시 연기가 짙게 피어오르도록 나뭇잎을 잔뜩 얹어 불을 피운다.', tag: 'PRACTICAL' },
+        { text: '온 힘을 다해 소리를 지르고 반사판/거울 대용품을 흔든다.', tag: 'HOPE' }
+      ]
+    }
+  ];
+
+  const resultTypes = {
+    STRATEGY: {
+      icon: '🧠',
+      name: '치밀한 전략가 (Brain Master)',
+      desc: '위기 상황에서도 감정에 휩쓸리지 않고 냉철하게 계획을 세우는 분석형 생존자입니다. 주변 환경을 파악하고 최적의 자원 효율을 뽑아내 무인도에서도 기지를 구축할 능력을 갖추고 있습니다.'
+    },
+    PRACTICAL: {
+      icon: '🛠️',
+      name: '야생의 행동파 (Wild Builder)',
+      desc: '생각보다 손이 먼저 움직이는 현장 중심형 생존자입니다. 주변 사물을 도구로 바꾸는 뛰어난 손재주와 임기응변으로 어떤 환경에서도 가장 먼저 실질적인 생존 기반을 만들어냅니다.'
+    },
+    HOPE: {
+      icon: '🔥',
+      name: '불굴의 생존 탐험가 (Signal Keeper)',
+      desc: '강한 멘탈과 적응력으로 위기를 버텨내는 희망 중심형 생존자입니다. 구조 신호를 놓치지 않고 긍정적인 에너지와 신속한 리액션으로 결국 탈출 기회를 거머쥐는 유형입니다.'
+    }
+  };
+
+  let currentIdx = 0;
+  let scores = { STRATEGY: 0, PRACTICAL: 0, HOPE: 0 };
+  let userData = { name: '', email: '', resultType: '' };
+
+  function startTest() {
+    const nameInput = document.getElementById('userName').value.trim();
+    const emailInput = document.getElementById('userEmail').value.trim();
+
+    userData.name = nameInput || '익명 탐험가';
+    userData.email = emailInput;
+
+    currentIdx = 0;
+    scores = { STRATEGY: 0, PRACTICAL: 0, HOPE: 0 };
+
+    switchScreen('quizScreen');
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    const q = questions[currentIdx];
+    document.getElementById('questionStep').innerText = q.step;
+    document.getElementById('questionTitle').innerText = q.title;
+    document.getElementById('questionDesc').innerText = q.desc;
+
+    const progressPercent = ((currentIdx + 1) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = `${progressPercent}%`;
+
+    const container = document.getElementById('optionsContainer');
+    container.innerHTML = '';
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-card';
+      btn.innerText = opt.text;
+      btn.onclick = () => selectOption(opt.tag);
+      container.appendChild(btn);
+    });
+  }
+
+  function selectOption(tag) {
+    scores[tag]++;
+    currentIdx++;
+
+    if (currentIdx < questions.length) {
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    switchScreen('resultScreen');
+
+    let maxTag = 'STRATEGY';
+    if (scores.PRACTICAL > scores[maxTag]) maxTag = 'PRACTICAL';
+    if (scores.HOPE > scores[maxTag]) maxTag = 'HOPE';
+
+    const result = resultTypes[maxTag];
+    userData.resultType = result.name;
+
+    document.getElementById('resIcon').innerText = result.icon;
+    document.getElementById('resTitle').innerText = `${userData.name} 님의 결과:\n${result.name}`;
+    document.getElementById('resDesc').innerText = result.desc;
+
+    document.getElementById('syncStatus').innerText = '구글 스프레드시트에 결과를 기록하는 중...';
+    
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(() => {
+          document.getElementById('syncStatus').innerText = '✅ 기록이 안전하게 저장되었습니다.';
+        })
+        .withFailureHandler((err) => {
+          document.getElementById('syncStatus').innerText = '기록 저장 중 오류가 발생했습니다.';
+          console.error(err);
+        })
+        .submitSurvivalTest(userData);
+    } else {
+      document.getElementById('syncStatus').innerText = '로컬 미리보기 환경입니다. (저장 생략)';
+    }
+  }
+
+  function restartTest() {
+    switchScreen('startScreen');
+  }
+
+  function switchScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+  }
+</script>
+
+</body>
+</html>
