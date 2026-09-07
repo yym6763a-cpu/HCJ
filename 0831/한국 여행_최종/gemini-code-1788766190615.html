@@ -1,0 +1,2215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>韓国3泊4日旅行｜ソウル・慶州・釜山</title>
+
+<meta name="description"
+content="日本人旅行者向け韓国3泊4日モデルコース。ソウル・慶州・釜山を巡り、韓国の歴史、文化、グルメ、海を楽しみます。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<style>
+
+/* ===============================
+   BASE
+================================ */
+
+:root {
+  --primary:#087f8c;
+  --primary-dark:#05636d;
+  --accent:#ff715b;
+  --gold:#d8a83e;
+  --dark:#17202a;
+  --gray:#667085;
+  --light:#f5f7f8;
+  --white:#ffffff;
+  --border:#e5e7eb;
+  --shadow:0 12px 35px rgba(0,0,0,.08);
+  --radius:20px;
+}
+
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html {
+  scroll-behavior:smooth;
+}
+
+body {
+  font-family:"Noto Sans JP",sans-serif;
+  color:var(--dark);
+  background:var(--light);
+  line-height:1.75;
+}
+
+a {
+  text-decoration:none;
+  color:inherit;
+}
+
+img {
+  width:100%;
+  display:block;
+}
+
+button {
+  font-family:inherit;
+}
+
+
+/* ===============================
+   HEADER
+================================ */
+
+header {
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+
+.nav {
+  max-width:1150px;
+  margin:auto;
+  height:68px;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo {
+  font-size:20px;
+  font-weight:800;
+  color:var(--primary);
+}
+
+.logo span {
+  color:var(--accent);
+}
+
+.nav-menu {
+  display:flex;
+  gap:25px;
+  font-size:14px;
+  font-weight:600;
+}
+
+.nav-menu a:hover {
+  color:var(--primary);
+}
+
+
+/* ===============================
+   HERO
+================================ */
+
+.hero {
+  min-height:650px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:white;
+
+  background:
+  linear-gradient(
+    rgba(0,0,0,.40),
+    rgba(0,0,0,.55)
+  ),
+  url("https://images.unsplash.com/photo-1538485399081-7c8971d0e9b8?auto=format&fit=crop&w=2000&q=85")
+  center/cover;
+}
+
+.hero-inner {
+  width:92%;
+  max-width:900px;
+}
+
+.hero-badge {
+  display:inline-block;
+  padding:7px 18px;
+  border-radius:50px;
+  border:1px solid rgba(255,255,255,.5);
+  background:rgba(255,255,255,.13);
+  font-size:13px;
+  margin-bottom:22px;
+}
+
+.hero h1 {
+  font-size:clamp(38px,7vw,72px);
+  line-height:1.15;
+  font-weight:800;
+  margin-bottom:20px;
+}
+
+.hero h1 span {
+  color:#ffd166;
+}
+
+.hero-description {
+  font-size:18px;
+  margin-bottom:30px;
+}
+
+.hero-buttons {
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.btn {
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  padding:13px 24px;
+  border-radius:50px;
+  font-size:14px;
+  font-weight:700;
+  transition:.25s;
+}
+
+.btn-primary {
+  background:var(--accent);
+  color:white;
+}
+
+.btn-primary:hover {
+  transform:translateY(-2px);
+  background:#e85e4a;
+}
+
+.btn-white {
+  background:white;
+  color:var(--dark);
+}
+
+.btn-white:hover {
+  transform:translateY(-2px);
+}
+
+
+/* ===============================
+   QUICK INFO
+================================ */
+
+.quick-info {
+  max-width:1050px;
+  margin:-50px auto 0;
+  position:relative;
+  z-index:10;
+
+  background:white;
+  border-radius:22px;
+  box-shadow:var(--shadow);
+
+  padding:25px;
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+
+.quick-item {
+  text-align:center;
+  border-right:1px solid var(--border);
+}
+
+.quick-item:last-child {
+  border-right:0;
+}
+
+.quick-icon {
+  font-size:28px;
+}
+
+.quick-item strong {
+  display:block;
+  font-size:14px;
+}
+
+.quick-item span {
+  color:var(--gray);
+  font-size:12px;
+}
+
+
+/* ===============================
+   SECTION
+================================ */
+
+.section {
+  max-width:1100px;
+  margin:auto;
+  padding:80px 20px;
+}
+
+.section-label {
+  color:var(--primary);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.15em;
+  margin-bottom:7px;
+}
+
+.section-title {
+  font-size:clamp(28px,4vw,42px);
+  line-height:1.3;
+  font-weight:800;
+}
+
+.section-description {
+  margin-top:10px;
+  color:var(--gray);
+  font-size:14px;
+}
+
+
+/* ===============================
+   ROUTE
+================================ */
+
+.route {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-top:35px;
+}
+
+.route-card {
+  position:relative;
+  background:white;
+  border-radius:18px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+.route-number {
+  width:40px;
+  height:40px;
+  margin:auto auto 12px;
+  border-radius:50%;
+  background:var(--primary);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+}
+
+.route-card h3 {
+  font-size:20px;
+}
+
+.route-card p {
+  color:var(--gray);
+  font-size:13px;
+}
+
+.route-arrow {
+  position:absolute;
+  right:-15px;
+  top:50%;
+  z-index:5;
+  color:var(--primary);
+  font-size:25px;
+}
+
+
+/* ===============================
+   SCHEDULE
+================================ */
+
+.day-tabs {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin:35px 0 25px;
+}
+
+.day-tab {
+  border:1px solid var(--border);
+  background:white;
+  border-radius:14px;
+  padding:14px 5px;
+  cursor:pointer;
+  font-weight:700;
+  color:#555;
+}
+
+.day-tab small {
+  display:block;
+  font-size:11px;
+  color:#999;
+  font-weight:400;
+}
+
+.day-tab.active {
+  background:var(--primary);
+  color:white;
+  border-color:var(--primary);
+}
+
+.day-tab.active small {
+  color:rgba(255,255,255,.8);
+}
+
+.day-panel {
+  display:none;
+}
+
+.day-panel.active {
+  display:block;
+  animation:fade .3s ease;
+}
+
+@keyframes fade {
+  from {
+    opacity:0;
+    transform:translateY(8px);
+  }
+  to {
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.day-intro {
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  margin-bottom:20px;
+  box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.day-intro h3 {
+  font-size:23px;
+}
+
+.day-intro p {
+  color:var(--gray);
+  font-size:14px;
+}
+
+.timeline {
+  position:relative;
+  padding-left:30px;
+}
+
+.timeline:before {
+  content:"";
+  position:absolute;
+  left:8px;
+  top:8px;
+  bottom:8px;
+  width:2px;
+  background:#dbe5e7;
+}
+
+.timeline-item {
+  position:relative;
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  margin-bottom:16px;
+  box-shadow:0 4px 15px rgba(0,0,0,.045);
+}
+
+.timeline-item:before {
+  content:"";
+  position:absolute;
+  left:-28px;
+  top:25px;
+  width:11px;
+  height:11px;
+  background:var(--primary);
+  border:3px solid var(--light);
+  border-radius:50%;
+}
+
+.timeline-time {
+  color:var(--primary);
+  font-weight:800;
+  font-size:13px;
+}
+
+.timeline-item h4 {
+  font-size:18px;
+  margin:3px 0;
+}
+
+.timeline-item p {
+  color:var(--gray);
+  font-size:13px;
+}
+
+.food-label {
+  display:inline-block;
+  background:#fff2ee;
+  color:#dc604d;
+  border-radius:30px;
+  padding:3px 10px;
+  font-size:11px;
+  font-weight:700;
+  margin-top:8px;
+}
+
+
+/* ===============================
+   SPOTS
+================================ */
+
+.spot-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:35px;
+}
+
+.spot-card {
+  background:white;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
+  transition:.25s;
+}
+
+.spot-card:hover {
+  transform:translateY(-5px);
+}
+
+.spot-image {
+  height:220px;
+  background-size:cover;
+  background-position:center;
+}
+
+.spot-body {
+  padding:18px;
+}
+
+.spot-body h3 {
+  font-size:18px;
+  margin-bottom:5px;
+}
+
+.spot-body p {
+  color:var(--gray);
+  font-size:13px;
+}
+
+
+/* ===============================
+   FOOD
+================================ */
+
+.food-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  margin-top:35px;
+}
+
+.food-card {
+  background:white;
+  border-radius:17px;
+  padding:19px;
+  display:flex;
+  gap:15px;
+  box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.food-icon {
+  min-width:60px;
+  height:60px;
+  border-radius:16px;
+  background:#f0f8f8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+}
+
+.food-card h3 {
+  font-size:16px;
+}
+
+.food-card p {
+  color:var(--gray);
+  font-size:13px;
+}
+
+
+/* ===============================
+   HOTEL
+================================ */
+
+.hotel-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:35px;
+}
+
+.hotel-card {
+  background:white;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
+}
+
+.hotel-image {
+  height:190px;
+  background-size:cover;
+  background-position:center;
+}
+
+.hotel-body {
+  padding:18px;
+}
+
+.hotel-area {
+  font-size:11px;
+  font-weight:800;
+  color:var(--primary);
+}
+
+.hotel-body h3 {
+  font-size:18px;
+  margin:3px 0;
+}
+
+.hotel-body p {
+  color:var(--gray);
+  font-size:13px;
+}
+
+.hotel-price {
+  margin-top:10px;
+  font-size:13px;
+  font-weight:800;
+}
+
+
+/* ===============================
+   TIPS
+================================ */
+
+.tips {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  margin-top:35px;
+}
+
+.tip {
+  background:white;
+  border-radius:16px;
+  padding:20px;
+  display:flex;
+  gap:15px;
+}
+
+.tip-icon {
+  font-size:27px;
+}
+
+.tip h3 {
+  font-size:15px;
+}
+
+.tip p {
+  color:var(--gray);
+  font-size:13px;
+}
+
+
+/* ===============================
+   BUDGET
+================================ */
+
+.budget-box {
+  background:var(--primary);
+  color:white;
+  border-radius:24px;
+  padding:35px;
+}
+
+.budget-box h2 {
+  font-size:25px;
+  margin-bottom:20px;
+}
+
+.budget-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+.budget-item {
+  background:rgba(255,255,255,.1);
+  border-radius:15px;
+  padding:17px;
+}
+
+.budget-item span {
+  display:block;
+  font-size:11px;
+  opacity:.8;
+}
+
+.budget-item strong {
+  font-size:18px;
+}
+
+
+/* ===============================
+   QR CODE CARD
+================================ */
+
+.qr-section {
+  display:flex;
+  justify-content:center;
+  margin-bottom:30px;
+}
+
+.qr-card {
+  background:white;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.12);
+  display:inline-flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+
+.qr-card a {
+  display:block;
+}
+
+.qr-card img {
+  width:160px;
+  height:160px;
+  border-radius:10px;
+}
+
+.qr-card span {
+  margin-top:12px;
+  font-size:13px;
+  font-weight:700;
+  color:var(--dark);
+}
+
+
+/* ===============================
+   CTA
+================================ */
+
+.cta {
+  border-radius:25px;
+  padding:70px 25px;
+  text-align:center;
+  color:white;
+
+  background:
+  linear-gradient(
+    rgba(0,0,0,.45),
+    rgba(0,0,0,.55)
+  ),
+  url("https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=1800&q=85")
+  center/cover;
+}
+
+.cta h2 {
+  font-size:clamp(28px,5vw,44px);
+}
+
+.cta p {
+  margin:12px 0 25px;
+}
+
+
+/* ===============================
+   FOOTER
+================================ */
+
+footer {
+  background:#111820;
+  color:white;
+  text-align:center;
+  padding:45px 20px;
+}
+
+footer h3 {
+  font-size:20px;
+}
+
+footer p {
+  color:#aab2ba;
+  font-size:12px;
+}
+
+.footer-qr {
+  margin:20px auto 10px;
+  display:inline-block;
+  background:white;
+  padding:10px;
+  border-radius:12px;
+  width:120px;
+}
+
+.footer-qr img {
+  width:100px;
+  height:100px;
+}
+
+.copyright {
+  margin-top:18px;
+  font-size:11px;
+  color:#68727d;
+}
+
+
+/* ===============================
+   MOBILE
+================================ */
+
+@media(max-width:800px) {
+
+  .nav {
+    height:60px;
+  }
+
+  .nav-menu {
+    display:none;
+  }
+
+  .hero {
+    min-height:570px;
+  }
+
+  .hero-description {
+    font-size:15px;
+  }
+
+  .quick-info {
+    width:calc(100% - 28px);
+    grid-template-columns:repeat(2,1fr);
+    padding:15px;
+    margin-top:-40px;
+  }
+
+  .quick-item {
+    padding:10px;
+    border-right:0;
+    border-bottom:1px solid var(--border);
+  }
+
+  .quick-item:nth-child(3),
+  .quick-item:nth-child(4) {
+    border-bottom:0;
+  }
+
+  .section {
+    padding:60px 15px;
+  }
+
+  .route {
+    grid-template-columns:1fr;
+  }
+
+  .route-arrow {
+    right:auto;
+    left:50%;
+    top:auto;
+    bottom:-22px;
+    transform:rotate(90deg);
+  }
+
+  .route-card {
+    padding:20px;
+  }
+
+  .day-tabs {
+    gap:6px;
+  }
+
+  .day-tab {
+    font-size:12px;
+  }
+
+  .spot-grid {
+    grid-template-columns:1fr;
+  }
+
+  .food-grid {
+    grid-template-columns:1fr;
+  }
+
+  .hotel-grid {
+    grid-template-columns:1fr;
+  }
+
+  .tips {
+    grid-template-columns:1fr;
+  }
+
+  .budget-grid {
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .budget-box {
+    padding:25px 18px;
+  }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+HEADER
+========================= -->
+
+<header>
+
+  <nav class="nav">
+
+    <a href="#" class="logo">
+      KOREA<span> TRAVEL</span>
+    </a>
+
+    <div class="nav-menu">
+
+      <a href="#schedule">日程</a>
+      <a href="#spots">観光</a>
+      <a href="#food">グルメ</a>
+      <a href="#hotel">ホテル</a>
+
+    </div>
+
+  </nav>
+
+</header>
+
+
+<!-- =========================
+HERO
+========================= -->
+
+<section class="hero">
+
+  <div class="hero-inner">
+
+    <div class="hero-badge">
+      🇯🇵 日本人旅行者向け
+    </div>
+
+    <h1>
+      韓国<br>
+      <span>3泊4日</span> 旅行
+    </h1>
+
+    <p class="hero-description">
+      ソウル・慶州・釜山を巡る<br>
+      「今の韓国」と「昔の韓国」を楽しむモデルコース
+    </p>
+
+    <div class="hero-buttons">
+
+      <a href="#schedule" class="btn btn-primary">
+        旅行日程を見る
+      </a>
+
+      <a href="#food" class="btn btn-white">
+        韓国グルメを見る
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+QUICK INFO
+========================= -->
+
+<div class="quick-info">
+
+  <div class="quick-item">
+    <div class="quick-icon">📅</div>
+    <strong>3泊4日</strong>
+    <span>おすすめモデルコース</span>
+  </div>
+
+  <div class="quick-item">
+    <div class="quick-icon">🏙️</div>
+    <strong>ソウル</strong>
+    <span>現代の韓国</span>
+  </div>
+
+  <div class="quick-item">
+    <div class="quick-icon">🏯</div>
+    <strong>慶州</strong>
+    <span>歴史と文化</span>
+  </div>
+
+  <div class="quick-item">
+    <div class="quick-icon">🌊</div>
+    <strong>釜山</strong>
+    <span>海とグルメ</span>
+  </div>
+
+</div>
+
+
+<!-- =========================
+ROUTE
+========================= -->
+
+<section class="section">
+
+  <div class="section-label">
+    TRAVEL ROUTE
+  </div>
+
+  <h2 class="section-title">
+    3泊4日の旅ルート
+  </h2>
+
+  <p class="section-description">
+    韓国の代表的な3都市を効率よく巡ります。
+  </p>
+
+
+  <div class="route">
+
+    <div class="route-card">
+
+      <div class="route-number">1</div>
+
+      <h3>ソウル</h3>
+
+      <p>
+        宮殿・韓屋・市場<br>
+        ショッピング
+      </p>
+
+      <div class="route-arrow">→</div>
+
+    </div>
+
+
+    <div class="route-card">
+
+      <div class="route-number">2</div>
+
+      <h3>慶州</h3>
+
+      <p>
+        新羅文化・寺院<br>
+        韓屋・夜景
+      </p>
+
+      <div class="route-arrow">→</div>
+
+    </div>
+
+
+    <div class="route-card">
+
+      <div class="route-number">3</div>
+
+      <h3>釜山</h3>
+
+      <p>
+        海・市場・夜景<br>
+        韓国グルメ
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+SCHEDULE
+========================= -->
+
+<section class="section" id="schedule">
+
+  <div class="section-label">
+    ITINERARY
+  </div>
+
+  <h2 class="section-title">
+    3泊4日モデルプラン
+  </h2>
+
+  <p class="section-description">
+    観光・食事・ショッピングをバランスよく楽しむコースです。
+  </p>
+
+
+  <div class="day-tabs">
+
+    <button class="day-tab active"
+            onclick="showDay(1,this)">
+      DAY 1
+      <small>ソウル</small>
+    </button>
+
+    <button class="day-tab"
+            onclick="showDay(2,this)">
+      DAY 2
+      <small>ソウル→慶州</small>
+    </button>
+
+    <button class="day-tab"
+            onclick="showDay(3,this)">
+      DAY 3
+      <small>慶州→釜山</small>
+    </button>
+
+    <button class="day-tab"
+            onclick="showDay(4,this)">
+      DAY 4
+      <small>釜山</small>
+    </button>
+
+  </div>
+
+
+  <!-- DAY 1 -->
+
+  <div class="day-panel active" id="day1">
+
+    <div class="day-intro">
+
+      <h3>
+        DAY 1｜ソウル
+      </h3>
+
+      <p>
+        韓国の伝統文化と、今のソウルを体験します。
+      </p>
+
+    </div>
+
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">09:00</span>
+
+        <h4>🏯 景福宮</h4>
+
+        <p>
+          韓国を代表する王宮。
+          韓服を着て写真を撮るのもおすすめです。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">11:00</span>
+
+        <h4>🏠 北村韓屋村</h4>
+
+        <p>
+          韓国の伝統家屋「韓屋」が並ぶ美しい街。
+          カフェやショップも楽しめます。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">12:30</span>
+
+        <h4>🍚 昼食｜ビビンバ・プルコギ</h4>
+
+        <p>
+          初めて韓国料理を食べる方にもおすすめ。
+        </p>
+
+        <span class="food-label">
+          韓国料理
+        </span>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">14:00</span>
+
+        <h4>🎎 仁寺洞</h4>
+
+        <p>
+          韓国伝統のお茶、工芸品、雑貨などを楽しみます。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">16:00</span>
+
+        <h4>🛍️ 明洞</h4>
+
+        <p>
+          K-Beauty、ショッピング、韓国の屋台グルメを楽しみます。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">19:00</span>
+
+        <h4>🍢 広蔵市場</h4>
+
+        <p>
+          韓国のローカル市場で夕食。
+          屋台料理をいろいろ食べてみましょう。
+        </p>
+
+        <span class="food-label">
+          チヂミ・キンパ・ユッケ
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- DAY 2 -->
+
+  <div class="day-panel" id="day2">
+
+    <div class="day-intro">
+
+      <h3>
+        DAY 2｜ソウル → 慶州
+      </h3>
+
+      <p>
+        KTXで移動して、韓国の歴史都市・慶州へ。
+      </p>
+
+    </div>
+
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">08:00</span>
+
+        <h4>🚄 ソウル → 慶州</h4>
+
+        <p>
+          KTXを利用して慶州へ移動します。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">12:00</span>
+
+        <h4>🍱 昼食｜韓定食</h4>
+
+        <p>
+          韓国の伝統的な料理を少しずつ楽しみます。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">13:30</span>
+
+        <h4>🏯 仏国寺</h4>
+
+        <p>
+          新羅時代を代表する歴史的な寺院。
+          韓国の仏教文化を感じることができます。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">16:30</span>
+
+        <h4>☕ 皇理団通り</h4>
+
+        <p>
+          韓屋を利用したカフェやショップが並ぶ人気エリア。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">19:00</span>
+
+        <h4>🌙 東宮と月池</h4>
+
+        <p>
+          夜になるとライトアップされる美しい歴史スポット。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">20:30</span>
+
+        <h4>🏠 韓屋ステイ</h4>
+
+        <p>
+          韓国らしい韓屋の宿泊体験をおすすめします。
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- DAY 3 -->
+
+  <div class="day-panel" id="day3">
+
+    <div class="day-intro">
+
+      <h3>
+        DAY 3｜慶州 → 釜山
+      </h3>
+
+      <p>
+        歴史の街から海の街・釜山へ移動します。
+      </p>
+
+    </div>
+
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">09:00</span>
+
+        <h4>🚆 慶州 → 釜山</h4>
+
+        <p>
+          午前中に釜山へ移動。
+          ホテルに荷物を預けます。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">12:00</span>
+
+        <h4>🍲 昼食｜テジクッパ</h4>
+
+        <p>
+          豚肉とスープをご飯と一緒に食べる釜山名物です。
+        </p>
+
+        <span class="food-label">
+          釜山名物
+        </span>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">13:30</span>
+
+        <h4>🎨 甘川文化村</h4>
+
+        <p>
+          カラフルな家々が山の斜面に広がる人気観光地。
+          写真撮影におすすめです。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">16:00</span>
+
+        <h4>🐟 チャガルチ市場</h4>
+
+        <p>
+          新鮮な魚介類と釜山の市場文化を体験します。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">18:00</span>
+
+        <h4>🛍️ 南浦洞・BIFF広場</h4>
+
+        <p>
+          ショッピングと屋台グルメを楽しみます。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">20:00</span>
+
+        <h4>🌉 広安里夜景</h4>
+
+        <p>
+          広安大橋の美しい夜景を楽しみます。
+        </p>
+
+        <span class="food-label">
+          韓国焼肉
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- DAY 4 -->
+
+  <div class="day-panel" id="day4">
+
+    <div class="day-intro">
+
+      <h3>
+        DAY 4｜釜山・海・カフェ・帰国
+      </h3>
+
+      <p>
+        最終日はゆっくり釜山を楽しんで空港へ向かいます。
+      </p>
+
+    </div>
+
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">09:00</span>
+
+        <h4>🏖️ 海雲台ビーチ</h4>
+
+        <p>
+          釜山を代表するビーチを散歩します。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">10:30</span>
+
+        <h4>🌿 冬柏島</h4>
+
+        <p>
+          海を眺めながらゆっくり散歩。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">11:30</span>
+
+        <h4>☕ 海辺のカフェ</h4>
+
+        <p>
+          海を眺めながら韓国のカフェ文化を体験します。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">12:30</span>
+
+        <h4>🍜 昼食｜ミルミョン</h4>
+
+        <p>
+          釜山名物の冷たい麺料理。
+          旅行最後の食事にもおすすめです。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">14:00</span>
+
+        <h4>🛍️ お土産ショッピング</h4>
+
+        <p>
+          韓国海苔、お菓子、コスメ、韓国茶などを購入。
+        </p>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <span class="timeline-time">15:00〜</span>
+
+        <h4>✈️ 金海空港へ</h4>
+
+        <p>
+          フライト時間に合わせて余裕を持って空港へ向かいます。
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+SPOTS
+========================= -->
+
+<section class="section" id="spots">
+
+  <div class="section-label">
+    MUST VISIT
+  </div>
+
+  <h2 class="section-title">
+    一度は行きたい韓国の観光スポット
+  </h2>
+
+  <p class="section-description">
+    韓国旅行が初めての方におすすめの代表的な観光地です。
+  </p>
+
+
+  <div class="spot-grid">
+
+
+    <div class="spot-card">
+
+      <div class="spot-image"
+      style="background-image:url('https://images.unsplash.com/photo-1580130732478-4e339fb6836f?auto=format&fit=crop&w=1000&q=80')">
+      </div>
+
+      <div class="spot-body">
+
+        <h3>🏯 景福宮</h3>
+
+        <p>
+          韓国を代表する王宮。
+          韓服体験と一緒に楽しむのがおすすめです。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="spot-card">
+
+      <div class="spot-image"
+      style="background-image:url('https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1000&q=80')">
+      </div>
+
+      <div class="spot-body">
+
+        <h3>🏯 仏国寺</h3>
+
+        <p>
+          慶州を代表する歴史的な寺院。
+          新羅文化を感じることができます。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="spot-card">
+
+      <div class="spot-image"
+      style="background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1000&q=80')">
+      </div>
+
+      <div class="spot-body">
+
+        <h3>🌉 広安里</h3>
+
+        <p>
+          広安大橋の夜景が美しい釜山の人気スポット。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="spot-card">
+
+      <div class="spot-image"
+      style="background-image:url('https://images.unsplash.com/photo-1597008641621-ce3f3a7a7a9c?auto=format&fit=crop&w=1000&q=80')">
+      </div>
+
+      <div class="spot-body">
+
+        <h3>🐟 チャガルチ市場</h3>
+
+        <p>
+          新鮮な魚介類を楽しめる釜山最大級の市場。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="spot-card">
+
+      <div class="spot-image"
+      style="background-image:url('https://images.unsplash.com/photo-1609851517327-96f1e1f43f1f?auto=format&fit=crop&w=1000&q=80')">
+      </div>
+
+      <div class="spot-body">
+
+        <h3>🎨 甘川文化村</h3>
+
+        <p>
+          カラフルな街並みで有名な釜山の写真スポット。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="spot-card">
+
+      <div class="spot-image"
+      style="background-image:url('https://images.unsplash.com/photo-1576158114254-3ba5a3f3e8d8?auto=format&fit=crop&w=1000&q=80')">
+      </div>
+
+      <div class="spot-body">
+
+        <h3>🏖️ 海雲台</h3>
+
+        <p>
+          韓国を代表する海辺の観光地。
+          カフェやショッピングも楽しめます。
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+FOOD
+========================= -->
+
+<section class="section" id="food">
+
+  <div class="section-label">
+    KOREAN FOOD
+  </div>
+
+  <h2 class="section-title">
+    日本人におすすめの韓国グルメ
+  </h2>
+
+  <p class="section-description">
+    韓国旅行でぜひ食べてほしい代表的な料理です。
+  </p>
+
+
+  <div class="food-grid">
+
+
+    <div class="food-card">
+
+      <div class="food-icon">🍲</div>
+
+      <div>
+
+        <h3>テジクッパ</h3>
+
+        <p>
+          釜山名物。豚肉とスープをご飯と一緒に食べます。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="food-card">
+
+      <div class="food-icon">🍜</div>
+
+      <div>
+
+        <h3>ミルミョン</h3>
+
+        <p>
+          冷たいスープで食べる釜山名物の麺料理。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="food-card">
+
+      <div class="food-icon">🥩</div>
+
+      <div>
+
+        <h3>サムギョプサル</h3>
+
+        <p>
+          韓国旅行で人気の豚バラ肉の焼肉。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="food-card">
+
+      <div class="food-icon">🍚</div>
+
+      <div>
+
+        <h3>ビビンバ</h3>
+
+        <p>
+          野菜、肉、卵などを混ぜて食べる韓国の定番料理。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="food-card">
+
+      <div class="food-icon">🥞</div>
+
+      <div>
+
+        <h3>シアホットク</h3>
+
+        <p>
+          ナッツや種が入った釜山名物の甘い屋台スイーツ。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="food-card">
+
+      <div class="food-icon">🍗</div>
+
+      <div>
+
+        <h3>韓国チキン</h3>
+
+        <p>
+          サクサクの韓国式フライドチキン。
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+HOTEL
+========================= -->
+
+<section class="section" id="hotel">
+
+  <div class="section-label">
+    ACCOMMODATION
+  </div>
+
+  <h2 class="section-title">
+    おすすめの宿泊エリア
+  </h2>
+
+  <p class="section-description">
+    観光のしやすさを考えて、各都市で便利なエリアを選びます。
+  </p>
+
+
+  <div class="hotel-grid">
+
+
+    <div class="hotel-card">
+
+      <div class="hotel-image"
+      style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80')">
+      </div>
+
+      <div class="hotel-body">
+
+        <div class="hotel-area">
+          DAY 1｜ソウル
+        </div>
+
+        <h3>明洞・乙支路エリア</h3>
+
+        <p>
+          ショッピング、飲食店、地下鉄利用に便利。
+        </p>
+
+        <div class="hotel-price">
+          💰 ビジネス〜高級ホテル
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="hotel-card">
+
+      <div class="hotel-image"
+      style="background-image:url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=80')">
+      </div>
+
+      <div class="hotel-body">
+
+        <div class="hotel-area">
+          DAY 2｜慶州
+        </div>
+
+        <h3>皇理団通り・市内エリア</h3>
+
+        <p>
+          観光地やカフェに近く、韓屋ステイにもおすすめ。
+        </p>
+
+        <div class="hotel-price">
+          💰 韓屋・ホテル
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="hotel-card">
+
+      <div class="hotel-image"
+      style="background-image:url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1000&q=80')">
+      </div>
+
+      <div class="hotel-body">
+
+        <div class="hotel-area">
+          DAY 3｜釜山
+        </div>
+
+        <h3>海雲台・広安里</h3>
+
+        <p>
+          海、夜景、カフェ、レストランを楽しむならおすすめ。
+        </p>
+
+        <div class="hotel-price">
+          💰 ビジネス〜高級ホテル
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+TIPS
+========================= -->
+
+<section class="section">
+
+  <div class="section-label">
+    TRAVEL TIPS
+  </div>
+
+  <h2 class="section-title">
+    韓国旅行の便利なポイント
+  </h2>
+
+
+  <div class="tips">
+
+
+    <div class="tip">
+
+      <div class="tip-icon">🚄</div>
+
+      <div>
+
+        <h3>KTXを利用</h3>
+
+        <p>
+          ソウルから慶州など長距離移動にはKTXが便利です。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="tip">
+
+      <div class="tip-icon">🚇</div>
+
+      <div>
+
+        <h3>交通カード</h3>
+
+        <p>
+          地下鉄やバスの利用には交通カードが便利です。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="tip">
+
+      <div class="tip-icon">📱</div>
+
+      <div>
+
+        <h3>地図アプリ</h3>
+
+        <p>
+          Naver MapやKakaoMapを準備しておくと便利です。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="tip">
+
+      <div class="tip-icon">💳</div>
+
+      <div>
+
+        <h3>クレジットカード</h3>
+
+        <p>
+          カードが使える店舗が多いですが、市場用に少額のウォンも準備しましょう。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="tip">
+
+      <div class="tip-icon">📶</div>
+
+      <div>
+
+        <h3>eSIM・SIM</h3>
+
+        <p>
+          地図や翻訳アプリを使うため、インターネット環境を準備しましょう。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="tip">
+
+      <div class="tip-icon">🌦️</div>
+
+      <div>
+
+        <h3>天気・服装</h3>
+
+        <p>
+          季節によって気温差があります。旅行前に天気を確認しましょう。
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+BUDGET
+========================= -->
+
+<section class="section">
+
+  <div class="budget-box">
+
+    <h2>
+      💰 3泊4日の旅行予算目安
+    </h2>
+
+
+    <div class="budget-grid">
+
+      <div class="budget-item">
+        <span>ホテル</span>
+        <strong>₩300,000〜</strong>
+      </div>
+
+      <div class="budget-item">
+        <span>食事</span>
+        <strong>₩150,000〜</strong>
+      </div>
+
+      <div class="budget-item">
+        <span>交通</span>
+        <strong>₩60,000〜</strong>
+      </div>
+
+      <div class="budget-item">
+        <span>観光・買物</span>
+        <strong>₩100,000〜</strong>
+      </div>
+
+    </div>
+
+
+    <p style="margin-top:18px;font-size:12px;opacity:.8;">
+      ※ 1人あたりの大まかな目安です。
+      航空券、ショッピング、高級レストランなどは含まれていません。
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+CTA
+========================= -->
+
+<section class="section">
+
+  <div class="cta">
+
+    <h2>
+      次の旅行は、韓国へ。
+    </h2>
+
+    <p>
+      ソウルの街、慶州の歴史、釜山の海。<br>
+      3泊4日で韓国の魅力をたっぷり楽しみましょう。
+    </p>
+
+    <!-- QR CODE BLOCK (https://url.kr/rhbmmo) -->
+    <div class="qr-section">
+      <div class="qr-card">
+        <a href="https://url.kr/rhbmmo" target="_blank" rel="noopener noreferrer">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Furl.kr%2Frhbmmo&margin=5" alt="旅行ガイド QRコード">
+        </a>
+        <span>📱 スマホで開く・保存</span>
+      </div>
+    </div>
+
+    <div>
+      <a href="#schedule" class="btn btn-primary">
+        旅行日程をもう一度見る
+      </a>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+FOOTER
+========================= -->
+
+<footer>
+
+  <h3>
+    🇰🇷 KOREA TRAVEL GUIDE
+  </h3>
+
+  <p>
+    日本人旅行者向け 韓国3泊4日旅行ガイド
+  </p>
+
+  <div class="footer-qr">
+    <a href="https://url.kr/rhbmmo" target="_blank" rel="noopener noreferrer">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Furl.kr%2Frhbmmo&margin=5" alt="QRコード">
+    </a>
+  </div>
+
+  <div class="copyright">
+    © 2026 Korea Travel Guide
+  </div>
+
+</footer>
+
+
+<!-- =========================
+JAVASCRIPT
+========================= -->
+
+<script>
+
+function showDay(day, button) {
+
+  // 일정 패널 모두 숨김
+  document.querySelectorAll(".day-panel")
+    .forEach(function(panel) {
+      panel.classList.remove("active");
+    });
+
+  // 버튼 모두 비활성화
+  document.querySelectorAll(".day-tab")
+    .forEach(function(tab) {
+      tab.classList.remove("active");
+    });
+
+  // 선택된 일정 표시
+  document.getElementById("day" + day)
+    .classList.add("active");
+
+  // 선택된 버튼 활성화
+  button.classList.add("active");
+
+  // 일정 영역으로 이동
+  document.getElementById("schedule")
+    .scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+}
+
+
+document.querySelectorAll('a[href^="#"]')
+.forEach(function(anchor) {
+
+  anchor.addEventListener("click", function(e) {
+
+    const target =
+      document.querySelector(
+        this.getAttribute("href")
+      );
+
+    if(target) {
+
+      e.preventDefault();
+
+      target.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+    }
+
+  });
+
+});
+
+</script>
+
+
+</body>
+</html>
