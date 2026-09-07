@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="일본인 관광객을 위한 부산 3박 4일 여행 코스. 해운대, 광안리, 감천문화마을, 자갈치시장, 해동용궁사와 부산 대표 먹거리를 한 번에.">
+  <title>BUSAN 3박 4일 | 일본인 관광객 여행 가이드</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --navy:#102c43;
+      --blue:#0b86a8;
+      --cyan:#dff5fa;
+      --cream:#fff7e7;
+      --paper:#ffffff;
+      --bg:#f5f8fa;
+      --text:#213747;
+      --muted:#6a7e8c;
+      --line:#dce6eb;
+      --shadow:0 16px 40px rgba(16,44,67,.09);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--text);
+      background:var(--bg);
+      font-family:"Noto Sans KR","Noto Sans JP",sans-serif;
+      line-height:1.7;
+    }
+    button{font:inherit}
+    a{text-decoration:none;color:inherit}
+    .topbar{
+      position:fixed;z-index:50;top:0;left:0;right:0;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 5%;
+      background:rgba(16,44,67,.86);
+      backdrop-filter:blur(12px);
+      color:#fff;
+    }
+    .brand{font-weight:800;letter-spacing:.04em}
+    .nav{display:flex;gap:18px;align-items:center;font-size:.9rem}
+    .nav a{opacity:.9}
+    .lang button{
+      border:1px solid rgba(255,255,255,.35);
+      background:rgba(255,255,255,.08);
+      color:#fff;border-radius:999px;padding:6px 11px;cursor:pointer
+    }
+    .lang button.active{background:#fff;color:var(--navy)}
+    .hero{
+      min-height:650px;
+      display:flex;align-items:center;
+      padding:110px 6% 80px;
+      color:#fff;
+      background:
+        linear-gradient(115deg,rgba(10,35,54,.9),rgba(11,134,168,.48)),
+        url("https://images.unsplash.com/photo-1538485399081-7c897d3d8f2d?auto=format&fit=crop&w=2000&q=85")
+        center/cover;
+    }
+    .hero-inner{max-width:1000px;margin:auto;width:100%}
+    .eyebrow{font-size:.9rem;letter-spacing:.18em;font-weight:700;opacity:.9}
+    h1{font-size:clamp(3rem,7vw,6.4rem);line-height:1.02;margin:18px 0}
+    .hero-copy{max-width:760px;font-size:1.15rem}
+    .pills{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+    .pill{border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.12);padding:7px 13px;border-radius:999px}
+    .wrap{max-width:1160px;margin:auto;padding:70px 22px}
+    .section-head{margin-bottom:25px}
+    .section-head h2{font-size:2rem;margin:0 0 4px}
+    .section-head p{margin:0;color:var(--muted)}
+    .intro-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}
+    .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
+    .card.cream{background:var(--cream)}
+    .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:25px}
+    .quick-item{padding:18px;border-radius:16px;background:#fff;border:1px solid var(--line);text-align:center}
+    .quick-item strong{display:block;font-size:1.1rem}
+    .quick-item span{font-size:.82rem;color:var(--muted)}
+    .day{margin-top:70px}
+    .day-title{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--navy);padding-bottom:12px}
+    .day-title h2{margin:0;font-size:1.75rem}
+    .day-title p{margin:0;color:var(--muted)}
+    .timeline{margin-top:18px;display:grid;gap:12px}
+    .stop{
+      display:grid;grid-template-columns:112px 1fr;gap:18px;
+      background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;
+      transition:transform .2s, box-shadow .2s;
+    }
+    .stop:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(16,44,67,.08)}
+    .time{font-weight:800;color:var(--blue);white-space:nowrap}
+    .stop h3{margin:0 0 4px;font-size:1.13rem}
+    .stop p{margin:0;color:#566b79}
+    .food-tag{display:inline-block;margin-top:9px;padding:4px 10px;border-radius:9px;background:var(--cyan);font-size:.87rem}
+    .map-btn{
+      display:inline-block;margin-top:10px;
+      padding:6px 10px;border-radius:8px;
+      background:#f0f4f6;color:var(--navy);font-size:.84rem;font-weight:700
+    }
+    .photo{
+      height:260px;border-radius:20px;margin-top:18px;
+      background:center/cover no-repeat;
+    }
+    .route{margin-top:65px;background:var(--navy);color:#fff;border-radius:28px;padding:34px}
+    .route h2{margin-top:0}
+    .route-row{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+    .route-row:last-child{border-bottom:0}
+    .route-row b{color:#8ee7f5;margin-right:8px}
+    .food-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+    .food{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center}
+    .food .emoji{font-size:2rem}
+    .food strong{display:block;margin-top:6px}
+    .stars{font-size:.78rem;color:#e0a400}
+    .tips{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .tip{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}
+    .tip h3{margin-top:0}
+    footer{background:#0b2233;color:#dbe8ee;text-align:center;padding:38px 20px}
+    .back{position:fixed;right:18px;bottom:18px;width:45px;height:45px;border:0;border-radius:50%;background:var(--blue);color:#fff;cursor:pointer;box-shadow:var(--shadow)}
+    .notice{margin-top:18px;color:var(--muted);font-size:.84rem}
+    [data-lang="ja"]{display:none}
+    body.ja [data-lang="ko"]{display:none}
+    body.ja [data-lang="ja"]{display:inline}
+    .block-ko{display:block}
+    body.ja .block-ko{display:none}
+    .block-ja{display:none}
+    body.ja .block-ja{display:block}
+
+    @media(max-width:850px){
+      .nav a{display:none}
+      .intro-grid,.tips{grid-template-columns:1fr}
+      .quick{grid-template-columns:repeat(2,1fr)}
+      .food-grid{grid-template-columns:repeat(2,1fr)}
+      .day-title{display:block}
+    }
+    @media(max-width:620px){
+      .hero{min-height:590px;padding:105px 24px 60px}
+      .wrap{padding:50px 16px}
+      .stop{grid-template-columns:76px 1fr;padding:17px}
+      .time{font-size:.9rem}
+      .photo{height:190px}
+      .route{padding:25px 20px}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="brand">BUSAN TRAVEL</div>
+    <nav class="nav">
+      <a href="#day1">DAY 1</a>
+      <a href="#day2">DAY 2</a>
+      <a href="#day3">DAY 3</a>
+      <a href="#day4">DAY 4</a>
+      <a href="#food">FOOD</a>
+    </nav>
+    <div class="lang">
+      <button id="koBtn" class="active" onclick="setLang('ko')">한국어</button>
+      <button id="jaBtn" onclick="setLang('ja')">日本語</button>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">BUSAN · 3 NIGHTS 4 DAYS</div>
+      <h1 data-lang="ko">바다와 시장,<br>부산을 맛보다.</h1>
+      <h1 data-lang="ja">海と市場、<br>釜山を味わう。</h1>
+      <p class="hero-copy block-ko">
+        일본인 관광객을 위한 부산 3박 4일 추천 코스입니다.
+        대표 관광지와 부산다운 먹거리, 사진 명소와 야경을 여유 있게 연결했습니다.
+      </p>
+      <p class="hero-copy block-ja">
+        日本人旅行者向けの釜山3泊4日モデルコースです。
+        定番観光地、釜山グルメ、フォトスポット、夜景をバランスよく楽しめます。
+      </p>
+      <div class="pills">
+        <span class="pill">🌊 <span data-lang="ko">바다</span><span data-lang="ja">海</span></span>
+        <span class="pill">🍜 <span data-lang="ko">부산 먹거리</span><span data-lang="ja">釜山グルメ</span></span>
+        <span class="pill">📸 <span data-lang="ko">사진 명소</span><span data-lang="ja">フォトスポット</span></span>
+        <span class="pill">🌙 <span data-lang="ko">야경</span><span data-lang="ja">夜景</span></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <div class="intro-grid">
+        <div class="card">
+          <div class="section-head">
+            <h2 data-lang="ko">여행 컨셉</h2>
+            <h2 data-lang="ja">旅のコンセプト</h2>
+          </div>
+          <p class="block-ko">관광 <b>50%</b> · 먹거리 <b>30%</b> · 카페/쇼핑 <b>20%</b>의 균형으로 구성했습니다.</p>
+          <p class="block-ja">観光 <b>50%</b> · グルメ <b>30%</b> · カフェ・ショッピング <b>20%</b>のバランスで構成しています。</p>
+          <div class="notice block-ko">회·해산물처럼 일본인에게 친숙한 음식과 돼지국밥·밀면·시장 간식을 함께 경험하도록 구성했습니다.</div>
+          <div class="notice block-ja">刺身・海鮮など馴染みのある料理と、テジクッパ・ミルミョン・市場グルメを組み合わせています。</div>
+        </div>
+        <div class="card cream">
+          <div class="section-head">
+            <h2 data-lang="ko">추천 숙소</h2>
+            <h2 data-lang="ja">おすすめの宿泊エリア</h2>
+          </div>
+          <p><b>Haeundae / 해운대</b></p>
+          <p class="block-ko">3박 모두 해운대에 머물면 동쪽·서쪽 관광지를 나누어 이동하기 편하고, 저녁에는 해운대와 광안리 야경을 즐기기 좋습니다.</p>
+          <p class="block-ja">3泊とも海雲台に泊まると東側・西側の観光地を効率よく回れ、夜は海雲台と広安里の夜景を楽しめます。</p>
+        </div>
+      </div>
+      <div class="quick">
+        <div class="quick-item">🛏️<strong>3박</strong><span>3 nights</span></div>
+        <div class="quick-item">📍<strong>부산 핵심권</strong><span>Busan highlights</span></div>
+        <div class="quick-item">🍴<strong>로컬 음식</strong><span>Local food</span></div>
+        <div class="quick-item">🚕<strong>택시+지하철</strong><span>Easy transfer</span></div>
+      </div>
+    </section>
+
+    <section id="day1" class="day">
+      <div class="day-title">
+        <h2>DAY 1 · 해운대 & 광안리</h2>
+        <p data-lang="ko">부산의 바다와 야경</p><p data-lang="ja">釜山の海と夜景</p>
+      </div>
+      <div class="timeline">
+        <div class="stop"><div class="time">12:00–14:00</div><div><h3 data-lang="ko">부산 도착 · 돼지국밥</h3><h3 data-lang="ja">釜山到着・テジクッパ</h3><p data-lang="ko">첫 식사는 부산 대표 음식인 돼지국밥으로 시작합니다.</p><p data-lang="ja">最初の食事は釜山名物のテジクッパから。</p><span class="food-tag">🍲 豚肉スープご飯 / 돼지국밥</span></div></div>
+        <div class="stop"><div class="time">14:30–16:00</div><div><h3>해운대 해수욕장</h3><p data-lang="ko">해변 산책, 바다 사진, 카페에서 여유로운 첫 오후.</p><p data-lang="ja">ビーチ散策、海の写真、カフェでゆっくり過ごします。</p><a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Haeundae+Beach">📍 Google Maps</a></div></div>
+        <div class="stop"><div class="time">16:00–18:00</div><div><h3>해운대 블루라인파크 · 청사포</h3><p data-lang="ko">스카이캡슐과 청사포 바다 풍경을 즐깁니다.</p><p data-lang="ja">スカイカプセルと青沙浦の海岸風景を楽しみます。</p><a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Haeundae+Blueline+Park">📍 Google Maps</a></div></div>
+        <div class="stop"><div class="time">18:30–20:00</div><div><h3 data-lang="ko">청사포/해운대 해산물</h3><h3 data-lang="ja">青沙浦・海雲台で海鮮料理</h3><p data-lang="ko">한국식 회와 해산물을 즐기는 시간.</p><p data-lang="ja">韓国スタイルの刺身や海鮮料理を楽しみます。</p><span class="food-tag">🐟 회 · 🦐 해산물 · 🐚 조개구이</span></div></div>
+        <div class="stop"><div class="time">20:30–22:00</div><div><h3>광안리 야경 · Gwangalli</h3><p data-lang="ko">광안대교를 바라보며 오션뷰 카페에서 첫날을 마무리합니다.</p><p data-lang="ja">広安大橋を眺めながらオーシャンビューカフェで1日を締めくくります。</p><a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Gwangalli+Beach+Busan">📍 Google Maps</a></div></div>
+      </div>
+      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1538485399081-7c897d3d8f2d?auto=format&fit=crop&w=1600&q=85')"></div>
+    </section>
+
+    <section id="day2" class="day">
+      <div class="day-title">
+        <h2>DAY 2 · 감천 & 남포동</h2>
+        <p data-lang="ko">골목, 시장, 먹방</p><p data-lang="ja">路地・市場・食べ歩き</p>
+      </div>
+      <div class="timeline">
+        <div class="stop"><div class="time">09:30–11:30</div><div><h3>감천문화마을 · Gamcheon</h3><p data-lang="ko">알록달록한 산비탈 마을과 골목길에서 사진을 남깁니다.</p><p data-lang="ja">カラフルな山の斜面の街並みと路地で写真を撮ります。</p><a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Gamcheon+Culture+Village+Busan">📍 Google Maps</a></div></div>
+        <div class="stop"><div class="time">12:00–13:30</div><div><h3>자갈치시장 · Jagalchi</h3><p data-lang="ko">부산 최대 수산시장 분위기를 구경하고 해산물 점심.</p><p data-lang="ja">釜山を代表する水産市場を見学し、海鮮ランチ。</p><span class="food-tag">🦀 대게 · 🐟 회 · 🐙 해산물</span><a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Jagalchi+Market+Busan">📍 Google Maps</a></div></div>
+        <div class="stop"><div class="time">13:30–15:30</div><div><h3>국제시장 · BIFF광장</h3><p data-lang="ko">부산 원도심을 천천히 걸으며 시장과 영화의 거리를 둘러봅니다.</p><p data-lang="ja">旧市街を歩きながら国際市場とBIFF広場を巡ります。</p></div></div>
+        <div class="stop"><div class="time">15:00–17:00</div><div><h3>부평깡통시장 먹방</h3><p data-lang="ko">여러 음식을 조금씩 나누어 먹는 방식이 좋습니다.</p><p data-lang="ja">いろいろな料理を少しずつシェアするのがおすすめです。</p><span class="food-tag">🥞 씨앗호떡 · 🍢 어묵 · 🍜 비빔당면 · 🥟 유부주머니</span><a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Bupyeong+Kkangtong+Market+Busan">📍 Google Maps</a></div></div>
+        <div class="stop"><div class="time">17:00–18:00</div><div><h3>용두산공원 · 부산타워</h3><p data-lang="ko">남포동 일대를 내려다보고 저녁 장소로 이동합니다.</p><p data-lang="ja">南浦洞エリアを見渡して夕食へ向かいます。</p></div></div>
+        <div class="stop"><div class="time">18:30–20:30</div><div><h3 data-lang="ko">한국식 고기구이</h3><h3 data-lang="ja">韓国式焼肉</h3><p data-lang="ko">해산물과 다른 매력의 한국식 고기를 경험합니다.</p><p data-lang="ja">海鮮とは違う韓国式焼肉を体験します。</p><span class="food-tag">🥩 돼지갈비 · 삼겹살 · 곱창</span></div></div>
+      </div>
+      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=1600&q=85')"></div>
+    </section>
+
+    <section id="day3" class="day">
+      <div class="day-title">
+        <h2>DAY 3 · 기장 & 송정</h2>
+        <p data-lang="ko">바닷가 사찰과 동부 해안</p><p data-lang="ja">海辺の寺院と東海岸</p>
+      </div>
+      <div class="timeline">
+        <div class="stop"><div class="time">09:00–10:30</div><div><h3>해동용궁사 · Haedong Yonggungsa</h3><p data-lang="ko">바다 절벽과 어우러진 한국 사찰의 독특한 풍경.</p><p data-lang="ja">海岸の崖と一体になった韓国寺院の独特な風景。</p><a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Haedong+Yonggungsa+Temple+Busan">📍 Google Maps</a></div></div>
+        <div class="stop"><div class="time">11:00–12:30</div><div><h3>기장시장 · Gijang</h3><p data-lang="ko">기장 특색을 살린 해산물 점심을 추천합니다.</p><p data-lang="ja">機張ならではの海鮮ランチがおすすめです。</p><span class="food-tag">🦀 대게 · 🦐 해산물 · 🍲 해물탕</span></div></div>
+        <div class="stop"><div class="time">13:00–15:00</div><div><h3>송정해수욕장 · 오션뷰 카페</h3><p data-lang="ko">해운대보다 여유로운 바다 분위기를 즐깁니다.</p><p data-lang="ja">海雲台よりゆったりした海辺の雰囲気を楽しみます。</p><a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Songjeong+Beach+Busan">📍 Google Maps</a></div></div>
+        <div class="stop"><div class="time">15:30–17:30</div><div><h3 data-lang="ko">해운대 자유시간</h3><h3 data-lang="ja">海雲台フリータイム</h3><p data-lang="ko">쇼핑, 카페, 한국 화장품과 기념품 쇼핑.</p><p data-lang="ja">ショッピング、カフェ、韓国コスメやお土産。</p></div></div>
+        <div class="stop"><div class="time">18:00–20:00</div><div><h3 data-lang="ko">부산 밀면</h3><h3 data-lang="ja">釜山名物ミルミョン</h3><p data-lang="ko">부산 여행에서 한 번은 꼭 맛볼 대표 음식.</p><p data-lang="ja">釜山旅行で一度は食べたい名物料理。</p><span class="food-tag">🍜 밀면 · 🥟 만두 · 🥩 수육</span></div></div>
+        <div class="stop"><div class="time">20:30–</div><div><h3 data-lang="ko">선택 코스</h3><h3 data-lang="ja">選択コース</h3><p data-lang="ko">해운대 야경 카페 / 서면 밤거리 / 황령산 야경 중 선택.</p><p data-lang="ja">海雲台の夜景カフェ / 西面の夜 / 荒嶺山の夜景から選択。</p></div></div>
+      </div>
+      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1600&q=85')"></div>
+    </section>
+
+    <section id="day4" class="day">
+      <div class="day-title">
+        <h2>DAY 4 · 마지막 부산</h2>
+        <p data-lang="ko">시장 · 국밥 · 쇼핑 · 공항</p><p data-lang="ja">市場・クッパ・買い物・空港</p>
+      </div>
+      <div class="timeline">
+        <div class="stop"><div class="time">09:00–10:00</div><div><h3 data-lang="ko">부산식 아침</h3><h3 data-lang="ja">釜山の朝ごはん</h3><p data-lang="ko">돼지국밥 또는 밀면으로 마지막 부산 음식을 즐깁니다.</p><p data-lang="ja">テジクッパまたはミルミョンで最後の釜山グルメ。</p></div></div>
+        <div class="stop"><div class="time">10:30–12:00</div><div><h3>해운대 전통시장</h3><p data-lang="ko">어묵, 김, 과자, 기념품 등을 쇼핑합니다.</p><p data-lang="ja">練り物、海苔、お菓子、お土産などを購入します。</p><a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Haeundae+Traditional+Market+Busan">📍 Google Maps</a></div></div>
+        <div class="stop"><div class="time">12:00–14:00</div><div><h3 data-lang="ko">마지막 점심 · 돼지국밥</h3><h3 data-lang="ja">最後のランチ・テジクッパ</h3><p data-lang="ko">부산을 대표하는 음식으로 여행을 마무리합니다.</p><p data-lang="ja">釜山を代表する料理で旅を締めくくります。</p></div></div>
+        <div class="stop"><div class="time">14:00–</div><div><h3 data-lang="ko">김해공항 이동</h3><h3 data-lang="ja">金海空港へ移動</h3><p data-lang="ko">항공편 시간에 맞춰 여유 있게 공항으로 이동합니다.</p><p data-lang="ja">フライト時間に合わせて余裕を持って空港へ。</p><a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Gimhae+International+Airport">📍 Google Maps</a></div></div>
+      </div>
+    </section>
+
+    <section class="route">
+      <h2 data-lang="ko">🗺️ 전체 동선</h2>
+      <h2 data-lang="ja">🗺️ 全体ルート</h2>
+      <div class="route-row"><b>DAY 1</b> 해운대 → 청사포 → 광안리</div>
+      <div class="route-row"><b>DAY 2</b> 감천문화마을 → 자갈치 → 국제시장 → BIFF → 깡통시장 → 남포동</div>
+      <div class="route-row"><b>DAY 3</b> 해동용궁사 → 기장 → 송정 → 해운대</div>
+      <div class="route-row"><b>DAY 4</b> 해운대시장 → 국밥 → 쇼핑 → 김해공항</div>
+    </section>
+
+    <section id="food" class="day">
+      <div class="section-head">
+        <h2 data-lang="ko">🍴 부산에서 꼭 먹어볼 음식</h2>
+        <h2 data-lang="ja">🍴 釜山で食べたいグルメ</h2>
+        <p data-lang="ko">일본인 관광객에게 추천하는 부산 대표 먹거리</p>
+        <p data-lang="ja">日本人旅行者におすすめの釜山グルメ</p>
+      </div>
+      <div class="food-grid">
+        <div class="food"><div class="emoji">🐷</div><strong>돼지국밥</strong><div class="stars">★★★★★</div></div>
+        <div class="food"><div class="emoji">🍜</div><strong>밀면</strong><div class="stars">★★★★★</div></div>
+        <div class="food"><div class="emoji">🐟</div><strong>회</strong><div class="stars">★★★★★</div></div>
+        <div class="food"><div class="emoji">🦀</div><strong>대게·해산물</strong><div class="stars">★★★★★</div></div>
+        <div class="food"><div class="emoji">🥞</div><strong>씨앗호떡</strong><div class="stars">★★★★★</div></div>
+        <div class="food"><div class="emoji">🍢</div><strong>부산어묵</strong><div class="stars">★★★★★</div></div>
+        <div class="food"><div class="emoji">🥩</div><strong>돼지갈비</strong><div class="stars">★★★★☆</div></div>
+        <div class="food"><div class="emoji">🥘</div><strong>해물탕</strong><div class="stars">★★★★☆</div></div>
+        <div class="food"><div class="emoji">🍜</div><strong>비빔당면</strong><div class="stars">★★★★☆</div></div>
+        <div class="food"><div class="emoji">🍗</div><strong>치킨·맥주</strong><div class="stars">★★★★☆</div></div>
+      </div>
+    </section>
+
+    <section class="day">
+      <div class="section-head">
+        <h2 data-lang="ko">🇯🇵 일본인 여행자를 위한 팁</h2>
+        <h2 data-lang="ja">🇯🇵 日本人旅行者向けのポイント</h2>
+      </div>
+      <div class="tips">
+        <div class="tip"><h3>🍣 음식</h3><p class="block-ko">회·해산물은 친숙하므로 한국식 양념과 반찬의 차이를 함께 소개하면 좋습니다.</p><p class="block-ja">刺身・海鮮は馴染みがあるため、韓国式のタレやおかずとの違いを紹介すると楽しみやすいです。</p></div>
+        <div class="tip"><h3>🍢 시장</h3><p class="block-ko">시장에서는 한 가지를 많이 먹기보다 여러 종류를 조금씩 맛보는 방식이 좋습니다.</p><p class="block-ja">市場では一つをたくさん食べるより、いろいろな料理を少しずつ食べ歩くのがおすすめです。</p></div>
+        <div class="tip"><h3>🌊 바다</h3><p class="block-ko">하루에 한 번은 오션뷰 카페나 해변 산책을 넣어 부산의 바다를 충분히 느끼게 했습니다.</p><p class="block-ja">毎日一度は海辺の散策やオーシャンビューカフェを入れ、釜山の海を満喫できるようにしています。</p></div>
+        <div class="tip"><h3>🚕 이동</h3><p class="block-ko">관광지 사이 이동은 지하철과 택시를 병행하면 편합니다. 시간에 여유가 있으면 택시를 활용하세요.</p><p class="block-ja">移動は地下鉄とタクシーの併用がおすすめです。時間に余裕があればタクシーを利用すると便利です。</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>BUSAN TRAVEL · 3 NIGHTS 4 DAYS</div>
+    <div class="notice" style="color:#b8cbd4">일본인 관광객을 위한 부산 관광 & 먹거리 추천 코스</div>
+  </footer>
+
+  <button class="back" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="맨 위로">↑</button>
+
+  <script>
+    function setLang(lang){
+      document.body.classList.toggle('ja', lang === 'ja');
+      document.getElementById('koBtn').classList.toggle('active', lang === 'ko');
+      document.getElementById('jaBtn').classList.toggle('active', lang === 'ja');
+      document.documentElement.lang = lang === 'ja' ? 'ja' : 'ko';
+      localStorage.setItem('busanLang', lang);
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+      const saved = localStorage.getItem('busanLang') || 'ko';
+      setLang(saved);
+
+      // Apps Script 서버 함수가 정상 동작하는지 확인.
+      // 실패해도 정적 웹페이지는 그대로 표시됩니다.
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withFailureHandler(function(){})
+          .getTravelInfo();
+      }
+    });
+  </script>
+</body>
+</html>
