@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Doc & Image Compressor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 아이콘 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 브라우저 압축 라이브러리들 (CDN) -->
+    <!-- 1. JSZip (Word/PPT 압축용) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- 2. PDF.js (PDF 페이지 캡처용) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- 3. jsPDF (PDF 재조합용) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        .drag-over { border-color: #3b82f6 !important; background-color: #eff6ff !important; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <!-- Header (요구사항 1, 2) -->
+    <header class="w-full bg-white shadow-sm px-8 py-4 flex justify-between items-center">
+        <!-- 1. 좌상단 로고 및 클릭시 이동 -->
+        <a href="https://nanalab.kr" target="_blank" rel="noopener noreferrer" class="flex items-center">
+            <img src="logo.png" alt="Logo" class="h-10 object-contain" onerror="this.src='https://via.placeholder.com/120x40?text=LOGO'">
+        </a>
+        <!-- 2. 우상단 문구 -->
+        <h1 class="text-xl font-bold text-gray-700">Smart Doc Compressor</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-6 flex flex-col gap-6">
+
+        <!-- Upload Zone (요구사항 3, 4, 5) -->
+        <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-2xl p-10 bg-white text-center shadow-sm transition-all flex flex-col items-center justify-center cursor-pointer hover:border-blue-400">
+            <i class="fa-solid fa-cloud-arrow-up text-5xl text-blue-500 mb-4"></i>
+            
+            <!-- 3. 메인 문구 -->
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">Upload or Drop your file!</h2>
+            <p class="text-sm text-gray-500 mb-6">PDF, Word, PPT 및 이미지(JPG, PNG, WEBP) 파일을 업로드하세요.</p>
+            
+            <!-- 4. 파일 선택 버튼 -->
+            <input type="file" id="file-input" multiple accept=".pdf,.docx,.pptx,.jpg,.jpeg,.png,.webp,.hwp,.hwpx" class="hidden">
+            <button onclick="document.getElementById('file-input').click()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2.5 rounded-lg transition-colors shadow-md mb-8">
+                파일 선택하기
+            </button>
+
+            <!-- 6. 지원 파일 아이콘 목록 -->
+            <div class="flex items-center gap-6 text-gray-500 pt-4 border-t border-gray-100 w-full justify-center flex-wrap">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-file-pdf text-red-500 text-2xl"></i>
+                    <span class="text-xs font-semibold text-gray-700">PDF</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-file-word text-blue-600 text-2xl"></i>
+                    <span class="text-xs font-semibold text-gray-700">Word</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-file-powerpoint text-orange-500 text-2xl"></i>
+                    <span class="text-xs font-semibold text-gray-700">PPT</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-file-image text-emerald-500 text-2xl"></i>
+                    <span class="text-xs font-semibold text-gray-700">Image</span>
+                </div>
+                <div class="flex items-center gap-2 opacity-50" title="HWP는 변환 후 업로드 필요">
+                    <i class="fa-solid fa-file-lines text-gray-400 text-2xl"></i>
+                    <span class="text-xs font-semibold text-gray-400 line-through">HWP</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Progress List (요구사항 7, 8, 9) -->
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">작업 목록</h3>
+            <div id="file-list" class="space-y-4">
+                <p id="empty-msg" class="text-center text-gray-400 py-4">업로드된 파일이 없습니다.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // PDF.js 워커 설정
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+        const emptyMsg = document.getElementById('empty-msg');
+
+        // 드래그 앤 드롭 이벤트
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => { e.preventDefault(); dropZone.classList.remove('drag-over'); });
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                const ext = file.name.split('.').pop().toLowerCase();
+
+                // HWP 파일 업로드 시 안내 팝업 출력
+                if (['hwp', 'hwpx'].includes(ext)) {
+                    alert(`[안내] '${file.name}'\nHWP 파일은 웹에서 직접 압축이 어렵습니다.\nPDF나 워드(DOCX) 파일로 변환하신 후 다시 업로드해 주세요!`);
+                    return;
+                }
+
+                const ALLOWED_EXTS = ['pdf', 'docx', 'pptx', 'jpg', 'jpeg', 'png', 'webp'];
+                if (!ALLOWED_EXTS.includes(ext)) {
+                    alert(`'${file.name}'은(는) 지원하지 않는 파일 형식입니다.`);
+                    return;
+                }
+
+                if (emptyMsg) emptyMsg.style.display = 'none';
+                processFileInBrowser(file);
+            });
+        }
+
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            if (ext === 'pdf') return '<i class="fa-solid fa-file-pdf text-red-500 text-2xl"></i>';
+            if (['ppt', 'pptx'].includes(ext)) return '<i class="fa-solid fa-file-powerpoint text-orange-500 text-2xl"></i>';
+            if (['doc', 'docx'].includes(ext)) return '<i class="fa-solid fa-file-word text-blue-600 text-2xl"></i>';
+            if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) return '<i class="fa-solid fa-file-image text-emerald-500 text-2xl"></i>';
+            return '<i class="fa-solid fa-file text-gray-500 text-2xl"></i>';
+        }
+
+        async function processFileInBrowser(file) {
+            const fileId = 'file-' + Math.random().toString(36).substr(2, 9);
+            
+            const fileItem = document.createElement('div');
+            fileItem.className = 'p-4 border rounded-lg flex flex-col gap-2 bg-gray-50';
+            fileItem.id = fileId;
+            fileItem.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        ${getFileIcon(file.name)}
+                        <div>
+                            <p class="font-medium text-gray-800 text-sm">${file.name}</p>
+                            <p class="text-xs text-gray-400">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                        </div>
+                    </div>
+                    <a id="btn-${fileId}" class="px-4 py-1.5 text-sm bg-gray-300 text-gray-500 rounded cursor-not-allowed pointer-events-none transition-colors flex items-center gap-1">
+                        <i class="fa-solid fa-download"></i> 다운로드
+                    </a>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                    <div id="bar-${fileId}" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500">
+                    <span id="status-${fileId}">압축 준비 중...</span>
+                    <span id="percent-${fileId}">0%</span>
+                </div>
+            `;
+            fileList.appendChild(fileItem);
+
+            const ext = file.name.split('.').pop().toLowerCase();
+            let compressedBlob = null;
+
+            try {
+                updateProgress(fileId, 10, '파일 처리 시작...');
+
+                // 1. PDF 압축 (모든 페이지 캡처 -> 이미지 저화질 압축 -> PDF 재조합)
+                if (ext === 'pdf') {
+                    compressedBlob = await compressPdfFile(file, (progress, statusText) => {
+                        updateProgress(fileId, progress, statusText);
+                    });
+                }
+                // 2. 단독 이미지 압축 (JPG, PNG, WEBP)
+                else if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
+                    compressedBlob = await compressImageBlob(file, 0.45);
+                    updateProgress(fileId, 80, '이미지 용량 줄이는 중...');
+                } 
+                // 3. Word/PPT 문서 압축
+                else if (['docx', 'pptx'].includes(ext)) {
+                    compressedBlob = await compressDocxPptx(file, 0.45, (progress) => {
+                        updateProgress(fileId, progress, '문서 사진 압축 중...');
+                    });
+                }
+
+                updateProgress(fileId, 100, '압축 완료!');
+
+                // 다운로드 버튼 활성화 (compressed_원본파일명)
+                const downloadBtn = document.getElementById(`btn-${fileId}`);
+                downloadBtn.href = URL.createObjectURL(compressedBlob);
+                downloadBtn.download = `compressed_${file.name}`;
+                downloadBtn.className = "px-4 py-1.5 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded cursor-pointer transition-colors flex items-center gap-1 shadow-sm";
+
+            } catch (err) {
+                console.error(err);
+                updateProgress(fileId, 0, '오류 발생');
+                document.getElementById(`status-${fileId}`).innerText = '압축 실패';
+                document.getElementById(`status-${fileId}`).className = 'text-xs text-red-500 font-semibold';
+            }
+        }
+
+        // PDF 페이지 캡처 및 스캔본 스타일 재조합 함수
+        async function compressPdfFile(file, onProgress) {
+            const arrayBuffer = await file.arrayBuffer();
+            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+            const pdfDoc = await loadingTask.promise;
+            const totalPages = pdfDoc.numPages;
+
+            let jsPdfDoc = null;
+
+            for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+                onProgress(
+                    Math.round((pageNum / totalPages) * 85),
+                    `PDF 페이지 캡처 중 (${pageNum}/${totalPages})...`
+                );
+
+                const page = await pdfDoc.getPage(pageNum);
+                // 저화질 스캔본 느낌을 내기 위해 배율 1.0으로 조절
+                const viewport = page.getViewport({ scale: 1.0 });
+
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+                // 캡처한 페이지를 JPEG 45% 화질로 압축
+                const imgData = canvas.toDataURL('image/jpeg', 0.45);
+
+                if (pageNum === 1) {
+                    jsPdfDoc = new jspdf.jsPDF({
+                        unit: 'pt',
+                        format: [viewport.width, viewport.height]
+                    });
+                    jsPdfDoc.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height);
+                } else {
+                    jsPdfDoc.addPage([viewport.width, viewport.height]);
+                    jsPdfDoc.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height);
+                }
+            }
+
+            onProgress(95, 'PDF 재조합 중...');
+            return jsPdfDoc.output('blob');
+        }
+
+        // 단독 이미지 압축 함수 (Canvas)
+        function compressImageBlob(blob, quality = 0.5) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                const url = URL.createObjectURL(blob);
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    canvas.toBlob((compressedBlob) => {
+                        URL.revokeObjectURL(url);
+                        resolve(compressedBlob);
+                    }, 'image/jpeg', quality);
+                };
+                img.src = url;
+            });
+        }
+
+        // Word / PPT 내 이미지 압축 함수 (JSZip)
+        async function compressDocxPptx(file, quality, onProgress) {
+            const zip = await JSZip.loadAsync(file);
+            const imageEntries = [];
+
+            zip.forEach((relativePath, zipEntry) => {
+                if (!zipEntry.dir && relativePath.match(/\.(png|jpg|jpeg)$/i)) {
+                    imageEntries.push(zipEntry);
+                }
+            });
+
+            if (imageEntries.length === 0) {
+                onProgress(90);
+                return await zip.generateAsync({ type: "blob" });
+            }
+
+            let count = 0;
+            for (const entry of imageEntries) {
+                const blob = await entry.async("blob");
+                const compressed = await compressImageBlob(blob, quality);
+                const arrayBuffer = await compressed.arrayBuffer();
+                zip.file(entry.name, arrayBuffer);
+                
+                count++;
+                onProgress(20 + Math.round((count / imageEntries.length) * 70));
+            }
+
+            return await zip.generateAsync({ type: "blob" });
+        }
+
+        function updateProgress(fileId, percent, statusText) {
+            const bar = document.getElementById(`bar-${fileId}`);
+            const percentText = document.getElementById(`percent-${fileId}`);
+            const status = document.getElementById(`status-${fileId}`);
+
+            if(bar) bar.style.width = percent + '%';
+            if(percentText) percentText.innerText = percent + '%';
+            if(status) status.innerText = statusText;
+        }
+    </script>
+</body>
+</html>
