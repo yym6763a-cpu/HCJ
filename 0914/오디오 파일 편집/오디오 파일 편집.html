@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Web Audio Editor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- WaveSurfer.js CDN -->
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
+    <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
+    <!-- LameJS for MP3 Encoding -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.all.min.js"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 md:p-8">
+
+    <!-- Header -->
+    <header class="w-full max-w-4xl text-center my-6">
+        <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 mb-2">
+            🎵 Web Audio Editor
+        </h1>
+        <p class="text-slate-400 text-sm md:text-base">오디오 파일을 자르고, 볼륨을 조절하며, 원하는 포맷(MP3/WAV)으로 변환하세요.</p>
+    </header>
+
+    <main class="w-full max-w-4xl space-y-6">
+        
+        <!-- File Upload Area -->
+        <div id="dropZone" class="glass-panel rounded-2xl p-8 text-center border-2 border-dashed border-indigo-500/30 hover:border-indigo-400 transition cursor-pointer">
+            <input type="file" id="audioInput" accept="audio/*" class="hidden">
+            <div class="flex flex-col items-center justify-center space-y-3">
+                <div class="p-4 bg-indigo-600/20 rounded-full text-indigo-400">
+                    <i data-lucide="upload-cloud" class="w-10 h-10"></i>
+                </div>
+                <div>
+                    <p class="text-lg font-semibold text-slate-200">오디오 파일 업로드</p>
+                    <p class="text-sm text-slate-400">여기에 파일을 끌어다 놓거나 클릭하여 선택하세요 (MP3, WAV, OGG, AAC 등)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editor Section (Initially Hidden) -->
+        <div id="editorSection" class="hidden glass-panel rounded-2xl p-6 space-y-6 shadow-2xl">
+            
+            <!-- File Info Bar -->
+            <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="music" class="text-indigo-400 w-5 h-5"></i>
+                    <span id="fileName" class="font-medium text-slate-200 text-sm md:text-base truncate max-w-xs md:max-w-md">filename.mp3</span>
+                </div>
+                <button id="reuploadBtn" class="text-xs text-slate-400 hover:text-indigo-400 flex items-center gap-1 transition">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 다른 파일 선택
+                </button>
+            </div>
+
+            <!-- Waveform View -->
+            <div class="relative bg-slate-900/80 rounded-xl p-4 border border-slate-800">
+                <div id="waveform" class="w-full"></div>
+                <div class="flex justify-between items-center mt-3 text-xs text-slate-400 font-mono">
+                    <span id="currentTime">00:00.00</span>
+                    <span id="totalTime">00:00.00</span>
+                </div>
+            </div>
+
+            <!-- Transport Controls -->
+            <div class="flex items-center justify-center space-x-4">
+                <button id="playPauseBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white p-4 rounded-full shadow-lg shadow-indigo-600/30 transition transform active:scale-95">
+                    <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+                </button>
+                <button id="stopBtn" class="bg-slate-700 hover:bg-slate-600 text-slate-200 p-3 rounded-full transition">
+                    <i data-lucide="square" class="w-5 h-5 fill-current"></i>
+                </button>
+            </div>
+
+            <!-- Tools Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-700/50">
+                
+                <!-- 1. Volume Control -->
+                <div class="bg-slate-800/50 p-4 rounded-xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <label class="text-sm font-semibold flex items-center gap-2 text-slate-300">
+                            <i data-lucide="volume-2" class="w-4 h-4 text-indigo-400"></i> 볼륨 조절
+                        </label>
+                        <span id="volumeVal" class="text-xs font-mono text-indigo-400 font-bold">100%</span>
+                    </div>
+                    <input type="range" id="volumeSlider" min="0" max="200" value="100" class="w-full accent-indigo-500 bg-slate-700 h-2 rounded-lg cursor-pointer">
+                </div>
+
+                <!-- 2. Trim Info -->
+                <div class="bg-slate-800/50 p-4 rounded-xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <label class="text-sm font-semibold flex items-center gap-2 text-slate-300">
+                            <i data-lucide="scissors" class="w-4 h-4 text-purple-400"></i> 구간 자르기 (Trim)
+                        </label>
+                        <button id="resetRegionBtn" class="text-xs text-purple-400 hover:underline">전체 선택</button>
+                    </div>
+                    <div class="flex justify-between text-xs text-slate-400 font-mono">
+                        <span>시작: <span id="trimStart" class="text-slate-200">0.0s</span></span>
+                        <span>종료: <span id="trimEnd" class="text-slate-200">0.0s</span></span>
+                        <span>길이: <span id="trimDuration" class="text-purple-300">0.0s</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export & Output Controls -->
+            <div class="bg-slate-800/80 p-5 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 border border-indigo-500/20">
+                <div class="flex items-center space-x-3 w-full md:w-auto">
+                    <label class="text-sm font-semibold text-slate-300 whitespace-nowrap flex items-center gap-2">
+                        <i data-lucide="file-output" class="w-4 h-4 text-pink-400"></i> 변환 포맷:
+                    </label>
+                    <select id="formatSelect" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 w-full md:w-32">
+                        <option value="wav">WAV (무손실)</option>
+                        <option value="mp3">MP3 (고압축)</option>
+                    </select>
+                </div>
+
+                <button id="exportBtn" class="w-full md:w-auto bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold px-6 py-2.5 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-purple-500/20 transition transform active:scale-95">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    <span>편집된 파일 내보내기</span>
+                </button>
+            </div>
+
+            <!-- Status Indicator -->
+            <div id="statusMessage" class="hidden text-center text-sm font-medium text-indigo-400 py-2"></div>
+        </div>
+    </main>
+
+    <script>
+        // Lucide Icons Initialization
+        lucide.createIcons();
+
+        // Elements
+        const dropZone = document.getElementById('dropZone');
+        const audioInput = document.getElementById('audioInput');
+        const editorSection = document.getElementById('editorSection');
+        const fileNameEl = document.getElementById('fileName');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeVal = document.getElementById('volumeVal');
+        const trimStartEl = document.getElementById('trimStart');
+        const trimEndEl = document.getElementById('trimEnd');
+        const trimDurationEl = document.getElementById('trimDuration');
+        const resetRegionBtn = document.getElementById('resetRegionBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const formatSelect = document.getElementById('formatSelect');
+        const statusMessage = document.getElementById('statusMessage');
+        const reuploadBtn = document.getElementById('reuploadBtn');
+
+        // State Variables
+        let wavesurfer, wsRegions, activeRegion;
+        let audioBuffer = null;
+        let currentFile = null;
+
+        // Init Drag & Drop Events
+        dropZone.addEventListener('click', () => audioInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-400'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-indigo-400'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-indigo-400');
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        });
+        audioInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFile(e.target.files[0]);
+        });
+        reuploadBtn.addEventListener('click', () => audioInput.click());
+
+        // File Handler
+        function handleFile(file) {
+            if (!file.type.startsWith('audio/')) {
+                alert('오디오 파일만 업로드할 수 있습니다.');
+                return;
+            }
+            currentFile = file;
+            fileNameEl.textContent = file.name;
+            dropZone.classList.add('hidden');
+            editorSection.classList.remove('hidden');
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const arrayBuffer = e.target.result;
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                audioBuffer = await audioCtx.decodeAudioData(arrayBuffer.slice(0));
+                initWaveSurfer(URL.createObjectURL(file));
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Initialize WaveSurfer
+        function initWaveSurfer(url) {
+            if (wavesurfer) wavesurfer.destroy();
+
+            wsRegions = WaveSurfer.Plugins.Regions.create();
+
+            wavesurfer = WaveSurfer.create({
+                container: '#waveform',
+                waveColor: '#475569',
+                progressColor: '#818cf8',
+                cursorColor: '#c084fc',
+                height: 120,
+                barWidth: 2,
+                barRadius: 2,
+                plugins: [wsRegions]
+            });
+
+            wavesurfer.load(url);
+
+            wavesurfer.on('ready', () => {
+                const totalDur = wavesurfer.getDuration();
+                document.getElementById('totalTime').textContent = formatTime(totalDur);
+
+                // Add default Region (Entire Audio)
+                wsRegions.clearRegions();
+                activeRegion = wsRegions.addRegion({
+                    start: 0,
+                    end: totalDur,
+                    color: 'rgba(99, 102, 241, 0.2)',
+                    drag: true,
+                    resize: true
+                });
+
+                updateTrimUI(0, totalDur);
+            });
+
+            wavesurfer.on('audioprocess', () => {
+                document.getElementById('currentTime').textContent = formatTime(wavesurfer.getCurrentTime());
+            });
+
+            wsRegions.on('region-updated', (region) => {
+                activeRegion = region;
+                updateTrimUI(region.start, region.end);
+            });
+
+            // Playback Toggle
+            playPauseBtn.onclick = () => {
+                wavesurfer.playPause();
+                const icon = playPauseBtn.querySelector('i');
+                if (wavesurfer.isPlaying()) {
+                    icon.setAttribute('data-lucide', 'pause');
+                } else {
+                    icon.setAttribute('data-lucide', 'play');
+                }
+                lucide.createIcons();
+            };
+
+            stopBtn.onclick = () => {
+                wavesurfer.stop();
+                wavesurfer.setTime(0);
+                const icon = playPauseBtn.querySelector('i');
+                icon.setAttribute('data-lucide', 'play');
+                lucide.createIcons();
+            };
+        }
+
+        // Update Trim Info UI
+        function updateTrimUI(start, end) {
+            trimStartEl.textContent = `${start.toFixed(2)}s`;
+            trimEndEl.textContent = `${end.toFixed(2)}s`;
+            trimDurationEl.textContent = `${(end - start).toFixed(2)}s`;
+        }
+
+        // Reset Region
+        resetRegionBtn.onclick = () => {
+            if (!wavesurfer || !activeRegion) return;
+            const totalDur = wavesurfer.getDuration();
+            activeRegion.setOptions({ start: 0, end: totalDur });
+            updateTrimUI(0, totalDur);
+        };
+
+        // Volume Control
+        volumeSlider.oninput = (e) => {
+            const val = e.target.value;
+            volumeVal.textContent = `${val}%`;
+            if (wavesurfer) wavesurfer.setVolume(val / 100);
+        };
+
+        // Format Time Helper
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            const millis = Math.floor((seconds % 1) * 100);
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${String(millis).padStart(2, '0')}`;
+        }
+
+        // Export Audio Logic
+        exportBtn.onclick = async () => {
+            if (!audioBuffer || !activeRegion) return;
+
+            showStatus("오디오를 처리하는 중입니다...");
+            await new Promise(r => setTimeout(r, 100)); // UI Render Pause
+
+            const start = activeRegion.start;
+            const end = activeRegion.end;
+            const duration = end - start;
+            const volumeGain = parseFloat(volumeSlider.value) / 100;
+
+            // OfflineAudioContext for rendering trimmed & volume-adjusted audio
+            const sampleRate = audioBuffer.sampleRate;
+            const numChannels = audioBuffer.numberOfChannels;
+            const offlineCtx = new OfflineAudioContext(numChannels, duration * sampleRate, sampleRate);
+
+            const source = offlineCtx.createBufferSource();
+            source.buffer = audioBuffer;
+
+            const gainNode = offlineCtx.createGain();
+            gainNode.gain.value = volumeGain;
+
+            source.connect(gainNode);
+            gainNode.connect(offlineCtx.destination);
+
+            source.start(0, start, duration);
+            const renderedBuffer = await offlineCtx.startRendering();
+
+            // Format Selection
+            const format = formatSelect.value;
+            let blob, ext;
+
+            if (format === 'wav') {
+                blob = bufferToWavBlob(renderedBuffer);
+                ext = 'wav';
+            } else if (format === 'mp3') {
+                blob = bufferToMp3Blob(renderedBuffer);
+                ext = 'mp3';
+            }
+
+            // Download Trigger
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const originalName = currentFile.name.substring(0, currentFile.name.lastIndexOf('.')) || 'audio';
+            a.download = `${originalName}_edited.${ext}`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showStatus("다운로드가 완료되었습니다!", 3000);
+        };
+
+        function showStatus(msg, timeout = 0) {
+            statusMessage.textContent = msg;
+            statusMessage.classList.remove('hidden');
+            if (timeout > 0) {
+                setTimeout(() => statusMessage.classList.add('hidden'), timeout);
+            }
+        }
+
+        // Encode AudioBuffer to WAV
+        function bufferToWavBlob(buffer) {
+            const numOfChan = buffer.numberOfChannels;
+            const length = buffer.length * numOfChan * 2 + 44;
+            const out = new DataView(new ArrayBuffer(length));
+            let channels = [], sample, offset = 0, pos = 0;
+
+            function setUint16(data) { out.setUint16(pos, data, true); pos += 2; }
+            function setUint32(data) { out.setUint32(pos, data, true); pos += 4; }
+
+            // RIFF Header
+            setUint32(0x46464952); // "RIFF"
+            setUint32(length - 8);
+            setUint32(0x45564157); // "WAVE"
+            setUint32(0x20746d66); // "fmt " chunk
+            setUint32(16); // length = 16
+            setUint16(1); // PCM (uncompressed)
+            setUint16(numOfChan);
+            setUint32(buffer.sampleRate);
+            setUint32(buffer.sampleRate * 2 * numOfChan); // avg. bytes/sec
+            setUint16(numOfChan * 2); // block-align
+            setUint16(16); // 16-bit
+            setUint32(0x61746164); // "data" chunk
+            setUint32(length - pos - 4);
+
+            for (let i = 0; i < buffer.numberOfChannels; i++) channels.push(buffer.getChannelData(i));
+
+            while (offset < buffer.length) {
+                for (let i = 0; i < numOfChan; i++) {
+                    sample = Math.max(-1, Math.min(1, channels[i][offset]));
+                    sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767) | 0;
+                    out.setInt16(pos, sample, true);
+                    pos += 2;
+                }
+                offset++;
+            }
+            return new Blob([out.buffer], { type: 'audio/wav' });
+        }
+
+        // Encode AudioBuffer to MP3 using LameJS
+        function bufferToMp3Blob(buffer) {
+            const channels = buffer.numberOfChannels;
+            const sampleRate = buffer.sampleRate;
+            const mp3encoder = new lamejs.Mp3Encoder(channels, sampleRate, 128);
+            const mp3Data = [];
+
+            const sampleBlockSize = 1152;
+            const left = buffer.getChannelData(0);
+            const right = channels > 1 ? buffer.getChannelData(1) : left;
+
+            // Convert Float32Array to Int16Array
+            const lSamples = new Int16Array(left.length);
+            const rSamples = new Int16Array(right.length);
+            for (let i = 0; i < left.length; i++) {
+                lSamples[i] = Math.max(-32768, Math.min(32767, left[i] * 32767));
+                rSamples[i] = Math.max(-32768, Math.min(32767, right[i] * 32767));
+            }
+
+            for (let i = 0; i < lSamples.length; i += sampleBlockSize) {
+                const lChunk = lSamples.subarray(i, i + sampleBlockSize);
+                const rChunk = rSamples.subarray(i, i + sampleBlockSize);
+                let mp3buf;
+                if (channels === 2) {
+                    mp3buf = mp3encoder.encodeBuffer(lChunk, rChunk);
+                } else {
+                    mp3buf = mp3encoder.encodeBuffer(lChunk);
+                }
+                if (mp3buf.length > 0) mp3Data.push(mp3buf);
+            }
+
+            const endBuf = mp3encoder.flush();
+            if (endBuf.length > 0) mp3Data.push(endBuf);
+
+            return new Blob(mp3Data, { type: 'audio/mp3' });
+        }
+    </script>
+</body>
+</html>
