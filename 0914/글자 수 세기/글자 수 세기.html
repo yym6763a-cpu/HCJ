@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글자수 및 용량(Byte) 계산기</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f78ca0 100%);
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 35px;
+            color: #ffffff;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        p.subtitle {
+            text-align: center;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 25px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 18px;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333;
+            resize: vertical;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        textarea:focus {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: #764ba2;
+            box-shadow: 0 0 15px rgba(118, 75, 162, 0.3);
+        }
+
+        textarea::placeholder {
+            color: #999;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 16px;
+            padding: 18px 15px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .stat-card.highlight {
+            background: rgba(255, 255, 255, 0.45);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .stat-title {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .stat-unit {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-left: 2px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-copy {
+            background: #ffffff;
+            color: #764ba2;
+        }
+
+        .btn-copy:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .btn-clear {
+            background: rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-clear:hover {
+            background: rgba(0, 0, 0, 0.35);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>✨ 글자수 계산기</h1>
+    <p class="subtitle">한글·특수문자 2 Byte / 영문·숫자·공백 1 Byte 기준</p>
+
+    <textarea id="textInput" placeholder="여기에 텍스트를 입력하거나 붙여넣으세요..." oninput="calculate()"></textarea>
+
+    <div class="stats-grid">
+        <div class="stat-card highlight">
+            <div class="stat-title">총 용량</div>
+            <div class="stat-value"><span id="byteCount">0</span><span class="stat-unit">Byte</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">총 글자수</div>
+            <div class="stat-value"><span id="totalChar">0</span><span class="stat-unit">자</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">공백 제외 글자수</div>
+            <div class="stat-value"><span id="noSpaceChar">0</span><span class="stat-unit">자</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">줄(Line) 수</div>
+            <div class="stat-value"><span id="lineCount">0</span><span class="stat-unit">줄</span></div>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-copy" onclick="copyText()">📋 텍스트 복사</button>
+        <button class="btn-clear" onclick="clearText()">🗑️ 전체 삭제</button>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        const text = document.getElementById('textInput').value;
+
+        // 1. Byte 계산 (한글/비-ASCII는 2byte, 영문/숫자/기본문자는 1byte)
+        let byteCount = 0;
+        for (let i = 0; i < text.length; i++) {
+            const charCode = text.charCodeAt(i);
+            // ASCII 영역(0~127) 및 줄바꿈/공백은 1byte, 그 외(한글, 한자 등)는 2byte 계산
+            if (charCode > 127) {
+                byteCount += 2;
+            } else {
+                byteCount += 1;
+            }
+        }
+
+        // 2. 전체 글자수 (유니코드 서기쌍 고려)
+        const totalChar = [...text].length;
+
+        // 3. 공백 제외 글자수 (줄바꿈, 띄어쓰기, 탭 제외)
+        const noSpaceText = text.replace(/\s/g, '');
+        const noSpaceChar = [...noSpaceText].length;
+
+        // 4. 줄 수 계산
+        const lineCount = text.length === 0 ? 0 : text.split('\n').length;
+
+        // 화면 업데이트
+        document.getElementById('byteCount').innerText = byteCount.toLocaleString();
+        document.getElementById('totalChar').innerText = totalChar.toLocaleString();
+        document.getElementById('noSpaceChar').innerText = noSpaceChar.toLocaleString();
+        document.getElementById('lineCount').innerText = lineCount.toLocaleString();
+    }
+
+    function copyText() {
+        const text = document.getElementById('textInput');
+        if (!text.value) {
+            alert('복사할 텍스트가 없습니다.');
+            return;
+        }
+        text.select();
+        navigator.clipboard.writeText(text.value).then(() => {
+            alert('클립보드에 복사되었습니다!');
+        });
+    }
+
+    function clearText() {
+        document.getElementById('textInput').value = '';
+        calculate();
+    }
+</script>
+
+</body>
+</html>
