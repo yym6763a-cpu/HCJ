@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart GIF Studio - Free Browser GIF Editor</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --primary-color: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: #eeefff;
+      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --button-bg: #f1f5f9;
+      --button-hover: #e2e8f0;
+      --success-color: #10b981;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.01);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header Design */
+    header {
+      background-color: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.875rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-logo-text {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      text-decoration: none;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: opacity 0.2s;
+    }
+
+    .header-logo-text:hover { opacity: 0.85; }
+
+    .header-title-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      background-color: var(--button-bg);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+    }
+
+    .header-title-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem;
+    }
+
+    /* Hero / Upload Section */
+    #upload-section {
+      text-align: center;
+      max-width: 680px;
+      margin: 2rem auto 0;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+
+    .title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .description-main {
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .description-privacy {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 0.875rem 1.25rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-align: left;
+    }
+
+    /* Dropzone */
+    .drop-zone {
+      border: 2px dashed var(--primary-color);
+      border-radius: 16px;
+      padding: 3.5rem 2rem;
+      background-color: var(--card-bg);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      background-color: var(--primary-light);
+      border-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .drop-icon {
+      width: 56px;
+      height: 56px;
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drop-zone-text {
+      color: var(--text-muted);
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+      padding: 0.85rem 1.85rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+    }
+
+    /* Editor Section */
+    #editor-section {
+      display: none;
+      flex-direction: column;
+      gap: 1.75rem;
+      width: 100%;
+    }
+
+    @media (min-width: 868px) {
+      #editor-section { flex-direction: row; align-items: flex-start; }
+      .left-column { flex: 1.15; }
+      .panel-container { flex: 1; }
+    }
+
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    /* Preview Card */
+    .preview-card {
+      position: relative;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 3.5rem 1.5rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-title-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1.25rem;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge-tag {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 6px;
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .badge-output {
+      background-color: #d1fae5;
+      color: var(--success-color);
+    }
+
+    .btn-download {
+      position: absolute;
+      top: 0.85rem;
+      right: 1.25rem;
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.15rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.25);
+    }
+
+    .btn-download:hover { opacity: 0.92; transform: translateY(-1px); }
+
+    .gif-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 8px;
+      background-color: #f8fafc;
+      border: 1px solid #f1f5f9;
+      user-select: none;
+    }
+
+    .gif-wrapper img, .gif-wrapper video {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+    }
+
+    .crop-overlay-box {
+      position: absolute;
+      border: 2px dashed var(--primary-color);
+      background-color: rgba(99, 102, 241, 0.2);
+      box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.45);
+      pointer-events: none;
+      display: none;
+      border-radius: 4px;
+    }
+
+    .gif-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      background-color: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+    }
+
+    .info-item { display: flex; flex-direction: column; gap: 0.2rem; }
+    .info-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em; }
+    .info-value { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
+
+    /* Control Panel */
+    .panel-container {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.85rem;
+    }
+
+    .panel-header-left { display: flex; align-items: center; gap: 0.65rem; }
+    .panel-title { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+
+    .btn-icon-toggle {
+      background: none;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      transition: background-color 0.2s;
+    }
+    .btn-icon-toggle:hover { background-color: var(--button-hover); }
+
+    .btn-secondary {
+      background-color: var(--button-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 0.85rem;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      transition: background-color 0.2s;
+    }
+    .btn-secondary:hover { background-color: var(--button-hover); }
+
+    /* Tools Grid */
+    .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+
+    .tool-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 1.1rem 0.5rem;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text-main);
+    }
+
+    .tool-btn:hover {
+      border-color: var(--primary-color);
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tool-btn svg { width: 22px; height: 22px; stroke-width: 2; }
+    .tool-btn span { font-size: 0.8125rem; font-weight: 700; }
+
+    /* Tool Options Views */
+    .tool-option-view { display: none; flex-direction: column; gap: 1.25rem; }
+
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      background-color: #f8fafc;
+      padding: 1.25rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .group-title { font-size: 0.875rem; font-weight: 800; color: var(--text-main); }
+
+    .checkbox-item, .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .checkbox-item input, .radio-item input { accent-color: var(--primary-color); width: 18px; height: 18px; }
+
+    .ratio-presets, .rotate-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+
+    .preset-btn {
+      padding: 0.65rem;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .preset-btn:hover { border-color: var(--primary-color); color: var(--primary-color); }
+    .preset-btn.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+
+    .axis-control-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .axis-header { display: flex; justify-content: space-between; align-items: center; }
+    .axis-label { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+    .axis-number-input {
+      width: 90px;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .slider-container { display: flex; align-items: center; gap: 0.75rem; }
+    .range-slider { flex: 1; height: 6px; accent-color: var(--primary-color); cursor: pointer; }
+    .range-percent { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); width: 45px; text-align: right; }
+
+    .lock-divider { display: flex; align-items: center; justify-content: center; margin: -0.25rem 0; }
+    .lock-btn {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--primary-color);
+      box-shadow: var(--shadow-sm);
+    }
+    .lock-btn.unlocked { color: var(--text-muted); }
+
+    .tool-action-bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+
+    .btn-go {
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.65rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-go:hover { transform: translateY(-1px); opacity: 0.95; }
+
+    .btn-back {
+      background-color: var(--button-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 1.35rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .btn-back:hover { background-color: var(--button-hover); }
+
+    .spinner {
+      width: 16px; height: 16px; border: 2px solid #ffffff; border-bottom-color: transparent;
+      border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite;
+    }
+    @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <!-- Text Logo linking to https://nanalab.kr -->
+    <a href="https://nanalab.kr" target="_blank" rel="noopener noreferrer" class="header-logo-text">
+      NaNaLab
+    </a>
+    <div class="header-title-badge">Smart GIF Studio</div>
+  </header>
+
+  <main>
+    <!-- Upload Hero Section -->
+    <section id="upload-section">
+      <div class="hero-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        Browser-Based Fast GIF Processing
+      </div>
+      <h1 class="title">Free GIF Editor</h1>
+      <p class="description-main">
+        Edit GIF files for free! A variety of features including resizing, downscaling, cropping, and FPS adjustment are available for free!
+      </p>
+      
+      <div class="description-privacy">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0; color: var(--primary-color);"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <span>All data is processed strictly within your computer's browser. Since no data is transmitted externally, you can use it safely without worrying about data leaks.</span>
+      </div>
+
+      <div class="drop-zone" id="drop-zone">
+        <div class="drop-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        </div>
+        <p class="drop-zone-text">Drag and drop your GIF file here, or</p>
+        <button class="btn-primary" onclick="document.getElementById('file-input').click()">Choose File</button>
+        <input type="file" id="file-input" accept="image/gif" hidden>
+      </div>
+    </section>
+
+    <!-- Editor Section -->
+    <section id="editor-section">
+      <!-- Left Column Preview Cards -->
+      <div class="left-column" id="left-column">
+        
+        <!-- Original GIF Card -->
+        <div class="preview-card" id="original-gif-card">
+          <div class="card-title-badge">
+            <span>Original GIF</span>
+            <span class="badge-tag">Source</span>
+          </div>
+
+          <button id="download-original-btn" class="btn-download">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download
+          </button>
+
+          <div class="gif-wrapper" id="original-gif-wrapper">
+            <img id="gif-preview" src="" alt="GIF Preview">
+            <div class="crop-overlay-box" id="crop-overlay-box"></div>
+          </div>
+
+          <div class="gif-info-grid">
+            <div class="info-item"><span class="info-label">File Size</span><span class="info-value" id="info-size">-</span></div>
+            <div class="info-item"><span class="info-label">Resolution</span><span class="info-value" id="info-resolution">-</span></div>
+            <div class="info-item"><span class="info-label">Frame Rate</span><span class="info-value" id="info-fps">-</span></div>
+            <div class="info-item"><span class="info-label">Total Frames</span><span class="info-value" id="info-frames">-</span></div>
+          </div>
+        </div>
+
+        <!-- Output Result Card -->
+        <div class="preview-card" id="result-gif-card" style="display: none;">
+          <div class="card-title-badge">
+            <span id="result-card-title">Edited GIF</span>
+            <span class="badge-tag badge-output">Output</span>
+          </div>
+
+          <button id="download-result-btn" class="btn-download">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download
+          </button>
+
+          <div class="gif-wrapper" id="result-media-wrapper">
+            <img id="result-gif-preview" src="" alt="Result GIF Preview">
+            <video id="result-video-preview" controls autoplay loop style="display:none;"></video>
+          </div>
+
+          <div class="gif-info-grid">
+            <div class="info-item"><span class="info-label">File Size</span><span class="info-value" id="result-info-size">-</span></div>
+            <div class="info-item"><span class="info-label">Resolution</span><span class="info-value" id="result-info-resolution">-</span></div>
+            <div class="info-item"><span class="info-label">Frame Rate</span><span class="info-value" id="result-info-fps">-</span></div>
+            <div class="info-item"><span class="info-label">Total Frames</span><span class="info-value" id="result-info-frames">-</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Control Panel -->
+      <div class="panel-container">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <button class="btn-icon-toggle" id="toggle-left-column-btn" title="Toggle Left Panel">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+            </button>
+            <h2 class="panel-title" id="panel-title">Editor Tools</h2>
+          </div>
+
+          <button class="btn-secondary" onclick="document.getElementById('reupload-input').click()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 16h5v5"></path></svg>
+            Choose Another File
+          </button>
+          <input type="file" id="reupload-input" accept="image/gif" hidden>
+        </div>
+
+        <!-- 9 Tools Menu Grid -->
+        <div class="tools-grid" id="tools-menu">
+          <button class="tool-btn" data-tool="resize">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg>
+            <span>Resize</span>
+          </button>
+          <button class="tool-btn" data-tool="crop">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2v14a2 2 0 0 0 2 2h14M18 22V8a2 2 0 0 0-2-2H2"></path></svg>
+            <span>Crop</span>
+          </button>
+          <button class="tool-btn" data-tool="downsize">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"></path></svg>
+            <span>Downsizing</span>
+          </button>
+          <button class="tool-btn" data-tool="convert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 3l4 4-4 4M8 21l-4-4 4-4M20 7H4M4 17h16"></path></svg>
+            <span>Format Convert</span>
+          </button>
+          <button class="tool-btn" data-tool="rotate">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+            <span>Rotate</span>
+          </button>
+          <button class="tool-btn" data-tool="optimize">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span>Optimize</span>
+          </button>
+          <button class="tool-btn" data-tool="reverse">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="11 19 2 12 11 5 11 19"></polygon><polygon points="22 19 13 12 22 5 22 19"></polygon></svg>
+            <span>Reverse</span>
+          </button>
+          <button class="tool-btn" data-tool="speed">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Speed</span>
+          </button>
+          <button class="tool-btn" data-tool="cut">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.47" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+            <span>Cut</span>
+          </button>
+        </div>
+
+        <!-- 1. Resize View -->
+        <div class="tool-option-view" id="tool-view-resize">
+          <div class="option-group">
+            <div class="axis-control-group">
+              <div class="axis-header"><span class="axis-label">Width (X-axis)</span><div><input type="number" id="resize-x-num" class="axis-number-input"> px</div></div>
+              <div class="slider-container"><input type="range" id="resize-x-slider" class="range-slider"><span id="resize-x-percent" class="range-percent">100%</span></div>
+            </div>
+            <div class="lock-divider">
+              <button class="lock-btn" id="lock-aspect-btn">
+                <svg id="lock-icon-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <svg id="lock-icon-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+              </button>
+            </div>
+            <div class="axis-control-group">
+              <div class="axis-header"><span class="axis-label">Height (Y-axis)</span><div><input type="number" id="resize-y-num" class="axis-number-input"> px</div></div>
+              <div class="slider-container"><input type="range" id="resize-y-slider" class="range-slider"><span id="resize-y-percent" class="range-percent">100%</span></div>
+            </div>
+          </div>
+          <div class="tool-action-bar">
+            <button class="btn-back tool-back-btn">&lt; Back</button>
+            <button class="btn-go" id="btn-resize-go"><span>&lt; Go! &gt;</span></button>
+          </div>
+        </div>
+
+        <!-- 2. Crop View -->
+        <div class="tool-option-view" id="tool-view-crop">
+          <div class="option-group">
+            <span class="group-title">1. Aspect Ratio Presets</span>
+            <div class="ratio-presets" id="crop-ratio-presets">
+              <button class="preset-btn active" data-ratio="free">Free</button>
+              <button class="preset-btn" data-ratio="1:1">1 : 1</button>
+              <button class="preset-btn" data-ratio="4:3">4 : 3</button>
+              <button class="preset-btn" data-ratio="16:9">16 : 9</button>
+              <button class="preset-btn" data-ratio="9:16">9 : 16</button>
+              <button class="preset-btn" data-ratio="3:2">3 : 2</button>
+            </div>
+          </div>
+          <div class="option-group">
+            <span class="group-title">2. Empty Space Option</span>
+            <label class="radio-item"><input type="radio" name="crop-fill" value="zoom" checked> Zoom & Expand (No borders)</label>
+            <label class="radio-item"><input type="radio" name="crop-fill" value="color"> Pad Empty Space with Solid Color</label>
+            <div style="margin-left: 1.5rem; display:none;" id="crop-color-picker-wrap">
+              <input type="color" id="crop-bg-color" value="#ffffff" style="width:32px; height:32px; cursor:pointer;">
+            </div>
+          </div>
+          <div class="tool-action-bar">
+            <button class="btn-back tool-back-btn">&lt; Back</button>
+            <button class="btn-go" id="btn-crop-go"><span>&lt; Go! &gt;</span></button>
+          </div>
+        </div>
+
+        <!-- 3. Downsizing View -->
+        <div class="tool-option-view" id="tool-view-downsize">
+          <div class="option-group">
+            <span class="group-title">Select Downsizing Methods</span>
+            <label class="checkbox-item"><input type="checkbox" id="ds-check-scale" checked> Scale Down Dimensions (50% Size)</label>
+            <label class="checkbox-item"><input type="checkbox" id="ds-check-drop"> Drop Every 2nd Frame (Half FPS)</label>
+            <label class="checkbox-item"><input type="checkbox" id="ds-check-colors"> Reduce Palette Colors (128 Colors)</label>
+          </div>
+          <div class="tool-action-bar">
+            <button class="btn-back tool-back-btn">&lt; Back</button>
+            <button class="btn-go" id="btn-downsize-go"><span>&lt; Go! &gt;</span></button>
+          </div>
+        </div>
+
+        <!-- 4. Format Convert View -->
+        <div class="tool-option-view" id="tool-view-convert">
+          <div class="option-group">
+            <span class="group-title">Select Target Format</span>
+            <label class="radio-item"><input type="radio" name="convert-fmt" value="mp4" checked> MP4 Video (.mp4)</label>
+            <label class="radio-item"><input type="radio" name="convert-fmt" value="jpg"> Cover JPG Image (.jpg)</label>
+          </div>
+          <div class="tool-action-bar">
+            <button class="btn-back tool-back-btn">&lt; Back</button>
+            <button class="btn-go" id="btn-convert-go"><span>&lt; Go! &gt;</span></button>
+          </div>
+        </div>
+
+        <!-- 5. Rotate View -->
+        <div class="tool-option-view" id="tool-view-rotate">
+          <div class="option-group">
+            <span class="group-title">Select Rotation or Flip Action</span>
+            <div class="rotate-grid">
+              <button class="preset-btn active" data-rotate="90">90° CW</button>
+              <button class="preset-btn" data-rotate="180">180°</button>
+              <button class="preset-btn" data-rotate="270">270° CW</button>
+              <button class="preset-btn" data-rotate="flipH">Flip Horiz</button>
+              <button class="preset-btn" data-rotate="flipV">Flip Vert</button>
+            </div>
+          </div>
+          <div class="tool-action-bar">
+            <button class="btn-back tool-back-btn">&lt; Back</button>
+            <button class="btn-go" id="btn-rotate-go"><span>&lt; Go! &gt;</span></button>
+          </div>
+        </div>
+
+        <!-- 6. Optimize View -->
+        <div class="tool-option-view" id="tool-view-optimize">
+          <div class="option-group">
+            <span class="group-title">Optimization Preset</span>
+            <label class="radio-item"><input type="radio" name="opt-mode" value="lossless" checked> Clean Up Palette & Lossless Compression</label>
+            <label class="radio-item"><input type="radio" name="opt-mode" value="balanced"> Balanced Color Reduction (128 Colors)</label>
+            <label class="radio-item"><input type="radio" name="opt-mode" value="max"> Maximum File Size Cleanup (64 Colors)</label>
+          </div>
+          <div class="tool-action-bar">
+            <button class="btn-back tool-back-btn">&lt; Back</button>
+            <button class="btn-go" id="btn-optimize-go"><span>&lt; Go! &gt;</span></button>
+          </div>
+        </div>
+
+        <!-- 7. Reverse View -->
+        <div class="tool-option-view" id="tool-view-reverse">
+          <div class="option-group">
+            <span class="group-title">Playback Mode</span>
+            <label class="radio-item"><input type="radio" name="reverse-mode" value="reverse" checked> Standard Reverse (End to Start)</label>
+            <label class="radio-item"><input type="radio" name="reverse-mode" value="pingpong"> Boomerang / Ping-Pong (Forward + Backward)</label>
+          </div>
+          <div class="tool-action-bar">
+            <button class="btn-back tool-back-btn">&lt; Back</button>
+            <button class="btn-go" id="btn-reverse-go"><span>&lt; Go! &gt;</span></button>
+          </div>
+        </div>
+
+        <!-- 8. Speed View -->
+        <div class="tool-option-view" id="tool-view-speed">
+          <div class="option-group">
+            <div class="axis-header">
+              <span class="axis-label">Speed Multiplier</span>
+              <span id="speed-val-text" style="font-weight:800; color:var(--primary-color);">1.5x</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="speed-slider" min="0.25" max="4.0" step="0.25" value="1.5" class="range-slider">
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted);">0.25x = Slower, 4.0x = Faster</p>
+          </div>
+          <div class="tool-action-bar">
+            <button class="btn-back tool-back-btn">&lt; Back</button>
+            <button class="btn-go" id="btn-speed-go"><span>&lt; Go! &gt;</span></button>
+          </div>
+        </div>
+
+        <!-- 9. Cut View -->
+        <div class="tool-option-view" id="tool-view-cut">
+          <div class="option-group">
+            <div class="axis-header">
+              <span class="axis-label">Start Frame</span>
+              <input type="number" id="cut-start-num" class="axis-number-input" value="1">
+            </div>
+            <div class="axis-header">
+              <span class="axis-label">End Frame</span>
+              <input type="number" id="cut-end-num" class="axis-number-input" value="10">
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted);" id="cut-total-text">Total frames in original: -</p>
+          </div>
+          <div class="tool-action-bar">
+            <button class="btn-back tool-back-btn">&lt; Back</button>
+            <button class="btn-go" id="btn-cut-go"><span>&lt; Go! &gt;</span></button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // DOM Cache
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const reuploadInput = document.getElementById('reupload-input');
+    const uploadSection = document.getElementById('upload-section');
+    const editorSection = document.getElementById('editor-section');
+    const leftColumn = document.getElementById('left-column');
+    const originalGifCard = document.getElementById('original-gif-card');
+    const resultGifCard = document.getElementById('result-gif-card');
+    const resultCardTitle = document.getElementById('result-card-title');
+    const gifPreview = document.getElementById('gif-preview');
+    const resultGifPreview = document.getElementById('result-gif-preview');
+    const resultVideoPreview = document.getElementById('result-video-preview');
+    const cropOverlayBox = document.getElementById('crop-overlay-box');
+    const downloadOriginalBtn = document.getElementById('download-original-btn');
+    const downloadResultBtn = document.getElementById('download-result-btn');
+    const toggleLeftColumnBtn = document.getElementById('toggle-left-column-btn');
+    const panelTitle = document.getElementById('panel-title');
+    const toolsMenu = document.getElementById('tools-menu');
+
+    // State
+    let currentFile = null;
+    let currentObjectUrl = null;
+    let currentArrayBuffer = null;
+    let originalWidth = 0;
+    let originalHeight = 0;
+    let originalMetadata = null;
+    let extractedFrames = [];
+
+    let resultBlob = null;
+    let resultObjectUrl = null;
+    let resultFileNamePrefix = "Edited_";
+    let isVideoOutput = false;
+
+    // Resize Controls
+    const resizeXSlider = document.getElementById('resize-x-slider');
+    const resizeXNum = document.getElementById('resize-x-num');
+    const resizeXPercent = document.getElementById('resize-x-percent');
+    const resizeYSlider = document.getElementById('resize-y-slider');
+    const resizeYNum = document.getElementById('resize-y-num');
+    const resizeYPercent = document.getElementById('resize-y-percent');
+    const lockAspectBtn = document.getElementById('lock-aspect-btn');
+    let isAspectLocked = true;
+
+    // Crop Controls
+    const cropRatioPresets = document.getElementById('crop-ratio-presets');
+    const cropBgColor = document.getElementById('crop-bg-color');
+    let currentCropRatio = "free";
+
+    // Rotate Controls
+    let selectedRotateAction = "90";
+
+    // Speed Controls
+    const speedSlider = document.getElementById('speed-slider');
+    const speedValText = document.getElementById('speed-val-text');
+
+    // Cut Controls
+    const cutStartNum = document.getElementById('cut-start-num');
+    const cutEndNum = document.getElementById('cut-end-num');
+
+    // Drag and Drop
+    ['dragenter', 'dragover'].forEach(eName => dropZone.addEventListener(eName, (e) => { e.preventDefault(); dropZone.classList.add('dragover'); }));
+    ['dragleave', 'drop'].forEach(eName => dropZone.addEventListener(eName, (e) => { e.preventDefault(); dropZone.classList.remove('dragover'); }));
+
+    dropZone.addEventListener('drop', (e) => { if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]); });
+    fileInput.addEventListener('change', (e) => { if (e.target.files.length > 0) handleFile(e.target.files[0]); });
+    reuploadInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) { resetState(); handleFile(e.target.files[0]); }
+    });
+
+    toggleLeftColumnBtn.addEventListener('click', () => {
+      leftColumn.style.display = leftColumn.style.display === 'none' ? 'flex' : 'none';
+    });
+
+    downloadOriginalBtn.addEventListener('click', () => {
+      if (currentObjectUrl) downloadFile(currentObjectUrl, currentFile ? currentFile.name : 'original.gif');
+    });
+
+    downloadResultBtn.addEventListener('click', () => {
+      if (resultObjectUrl) {
+        const ext = isVideoOutput ? '.mp4' : (resultFileNamePrefix.includes('JPG') ? '.jpg' : '.gif');
+        const origName = currentFile ? currentFile.name.replace(/\.[^/.]+$/, "") : 'image';
+        downloadFile(resultObjectUrl, `${resultFileNamePrefix}${origName}${ext}`);
+      }
+    });
+
+    function downloadFile(url, filename) {
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+
+    function resetState() {
+      if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+      if (resultObjectUrl) URL.revokeObjectURL(resultObjectUrl);
+      currentObjectUrl = null; resultObjectUrl = null; currentFile = null; currentArrayBuffer = null;
+      extractedFrames = [];
+      gifPreview.src = ''; resultGifPreview.src = ''; resultVideoPreview.src = '';
+      fileInput.value = ''; reuploadInput.value = '';
+      originalGifCard.style.display = 'flex'; resultGifCard.style.display = 'none';
+      leftColumn.style.display = 'flex'; cropOverlayBox.style.display = 'none';
+      showToolsMenu();
+    }
+
+    function handleFile(file) {
+      if (file.type !== 'image/gif') { alert('Please upload a valid GIF file.'); return; }
+      currentFile = file;
+      currentObjectUrl = URL.createObjectURL(file);
+      gifPreview.src = currentObjectUrl;
+
+      document.getElementById('info-size').textContent = formatFileSize(file.size);
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        currentArrayBuffer = e.target.result;
+        originalMetadata = parseGifMetadata(currentArrayBuffer);
+        if (originalMetadata) {
+          originalWidth = originalMetadata.width;
+          originalHeight = originalMetadata.height;
+          document.getElementById('info-resolution').textContent = `${originalWidth} × ${originalHeight} px`;
+          document.getElementById('info-fps').textContent = originalMetadata.fps;
+          document.getElementById('info-frames').textContent = `${originalMetadata.frameCount} frames`;
+
+          setupResizeControls();
+          cutStartNum.value = 1;
+          cutEndNum.value = originalMetadata.frameCount;
+          document.getElementById('cut-total-text').textContent = `Total frames in original: ${originalMetadata.frameCount}`;
+          
+          extractedFrames = await extractGifFrames(currentArrayBuffer, originalWidth, originalHeight);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+
+      uploadSection.style.display = 'none';
+      editorSection.style.display = 'flex';
+    }
+
+    // Navigation
+    document.querySelectorAll('.tool-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openToolView(btn.getAttribute('data-tool'));
+      });
+    });
+
+    document.querySelectorAll('.tool-back-btn').forEach(btn => btn.addEventListener('click', showToolsMenu));
+
+    function showToolsMenu() {
+      panelTitle.textContent = 'Editor Tools';
+      toolsMenu.style.display = 'grid';
+      document.querySelectorAll('.tool-option-view').forEach(v => v.style.display = 'none');
+      cropOverlayBox.style.display = 'none';
+    }
+
+    function openToolView(toolName) {
+      toolsMenu.style.display = 'none';
+      document.querySelectorAll('.tool-option-view').forEach(v => v.style.display = 'none');
+      cropOverlayBox.style.display = 'none';
+
+      const targetView = document.getElementById(`tool-view-${toolName}`);
+      if (targetView) {
+        targetView.style.display = 'flex';
+        panelTitle.textContent = toolName.charAt(0).toUpperCase() + toolName.slice(1);
+        if (toolName === 'crop') updateCropOverlay();
+      }
+    }
+
+    /* 1. RESIZE */
+    function setupResizeControls() {
+      if (!originalWidth || !originalHeight) return;
+      resizeXSlider.min = Math.max(1, Math.round(originalWidth * 0.05));
+      resizeXSlider.max = Math.round(originalWidth * 3.0);
+      resizeXSlider.value = originalWidth; resizeXNum.value = originalWidth;
+      resizeYSlider.min = Math.max(1, Math.round(originalHeight * 0.05));
+      resizeYSlider.max = Math.round(originalHeight * 3.0);
+      resizeYSlider.value = originalHeight; resizeYNum.value = originalHeight;
+    }
+
+    lockAspectBtn.addEventListener('click', () => {
+      isAspectLocked = !isAspectLocked;
+      lockAspectBtn.classList.toggle('unlocked', !isAspectLocked);
+    });
+
+    resizeXSlider.addEventListener('input', (e) => {
+      const v = parseInt(e.target.value); resizeXNum.value = v;
+      if (isAspectLocked) { const y = Math.round(originalHeight * (v / originalWidth)); resizeYSlider.value = y; resizeYNum.value = y; }
+    });
+    resizeYSlider.addEventListener('input', (e) => {
+      const v = parseInt(e.target.value); resizeYNum.value = v;
+      if (isAspectLocked) { const x = Math.round(originalWidth * (v / originalHeight)); resizeXSlider.value = x; resizeXNum.value = x; }
+    });
+
+    document.getElementById('btn-resize-go').addEventListener('click', async () => {
+      const targetW = parseInt(resizeXNum.value), targetH = parseInt(resizeYNum.value);
+      runAction(document.getElementById('btn-resize-go'), async () => {
+        const frames = await getFrames();
+        const resized = frames.map(f => ({ imageData: scaleImageData(f.imageData, targetW, targetH), delay: f.delay }));
+        const blob = encodeFramesToGif(targetW, targetH, resized);
+        displayResultCard("Resized GIF", "Resized_", blob, targetW, targetH, originalMetadata ? originalMetadata.fps : '10 FPS', resized.length);
+      });
+    });
+
+    /* 2. CROP */
+    cropRatioPresets.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        cropRatioPresets.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCropRatio = btn.getAttribute('data-ratio');
+        updateCropOverlay();
+      });
+    });
+
+    document.getElementsByName('crop-fill').forEach(r => {
+      r.addEventListener('change', (e) => {
+        document.getElementById('crop-color-picker-wrap').style.display = e.target.value === 'color' ? 'block' : 'none';
+      });
+    });
+
+    function updateCropOverlay() {
+      if (!originalWidth || !originalHeight) return;
+      cropOverlayBox.style.display = 'block';
+      const imgW = gifPreview.clientWidth, imgH = gifPreview.clientHeight;
+      let bW = imgW, bH = imgH;
+      if (currentCropRatio !== 'free') {
+        const parts = currentCropRatio.split(':').map(Number);
+        const targetR = parts[0] / parts[1];
+        if ((imgW / imgH) > targetR) { bW = imgH * targetR; bH = imgH; }
+        else { bW = imgW; bH = imgW / targetR; }
+      }
+      cropOverlayBox.style.width = `${bW}px`; cropOverlayBox.style.height = `${bH}px`;
+      cropOverlayBox.style.left = `${(imgW - bW) / 2}px`; cropOverlayBox.style.top = `${(imgH - bH) / 2}px`;
+    }
+
+    document.getElementById('btn-crop-go').addEventListener('click', async () => {
+      runAction(document.getElementById('btn-crop-go'), async () => {
+        const fillMode = Array.from(document.getElementsByName('crop-fill')).find(r => r.checked).value;
+        const color = cropBgColor.value;
+        const frames = await getFrames();
+
+        let tW = originalWidth, tH = originalHeight;
+        if (currentCropRatio !== 'free') {
+          const parts = currentCropRatio.split(':').map(Number);
+          const targetR = parts[0] / parts[1];
+          const srcR = originalWidth / originalHeight;
+          if (fillMode === 'zoom') {
+            if (srcR > targetR) { tW = Math.round(originalHeight * targetR); tH = originalHeight; }
+            else { tW = originalWidth; tH = Math.round(originalWidth / targetR); }
+          } else {
+            if (srcR > targetR) { tW = originalWidth; tH = Math.round(originalWidth / targetR); }
+            else { tW = Math.round(originalHeight * targetR); tH = originalHeight; }
+          }
+        }
+
+        const cropped = frames.map(f => ({ imageData: fitCropImageData(f.imageData, tW, tH, fillMode, color), delay: f.delay }));
+        const blob = encodeFramesToGif(tW, tH, cropped);
+        displayResultCard("Cropped GIF", "Cropped_", blob, tW, tH, originalMetadata ? originalMetadata.fps : '10 FPS', cropped.length);
+      });
+    });
+
+    /* 3. DOWNSIZING */
+    document.getElementById('btn-downsize-go').addEventListener('click', async () => {
+      runAction(document.getElementById('btn-downsize-go'), async () => {
+        const doScale = document.getElementById('ds-check-scale').checked;
+        const doDrop = document.getElementById('ds-check-drop').checked;
+        const doColor = document.getElementById('ds-check-colors').checked;
+
+        let frames = await getFrames();
+        if (doDrop && frames.length > 2) { frames = frames.filter((_, idx) => idx % 2 === 0); }
+
+        let tW = doScale ? Math.round(originalWidth * 0.5) : originalWidth;
+        let tH = doScale ? Math.round(originalHeight * 0.5) : originalHeight;
+
+        const processed = frames.map(f => ({
+          imageData: doScale ? scaleImageData(f.imageData, tW, tH) : f.imageData,
+          delay: f.delay
+        }));
+
+        const blob = encodeFramesToGif(tW, tH, processed, doColor ? 128 : 256);
+        displayResultCard("Downsized GIF", "Downsized_", blob, tW, tH, originalMetadata ? originalMetadata.fps : '10 FPS', processed.length);
+      });
+    });
+
+    /* 4. FORMAT CONVERT */
+    document.getElementById('btn-convert-go').addEventListener('click', async () => {
+      runAction(document.getElementById('btn-convert-go'), async () => {
+        const fmt = Array.from(document.getElementsByName('convert-fmt')).find(r => r.checked).value;
+        const frames = await getFrames();
+
+        if (fmt === 'mp4') {
+          const mp4Blob = await renderFramesToVideo(frames, originalWidth, originalHeight);
+          displayResultCard("Converted MP4", "Converted_", mp4Blob, originalWidth, originalHeight, originalMetadata ? originalMetadata.fps : '10 FPS', frames.length, true);
+        } else {
+          const canvas = document.createElement('canvas');
+          canvas.width = originalWidth; canvas.height = originalHeight;
+          canvas.getContext('2d').putImageData(frames[0].imageData, 0, 0);
+          const jpgBlob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.92));
+          displayResultCard("Converted JPG", "Converted_JPG_", jpgBlob, originalWidth, originalHeight, "N/A", 1);
+        }
+      });
+    });
+
+    /* 5. ROTATE */
+    document.querySelectorAll('#tool-view-rotate .preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#tool-view-rotate .preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedRotateAction = btn.getAttribute('data-rotate');
+      });
+    });
+
+    document.getElementById('btn-rotate-go').addEventListener('click', async () => {
+      runAction(document.getElementById('btn-rotate-go'), async () => {
+        const frames = await getFrames();
+        let tW = originalWidth, tH = originalHeight;
+        if (selectedRotateAction === '90' || selectedRotateAction === '270') { tW = originalHeight; tH = originalWidth; }
+
+        const rotated = frames.map(f => ({ imageData: rotateImageData(f.imageData, selectedRotateAction), delay: f.delay }));
+        const blob = encodeFramesToGif(tW, tH, rotated);
+        displayResultCard("Rotated GIF", "Rotated_", blob, tW, tH, originalMetadata ? originalMetadata.fps : '10 FPS', rotated.length);
+      });
+    });
+
+    /* 6. OPTIMIZE */
+    document.getElementById('btn-optimize-go').addEventListener('click', async () => {
+      runAction(document.getElementById('btn-optimize-go'), async () => {
+        const mode = Array.from(document.getElementsByName('opt-mode')).find(r => r.checked).value;
+        const frames = await getFrames();
+        let maxColors = mode === 'balanced' ? 128 : (mode === 'max' ? 64 : 256);
+
+        const blob = encodeFramesToGif(originalWidth, originalHeight, frames, maxColors);
+        displayResultCard("Optimized GIF", "Optimized_", blob, originalWidth, originalHeight, originalMetadata ? originalMetadata.fps : '10 FPS', frames.length);
+      });
+    });
+
+    /* 7. REVERSE */
+    document.getElementById('btn-reverse-go').addEventListener('click', async () => {
+      runAction(document.getElementById('btn-reverse-go'), async () => {
+        const mode = Array.from(document.getElementsByName('reverse-mode')).find(r => r.checked).value;
+        let frames = await getFrames();
+        let processed = mode === 'reverse' ? [...frames].reverse() : [...frames, ...[...frames].reverse()];
+
+        const blob = encodeFramesToGif(originalWidth, originalHeight, processed);
+        displayResultCard("Reversed GIF", "Reversed_", blob, originalWidth, originalHeight, originalMetadata ? originalMetadata.fps : '10 FPS', processed.length);
+      });
+    });
+
+    /* 8. SPEED */
+    speedSlider.addEventListener('input', (e) => speedValText.textContent = `${e.target.value}x`);
+
+    document.getElementById('btn-speed-go').addEventListener('click', async () => {
+      runAction(document.getElementById('btn-speed-go'), async () => {
+        const mult = parseFloat(speedSlider.value);
+        const frames = await getFrames();
+        const adjusted = frames.map(f => ({ imageData: f.imageData, delay: Math.max(2, Math.round(f.delay / mult)) }));
+
+        const blob = encodeFramesToGif(originalWidth, originalHeight, adjusted);
+        const newFps = (originalMetadata && originalMetadata.fps !== 'N/A') ? (parseFloat(originalMetadata.fps) * mult).toFixed(1) + ' FPS' : 'N/A';
+        displayResultCard("Speed Adjusted GIF", "Speed_", blob, originalWidth, originalHeight, newFps, adjusted.length);
+      });
+    });
+
+    /* 9. CUT */
+    document.getElementById('btn-cut-go').addEventListener('click', async () => {
+      runAction(document.getElementById('btn-cut-go'), async () => {
+        const frames = await getFrames();
+        let startIdx = Math.max(0, parseInt(cutStartNum.value) - 1);
+        let endIdx = Math.min(frames.length, parseInt(cutEndNum.value));
+        if (startIdx >= endIdx) startIdx = 0;
+
+        const trimmed = frames.slice(startIdx, endIdx);
+        const blob = encodeFramesToGif(originalWidth, originalHeight, trimmed);
+        displayResultCard("Cut GIF", "Cut_", blob, originalWidth, originalHeight, originalMetadata ? originalMetadata.fps : '10 FPS', trimmed.length);
+      });
+    });
+
+    async function runAction(btnEl, fn) {
+      if (!currentArrayBuffer) return;
+      btnEl.disabled = true;
+      const originalHtml = btnEl.innerHTML;
+      btnEl.innerHTML = `<span class="spinner"></span> Processing...`;
+      try { await fn(); }
+      catch (err) { console.error(err); alert('Processing failed.'); }
+      finally { btnEl.disabled = false; btnEl.innerHTML = originalHtml; }
+    }
+
+    function displayResultCard(cardTitle, prefix, blob, w, h, fps, frameCount, isVid = false) {
+      resultCardTitle.textContent = cardTitle;
+      resultFileNamePrefix = prefix;
+      isVideoOutput = isVid;
+
+      if (resultObjectUrl) URL.revokeObjectURL(resultObjectUrl);
+      resultObjectUrl = URL.createObjectURL(blob);
+
+      if (isVid) {
+        resultGifPreview.style.display = 'none';
+        resultVideoPreview.style.display = 'block';
+        resultVideoPreview.src = resultObjectUrl;
+      } else {
+        resultVideoPreview.style.display = 'none';
+        resultGifPreview.style.display = 'block';
+        resultGifPreview.src = resultObjectUrl;
+      }
+
+      document.getElementById('result-info-size').textContent = formatFileSize(blob.size);
+      document.getElementById('result-info-resolution').textContent = `${w} × ${h} px`;
+      document.getElementById('result-info-fps').textContent = fps;
+      document.getElementById('result-info-frames').textContent = `${frameCount} frames`;
+
+      originalGifCard.style.display = 'none';
+      resultGifCard.style.display = 'flex';
+      leftColumn.style.display = 'flex';
+      cropOverlayBox.style.display = 'none';
+    }
+
+    async function getFrames() {
+      if (extractedFrames.length > 0) return extractedFrames;
+      extractedFrames = await extractGifFrames(currentArrayBuffer, originalWidth, originalHeight);
+      return extractedFrames;
+    }
+
+    async function extractGifFrames(buffer, w, h) {
+      let frames = [];
+      if ('ImageDecoder' in window) {
+        try {
+          const decoder = new ImageDecoder({ data: buffer, type: 'image/gif' });
+          await decoder.tracks.ready;
+          const count = decoder.tracks.selectedTrack.frameCount;
+          const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+
+          for (let i = 0; i < count; i++) {
+            const frameResult = await decoder.decode({ frameIndex: i });
+            ctx.clearRect(0, 0, w, h);
+            ctx.drawImage(frameResult.image, 0, 0, w, h);
+            const delay = Math.max(2, Math.round((frameResult.image.duration || 100000) / 10000));
+            frames.push({ imageData: ctx.getImageData(0, 0, w, h), delay });
+            frameResult.image.close();
+          }
+          return frames;
+        } catch (e) {}
+      }
+      const img = new Image(); img.src = currentObjectUrl;
+      await new Promise(r => img.onload = r);
+      const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+      return [{ imageData: ctx.getImageData(0, 0, w, h), delay: 10 }];
+    }
+
+    function scaleImageData(imgData, targetW, targetH) {
+      const srcCanvas = document.createElement('canvas');
+      srcCanvas.width = imgData.width; srcCanvas.height = imgData.height;
+      srcCanvas.getContext('2d').putImageData(imgData, 0, 0);
+
+      const dstCanvas = document.createElement('canvas');
+      dstCanvas.width = targetW; dstCanvas.height = targetH;
+      const ctx = dstCanvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(srcCanvas, 0, 0, targetW, targetH);
+      return ctx.getImageData(0, 0, targetW, targetH);
+    }
+
+    function fitCropImageData(imgData, targetW, targetH, fillMode, colorHex) {
+      const srcCanvas = document.createElement('canvas');
+      srcCanvas.width = imgData.width; srcCanvas.height = imgData.height;
+      srcCanvas.getContext('2d').putImageData(imgData, 0, 0);
+
+      const dstCanvas = document.createElement('canvas');
+      dstCanvas.width = targetW; dstCanvas.height = targetH;
+      const ctx = dstCanvas.getContext('2d');
+
+      if (fillMode === 'color') {
+        ctx.fillStyle = colorHex;
+        ctx.fillRect(0, 0, targetW, targetH);
+      }
+
+      const scale = fillMode === 'zoom'
+        ? Math.max(targetW / imgData.width, targetH / imgData.height)
+        : Math.min(targetW / imgData.width, targetH / imgData.height);
+
+      const dW = imgData.width * scale, dH = imgData.height * scale;
+      const dX = (targetW - dW) / 2, dY = (targetH - dH) / 2;
+      ctx.drawImage(srcCanvas, dX, dY, dW, dH);
+      return ctx.getImageData(0, 0, targetW, targetH);
+    }
+
+    function rotateImageData(imgData, action) {
+      const srcCanvas = document.createElement('canvas');
+      srcCanvas.width = imgData.width; srcCanvas.height = imgData.height;
+      srcCanvas.getContext('2d').putImageData(imgData, 0, 0);
+
+      let targetW = imgData.width, targetH = imgData.height;
+      if (action === '90' || action === '270') { targetW = imgData.height; targetH = imgData.width; }
+
+      const dstCanvas = document.createElement('canvas');
+      dstCanvas.width = targetW; dstCanvas.height = targetH;
+      const ctx = dstCanvas.getContext('2d');
+
+      ctx.translate(targetW / 2, targetH / 2);
+      if (action === '90') ctx.rotate(90 * Math.PI / 180);
+      else if (action === '180') ctx.rotate(180 * Math.PI / 180);
+      else if (action === '270') ctx.rotate(270 * Math.PI / 180);
+      else if (action === 'flipH') ctx.scale(-1, 1);
+      else if (action === 'flipV') ctx.scale(1, -1);
+
+      ctx.drawImage(srcCanvas, -imgData.width / 2, -imgData.height / 2);
+      return ctx.getImageData(0, 0, targetW, targetH);
+    }
+
+    async function renderFramesToVideo(frames, width, height) {
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      const stream = canvas.captureStream(30);
+
+      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      let chunks = [];
+      mediaRecorder.ondataavailable = e => chunks.push(e.data);
+
+      const recordPromise = new Promise(r => mediaRecorder.onstop = r);
+      mediaRecorder.start();
+
+      for (let f of frames) {
+        ctx.putImageData(f.imageData, 0, 0);
+        await new Promise(r => setTimeout(r, (f.delay || 10) * 10));
+      }
+      mediaRecorder.stop();
+      await recordPromise;
+      return new Blob(chunks, { type: 'video/mp4' });
+    }
+
+    function encodeFramesToGif(width, height, frames, maxColors = 256) {
+      let out = [];
+      writeString(out, "GIF89a");
+      writeUInt16(out, width); writeUInt16(out, height);
+      out.push(0x70, 0x00, 0x00);
+
+      out.push(0x21, 0xFF, 0x0B);
+      writeString(out, "NETSCAPE2.0");
+      out.push(0x03, 0x01, 0x00, 0x00, 0x00);
+
+      for (let f of frames) {
+        const { palette, indexed } = quantizeRGBA(f.imageData.data, maxColors);
+
+        out.push(0x21, 0xF9, 0x04, 0x04);
+        writeUInt16(out, f.delay || 10);
+        out.push(0x00, 0x00);
+
+        out.push(0x2C);
+        writeUInt16(out, 0); writeUInt16(out, 0);
+        writeUInt16(out, width); writeUInt16(out, height);
+        out.push(0x87);
+
+        for (let c of palette) out.push(c[0], c[1], c[2]);
+
+        const lzwData = lzwEncode(indexed, 8);
+        out.push(8);
+        for (let b of lzwData) out.push(b);
+      }
+
+      out.push(0x3B);
+      return new Blob([new Uint8Array(out)], { type: 'image/gif' });
+    }
+
+    function writeString(out, str) { for (let i = 0; i < str.length; i++) out.push(str.charCodeAt(i)); }
+    function writeUInt16(out, val) { out.push(val & 0xFF, (val >> 8) & 0xFF); }
+
+    function quantizeRGBA(rgba, maxColors = 256) {
+      let colorMap = new Map();
+      let indexed = new Uint8Array(rgba.length / 4);
+
+      for (let i = 0; i < rgba.length; i += 4) {
+        let r = rgba[i] & 0xF8, g = rgba[i+1] & 0xF8, b = rgba[i+2] & 0xF8;
+        let key = (r << 16) | (g << 8) | b;
+        colorMap.set(key, (colorMap.get(key) || 0) + 1);
+      }
+
+      let sorted = Array.from(colorMap.entries()).sort((a,b) => b[1] - a[1]);
+      let topColors = sorted.slice(0, maxColors).map(e => [
+        (e[0] >> 16) & 0xFF, (e[0] >> 8) & 0xFF, e[0] & 0xFF
+      ]);
+
+      while (topColors.length < 256) topColors.push([0,0,0]);
+
+      for (let i = 0, idx = 0; i < rgba.length; i += 4, idx++) {
+        let r = rgba[i], g = rgba[i+1], b = rgba[i+2];
+        let bestIdx = 0, minDist = 999999;
+        for (let p = 0; p < maxColors; p++) {
+          let pr = topColors[p][0], pg = topColors[p][1], pb = topColors[p][2];
+          let dist = (r-pr)*(r-pr) + (g-pg)*(g-pg) + (b-pb)*(b-pb);
+          if (dist < minDist) { minDist = dist; bestIdx = p; if (dist === 0) break; }
+        }
+        indexed[idx] = bestIdx;
+      }
+      return { palette: topColors, indexed };
+    }
+
+    function lzwEncode(pixels, colorDepth) {
+      let initCodeSize = Math.max(2, colorDepth);
+      let clearCode = 1 << initCodeSize, endCode = clearCode + 1;
+      let nextCode = clearCode + 2, codeSize = initCodeSize + 1;
+      let maxCode = (1 << codeSize) - 1;
+
+      let dict = new Map();
+      for (let i = 0; i < clearCode; i++) dict.set(String(i), i);
+
+      let stream = [], bitBuf = 0, bitCnt = 0;
+
+      function writeCode(code) {
+        bitBuf |= (code << bitCnt); bitCnt += codeSize;
+        while (bitCnt >= 8) { stream.push(bitBuf & 0xFF); bitBuf >>= 8; bitCnt -= 8; }
+      }
+
+      writeCode(clearCode);
+      let prefix = "";
+
+      for (let i = 0; i < pixels.length; i++) {
+        let k = pixels[i];
+        let pk = prefix === "" ? String(k) : prefix + "," + k;
+
+        if (dict.has(pk)) prefix = pk;
+        else {
+          writeCode(dict.get(prefix));
+          if (nextCode <= 4095) {
+            dict.set(pk, nextCode++);
+            if (nextCode > maxCode && codeSize < 12) { codeSize++; maxCode = (1 << codeSize) - 1; }
+          } else {
+            writeCode(clearCode); dict.clear();
+            for (let c = 0; c < clearCode; c++) dict.set(String(c), c);
+            nextCode = clearCode + 2; codeSize = initCodeSize + 1; maxCode = (1 << codeSize) - 1;
+          }
+          prefix = String(k);
+        }
+      }
+      if (prefix !== "") writeCode(dict.get(prefix));
+      writeCode(endCode);
+      if (bitCnt > 0) stream.push(bitBuf & 0xFF);
+
+      let blocks = [], idx = 0;
+      while (idx < stream.length) {
+        let len = Math.min(255, stream.length - idx);
+        blocks.push(len);
+        for (let b = 0; b < len; b++) blocks.push(stream[idx + b]);
+        idx += len;
+      }
+      blocks.push(0);
+      return blocks;
+    }
+
+    function parseGifMetadata(buffer) {
+      const bytes = new Uint8Array(buffer);
+      if (bytes.length < 13 || !String.fromCharCode(...bytes.subarray(0, 6)).startsWith('GIF')) return null;
+
+      let pos = 6;
+      const width = bytes[pos] | (bytes[pos + 1] << 8);
+      const height = bytes[pos + 2] | (bytes[pos + 3] << 8);
+      const packed = bytes[pos + 4]; pos += 7;
+
+      if ((packed & 0x80) !== 0) pos += 3 * Math.pow(2, (packed & 0x07) + 1);
+
+      let frameCount = 0, totalDelayHundredths = 0;
+      while (pos < bytes.length) {
+        const blockType = bytes[pos++];
+        if (blockType === 0x3B) break;
+        else if (blockType === 0x21) {
+          const extType = bytes[pos++];
+          if (extType === 0xF9) {
+            const blockSize = bytes[pos++];
+            totalDelayHundredths += (bytes[pos + 1] | (bytes[pos + 2] << 8));
+            pos += blockSize;
+            while (pos < bytes.length && bytes[pos] !== 0) pos += bytes[pos] + 1;
+            pos++;
+          } else {
+            while (pos < bytes.length && bytes[pos] !== 0) pos += bytes[pos] + 1;
+            pos++;
+          }
+        } else if (blockType === 0x2C) {
+          frameCount++; pos += 9;
+          if ((bytes[pos] & 0x80) !== 0) pos += 3 * Math.pow(2, (bytes[pos] & 0x07) + 1);
+          pos++;
+          while (pos < bytes.length && bytes[pos] !== 0) pos += bytes[pos] + 1;
+          pos++;
+        } else break;
+      }
+
+      const totalSeconds = totalDelayHundredths / 100;
+      const fps = (frameCount > 0 && totalSeconds > 0) ? `${(frameCount / totalSeconds).toFixed(1)} FPS` : '10 FPS';
+      return { width, height, frameCount: frameCount || 1, fps };
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+  </script>
+</body>
+</html>
