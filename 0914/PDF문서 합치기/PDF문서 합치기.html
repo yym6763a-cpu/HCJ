@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF 병합기 (PDF Merger)</title>
+  <!-- pdf-lib 라이브러리 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* 화려하고 부드러운 그라데이션 배경 */
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f76b1c 100%);
+      background-size: 200% 200%;
+      animation: gradientAnimation 12s ease infinite;
+      padding: 20px;
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 40px;
+      width: 100%;
+      max-width: 550px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #2d3748;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    p.subtitle {
+      font-size: 14px;
+      color: #718096;
+      margin-bottom: 24px;
+    }
+
+    /* 드래그 앤 드롭 영역 */
+    .drop-zone {
+      border: 2px dashed #9f7aea;
+      border-radius: 16px;
+      padding: 30px 20px;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      background-color: rgba(159, 122, 234, 0.1);
+      border-color: #6b46c1;
+      transform: translateY(-2px);
+    }
+
+    .drop-zone p {
+      color: #4a5568;
+      font-size: 15px;
+    }
+
+    .drop-zone span {
+      display: block;
+      margin-top: 8px;
+      font-size: 13px;
+      color: #a0aec0;
+    }
+
+    #file-input {
+      display: none;
+    }
+
+    /* 파일 목록 영역 */
+    .file-list {
+      list-style: none;
+      margin-bottom: 20px;
+      max-height: 200px;
+      overflow-y: auto;
+      text-align: left;
+    }
+
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      font-size: 14px;
+      color: #2d3748;
+    }
+
+    .file-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 80%;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: #e53e3e;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 0 4px;
+    }
+
+    .remove-btn:hover {
+      color: #c53030;
+    }
+
+    /* 버튼 스타일 */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(118, 75, 162, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(118, 75, 162, 0.4);
+    }
+
+    .btn:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* 상태 메시지 */
+    .status {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #4a5568;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>📄 PDF 병합기</h1>
+    <p class="subtitle">여러 PDF 파일을 하나로 쉽고 안전하게 합치세요.</p>
+
+    <div class="drop-zone" id="drop-zone">
+      <p>PDF 파일을 이곳에 드래그하거나 클릭하여 선택하세요.</p>
+      <span>(여러 개 선택 가능)</span>
+      <input type="file" id="file-input" accept="application/pdf" multiple>
+    </div>
+
+    <ul class="file-list" id="file-list"></ul>
+
+    <button class="btn" id="merge-btn" disabled>PDF 합치기 및 다운로드</button>
+    
+    <div class="status" id="status-text"></div>
+  </div>
+
+  <script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const fileListUI = document.getElementById('file-list');
+    const mergeBtn = document.getElementById('merge-btn');
+    const statusText = document.getElementById('status-text');
+
+    let pdfFiles = [];
+
+    // 클릭 시 파일 선택창 열기
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    // 파일 선택 이벤트
+    fileInput.addEventListener('change', (e) => {
+      addFiles(e.target.files);
+      fileInput.value = ''; // 동일 파일 재선택 가능하도록 초기화
+    });
+
+    // 드래그 앤 드롭 이벤트
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      addFiles(e.dataTransfer.files);
+    });
+
+    // 파일 추가 함수
+    function addFiles(files) {
+      for (const file of files) {
+        if (file.type === 'application/pdf') {
+          pdfFiles.push(file);
+        } else {
+          alert(`"${file.name}"은(는) PDF 파일이 아닙니다.`);
+        }
+      }
+      updateUI();
+    }
+
+    // UI 업데이트 (목록 표시 및 버튼 활성화)
+    function updateUI() {
+      fileListUI.innerHTML = '';
+      
+      pdfFiles.forEach((file, index) => {
+        const li = document.createElement('li');
+        li.className = 'file-item';
+        
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'file-name';
+        nameSpan.textContent = `${index + 1}. ${file.name}`;
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.onclick = (e) => {
+          e.stopPropagation(); // 드롭존 클릭 이벤트 방지
+          pdfFiles.splice(index, 1);
+          updateUI();
+        };
+
+        li.appendChild(nameSpan);
+        li.appendChild(removeBtn);
+        fileListUI.appendChild(li);
+      });
+
+      // 파일이 2개 이상일 때 병합 버튼 활성화
+      mergeBtn.disabled = pdfFiles.length < 2;
+      statusText.textContent = pdfFiles.length > 0 ? `총 ${pdfFiles.length}개의 파일 선택됨` : '';
+    }
+
+    // PDF 병합 실행 함수
+    mergeBtn.addEventListener('click', async () => {
+      if (pdfFiles.length < 2) return;
+
+      try {
+        mergeBtn.disabled = true;
+        statusText.textContent = 'PDF를 병합하는 중입니다... 잠시만 기다려주세요.';
+
+        // 새 PDF 문서 생성
+        const mergedPdf = await PDFLib.PDFDocument.create();
+
+        // 순차적으로 PDF 로드 및 페이지 추가
+        for (const file of pdfFiles) {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+          const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+          copiedPages.forEach((page) => mergedPdf.addPage(page));
+        }
+
+        // 병합된 PDF 바이트 데이터 생성
+        const mergedPdfBytes = await mergedPdf.save();
+
+        // 다운로드 블롭(Blob) 생성 및 실행
+        const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `merged_${Date.now()}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        statusText.textContent = '✅ 성공적으로 병합하여 다운로드했습니다!';
+      } catch (error) {
+        console.error(error);
+        statusText.textContent = '❌ PDF 병합 중 오류가 발생했습니다.';
+      } finally {
+        mergeBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
