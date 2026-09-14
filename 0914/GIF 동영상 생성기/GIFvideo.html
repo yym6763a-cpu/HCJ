@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video to GIF Converter</title>
+    <!-- GIF 변환 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gifshot/0.3.2/gifshot.min.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-light: #eef2ff;
+            --accent: #8b5cf6;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --success-hover: #059669;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 1 & 2. 헤더 디자인 (글래스모피즘 적용) */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 40px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        /* 왼쪽 상단 텍스트 로고 (클릭 시 이동) */
+        .header-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.2s ease;
+        }
+
+        .header-logo:hover {
+            transform: scale(1.05);
+        }
+
+        /* 오른쪽 상단 제목 */
+        .header-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* 메인 레이아웃 */
+        main {
+            max-width: 840px;
+            width: 100%;
+            margin: 50px auto;
+            padding: 0 24px;
+            flex: 1;
+            text-align: center;
+        }
+
+        /* 3 & 4. 메인 타이틀 세련되게 스타일링 */
+        .main-title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sub-title {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        /* 5. 드래그 앤 드롭 업로드 카드 디자인 */
+        .drop-zone {
+            background: var(--card-bg);
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            padding: 50px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.15);
+        }
+
+        .drop-icon-wrapper {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .drop-icon {
+            width: 32px;
+            height: 32px;
+            fill: var(--primary);
+        }
+
+        .drop-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+        }
+
+        /* 6. 파일 목록 리스트 스타일링 */
+        .file-list {
+            margin-top: 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            gap: 20px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 왼쪽 썸네일 */
+        .item-thumb {
+            width: 90px;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 10px;
+            background-color: #000;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* 중앙 프로그레스 바 */
+        .item-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .file-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 320px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background-color: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.2s ease;
+        }
+
+        .progress-status {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        /* 오른쪽 다운로드 버튼 */
+        .download-btn {
+            padding: 10px 20px;
+            background-color: var(--success);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            pointer-events: none;
+            opacity: 0.4;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+        }
+
+        .download-btn.ready {
+            pointer-events: auto;
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .download-btn.ready:hover {
+            background-color: var(--success-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 영역 -->
+    <header>
+        <!-- 1. 좌상단 텍스트 로고 (누르면 nanalab.kr로 이동) -->
+        <a href="https://nanalab.kr" target="_blank" class="header-logo">Nanalab</a>
+        <!-- 2. 우상단 타이틀 -->
+        <div class="header-title">Video to GIF</div>
+    </header>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main>
+        <!-- 3. 큰 타이틀 -->
+        <h1 class="main-title">Video &rarr; GIF</h1>
+        <!-- 4. 서브 타이틀 -->
+        <p class="sub-title">Make your own GIF Animation!</p>
+
+        <!-- 5. 드래그 앤 드롭 업로드 메뉴 -->
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <div class="drop-icon-wrapper">
+                <svg class="drop-icon" viewBox="0 0 24 24">
+                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+                </svg>
+            </div>
+            <div class="drop-text">동영상 파일을 이곳에 드래그하세요</div>
+            <button class="upload-btn" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">파일 직접 선택</button>
+            <input type="file" id="fileInput" accept="video/*" multiple style="display: none;">
+        </div>
+
+        <!-- 6. 파일 목록 영역 -->
+        <div class="file-list" id="fileList"></div>
+    </main>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+
+        // 드래그 앤 드롭 이벤트 처리
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('video/')) {
+                    createFileRow(file);
+                } else {
+                    alert('동영상 파일만 업로드 가능합니다.');
+                }
+            });
+        }
+
+        // 6, 7, 8. 동영상 변환 처리 및 UI 생성
+        function createFileRow(file) {
+            const fileUrl = URL.createObjectURL(file);
+
+            // 목록 카드 생성
+            const item = document.createElement('div');
+            item.className = 'file-item';
+
+            // 왼쪽 썸네일 (비디오 미리보기)
+            const videoThumb = document.createElement('video');
+            videoThumb.className = 'item-thumb';
+            videoThumb.src = fileUrl;
+            videoThumb.muted = true;
+            videoThumb.currentTime = 0.5;
+
+            // 프로그레스 바 영역
+            const info = document.createElement('div');
+            info.className = 'item-info';
+
+            const name = document.createElement('div');
+            name.className = 'file-name';
+            name.textContent = file.name;
+
+            const progressBg = document.createElement('div');
+            progressBg.className = 'progress-bar-bg';
+
+            const progressFill = document.createElement('div');
+            progressFill.className = 'progress-bar-fill';
+            progressBg.appendChild(progressFill);
+
+            const status = document.createElement('div');
+            status.className = 'progress-status';
+            status.textContent = '변환 준비 중... 0%';
+
+            info.appendChild(name);
+            info.appendChild(progressBg);
+            info.appendChild(status);
+
+            // 오른쪽 다운로드 버튼
+            const downloadBtn = document.createElement('a');
+            downloadBtn.className = 'download-btn';
+            downloadBtn.textContent = '다운로드';
+
+            item.appendChild(videoThumb);
+            item.appendChild(info);
+            item.appendChild(downloadBtn);
+
+            fileList.appendChild(item);
+
+            // GIF 변환 (29 FPS 제한)
+            videoThumb.onloadedmetadata = function () {
+                const duration = Math.min(videoThumb.duration, 10); // 최대 10초
+                const fps = 29; // 8. 29 FPS 제약 조건
+                const numFrames = Math.floor(duration * fps);
+
+                gifshot.createGIF({
+                    video: [fileUrl],
+                    interval: 1 / fps,
+                    numFrames: numFrames,
+                    gifWidth: 480,
+                    gifHeight: 270,
+                    progressCallback: function (captureProgress) {
+                        const percent = Math.round(captureProgress * 100);
+                        progressFill.style.width = percent + '%';
+                        status.textContent = `GIF 변환 중... ${percent}%`;
+                    }
+                }, function (obj) {
+                    if (!obj.error) {
+                        // 100% 완료 시 다운로드 버튼 활성화
+                        progressFill.style.width = '100%';
+                        status.textContent = '변환 완료! (100%)';
+                        
+                        downloadBtn.href = obj.image;
+                        downloadBtn.download = file.name.replace(/\.[^/.]+$/, "") + ".gif";
+                        downloadBtn.classList.add('ready');
+                    } else {
+                        status.textContent = '변환에 실패했습니다.';
+                        console.error(obj.error);
+                    }
+                });
+            };
+        }
+    </script>
+</body>
+</html>
