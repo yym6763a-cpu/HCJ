@@ -46,28 +46,48 @@
 ```bash
 git clone https://github.com/your-username/smart-image-resizer.git
 cd smart-image-resizer
+```
 
-2. 실행 방법
-index.html 파일을 크롬, 엣지, 웨일 등 임의의 웹 브라우저로 엽니다.
+### 2. 실행 방법
+`index.html` 파일을 크롬, 엣지, 웨일 등 임의의 웹 브라우저로 엽니다.
+
+```bash
 # MacOS
 open index.html
 
 # Windows
 start index.html
+```
 
-📁 프로젝트 구조 (Project Structure)
+---
+
+## 📁 프로젝트 구조 (Project Structure)
+
+```text
 smart-image-resizer/
 ├── index.html        # HTML, CSS, JavaScript가 모두 통합된 메인 파일
 ├── logo.png          # 상단 헤더 로고 이미지
 └── README.md         # 프로젝트 설명 문서
+```
 
-💡 사용 방법 (How to Use)
-1. 웹 페이지 중앙의 업로드 영역에 사진을 드래그하여 떨어뜨리거나 사진 파일 선택 버튼을 클릭합니다.
-2. 원하는 캔버스 비율(1:1, 16:9 등 또는 커스텀 입력)을 클릭합니다.
-3. Padding 모드 선택 시 우측의 여백 색상을 원하는 색으로 지정합니다. (Crop 모드 선택 시 배경색은 비활성화됩니다)
-4. 이미지 변환 프로그레스 바가 100% 완료되면 개별 다운로드 버튼을 누르거나, 우측 상단의 일괄 다운로드 (ZIP) 버튼을 클릭하여 결과물을 다운로드합니다.
+---
 
-📄 라이선스 (License)
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 💡 사용 방법 (How to Use)
 
-Developed with ❤️ by NANA LAB
+1. 웹 페이지 중앙의 **업로드 영역**에 사진을 드래그하여 떨어뜨리거나 **사진 파일 선택** 버튼을 클릭합니다.
+2. 원하는 **캔버스 비율**(`1:1`, `16:9` 등 또는 커스텀 입력)을 클릭합니다.
+3. **Padding** 모드 선택 시 우측의 **여백 색상**을 원하는 색으로 지정합니다. (Crop 모드 선택 시 배경색은 비활성화됩니다)
+4. 이미지 변환 프로그레스 바가 100% 완료되면 개별 **다운로드** 버튼을 누르거나, 우측 상단의 **일괄 다운로드 (ZIP)** 버튼을 클릭하여 결과물을 다운로드합니다.
+
+---
+
+## 📄 라이선스 (License)
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  Developed with ❤️ by <a href="https://nanalab.kr">NANA LAB</a>
+</p>
+```
