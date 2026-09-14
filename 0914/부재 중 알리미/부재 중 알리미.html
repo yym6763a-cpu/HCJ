@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자리 비움 안내 화면</title>
+  <!-- Google Fonts 적용 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* 은은하고 트렌디한 감성의 움직이는 그라데이션 배경 */
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #8e44ad);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      color: #ffffff;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 공통 글래스모피즘 카스타일 */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    /* 1. 입력 폼 영역 */
+    #form-container {
+      width: 90%;
+      max-width: 480px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    #form-container h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-group label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .input-group input:focus {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: #fff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-submit {
+      margin-top: 10px;
+      padding: 16px;
+      border: none;
+      border-radius: 16px;
+      background: #ffffff;
+      color: #23a6d5;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    /* 2. 화면 표시 영역 */
+    #display-container {
+      width: 85%;
+      max-width: 900px;
+      padding: 60px 40px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      position: relative;
+      animation: zoomIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .status-badge {
+      padding: 8px 20px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.25);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* 가장 크고 강조되는 일정 글자 */
+    .display-title {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.15;
+      word-break: keep-all;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 시간 & 카운트다운 영역 */
+    .time-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .return-time {
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 500;
+      opacity: 0.95;
+    }
+
+    .countdown {
+      font-size: clamp(1.5rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #ffeaa7;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    /* 기타 안내 문구 */
+    .display-note {
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      font-weight: 300;
+      opacity: 0.85;
+      max-width: 80%;
+      line-height: 1.5;
+      word-break: keep-all;
+    }
+
+    /* 설정으로 돌아가기 버튼 */
+    .btn-edit {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      opacity: 0.6;
+    }
+
+    .btn-edit:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* 유틸리티 클래스 */
+    .hidden {
+      display: none !important;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 일정 입력 화면 -->
+  <div id="form-container" class="glass-card">
+    <h2>✨ 자리 비움 화면 설정</h2>
+    
+    <div class="input-group">
+      <label for="input-title">일정 (메인 메시지)</label>
+      <input type="text" id="input-title" placeholder="예: 점심 식사, 회의 참석, 외부 미팅" autofocus>
+    </div>
+
+    <div class="input-group">
+      <label for="input-time">복귀 예정 시간</label>
+      <input type="time" id="input-time">
+    </div>
+
+    <div class="input-group">
+      <label for="input-note">기타 안내 문구</label>
+      <input type="text" id="input-note" placeholder="예: 급한 연락은 메신저/전화 부탁드립니다.">
+    </div>
+
+    <button type="button" class="btn-submit" onclick="startDisplay()">화면 시작하기</button>
+  </div>
+
+  <!-- 2. 화면 표시 영역 -->
+  <div id="display-container" class="glass-card hidden">
+    <button class="btn-edit" onclick="showForm()">⚙️ 설정 수정</button>
+    
+    <div class="status-badge">AWAY FROM DESK</div>
+    
+    <!-- 일정 (가장 큰 글자) -->
+    <div id="out-title" class="display-title"></div>
+    
+    <!-- 돌아오는 시간 및 카운트다운 -->
+    <div class="time-box">
+      <div id="out-time" class="return-time"></div>
+      <div id="out-countdown" class="countdown"></div>
+    </div>
+    
+    <!-- 기타 안내 문구 -->
+    <div id="out-note" class="display-note"></div>
+  </div>
+
+  <script>
+    let timerInterval = null;
+    let targetDateTime = null;
+
+    // 페이지 로드시 기본 시간값 세팅 (현재 시간 + 1시간)
+    window.onload = () => {
+      const now = new Date();
+      now.setHours(now.getHours() + 1);
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('input-time').value = `${hours}:${minutes}`;
+    };
+
+    function startDisplay() {
+      const title = document.getElementById('input-title').value.trim() || '자리 비움 중';
+      const timeVal = document.getElementById('input-time').value;
+      const note = document.getElementById('input-note').value.trim();
+
+      // 시간 설정 계산
+      if (timeVal) {
+        const [hours, minutes] = timeVal.split(':').map(Number);
+        const now = new Date();
+        targetDateTime = new Date();
+        targetDateTime.setHours(hours, minutes, 0, 0);
+
+        // 만약 설정한 시간이 현재 시간보다 이전이라면 내일 시간으로 설정
+        if (targetDateTime < now) {
+          targetDateTime.setDate(targetDateTime.getDate() + 1);
+        }
+      } else {
+        targetDateTime = null;
+      }
+
+      // 화면 출력 텍스트 설정
+      document.getElementById('out-title').innerText = title;
+      document.getElementById('out-time').innerText = timeVal ? `복귀 예정 시각: ${timeVal}` : '';
+      document.getElementById('out-note').innerText = note ? `"${note}"` : '';
+
+      // 화면 전환
+      document.getElementById('form-container').classList.add('hidden');
+      document.getElementById('display-container').classList.remove('hidden');
+
+      // 카운트다운 시작
+      updateCountdown();
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(updateCountdown, 1000);
+    }
+
+    function updateCountdown() {
+      const countdownEl = document.getElementById('out-countdown');
+      
+      if (!targetDateTime) {
+        countdownEl.innerText = '';
+        return;
+      }
+
+      const now = new Date();
+      const diff = targetDateTime - now;
+
+      if (diff <= 0) {
+        countdownEl.innerText = '⏳ 곧 복귀 예정입니다!';
+        return;
+      }
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      let timeString = '남은 시간 ';
+      if (hours > 0) timeString += `${hours}시간 `;
+      timeString += `${minutes}분 ${seconds}초`;
+
+      countdownEl.innerText = timeString;
+    }
+
+    function showForm() {
+      if (timerInterval) clearInterval(timerInterval);
+      document.getElementById('display-container').classList.add('hidden');
+      document.getElementById('form-container').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
