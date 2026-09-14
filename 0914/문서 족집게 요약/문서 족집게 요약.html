@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TextRank 문서 요약기</title>
+    <!-- Tailwind CSS (디자인 프레임워크) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PDF.js (PDF 파일 읽기) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- Mammoth.js (DOCX 파일 읽기) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        * { font-family: 'Pretendard', sans-serif; }
+        
+        /* 커스텀 슬라이더 트랙 그라데이션 */
+        input[type=range]::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, #818cf8, #c084fc, #f472b6);
+            height: 8px;
+            border-radius: 4px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            margin-top: -6px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+    </style>
+</head>
+<!-- 배경: 은은하고 세련된 멀티 그라데이션 -->
+<body class="bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-indigo-100 via-purple-50 to-pink-100 min-h-screen text-slate-800 antialiased selection:bg-purple-200">
+
+    <div class="max-w-5xl mx-auto px-4 py-12">
+        
+        <!-- 헤더 영역 (그라데이션 텍스트 & 배지) -->
+        <header class="text-center mb-12">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-sm mb-4">
+                ✨ AI TextRank Summarizer
+            </span>
+            <h1 class="text-4xl sm:text-5xl font-black tracking-tight mb-3 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 drop-shadow-sm">
+                Document Summary Engine
+            </h1>
+            <p class="text-slate-600 text-sm sm:text-base font-medium">
+                복잡하고 긴 문서를 업로드하면 핵심 요점만 똑똑하게 추출해 드립니다.
+            </p>
+        </header>
+
+        <!-- 메인 카드 컨테이너 (글래스모피즘 적용) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- 왼쪽 카드: 업로드 및 설정 -->
+            <div class="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-xl shadow-purple-500/5 border border-white/60 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+                        <h2 class="text-lg font-bold text-slate-800">문서 업로드 및 설정</h2>
+                    </div>
+                    
+                    <!-- 드래그 앤 드롭 영역 (그라데이션 테두리 및 배경 효과) -->
+                    <div id="drop-zone" class="group relative border-2 border-dashed border-indigo-200 hover:border-purple-400 bg-gradient-to-br from-indigo-50/40 via-purple-50/20 to-pink-50/40 hover:from-indigo-50 hover:to-pink-50 rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 mb-6">
+                        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-500 text-white flex items-center justify-center shadow-md shadow-indigo-200 group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                        </div>
+                        <p class="text-sm font-semibold text-slate-700">파일을 드래그하거나 클릭하여 선택하세요</p>
+                        <p class="text-xs text-slate-400 mt-1">PDF, DOCX, TXT 지원</p>
+                        <input type="file" id="file-input" accept=".pdf, .docx, .txt" class="hidden">
+                    </div>
+
+                    <!-- 선택된 파일 정보 박스 -->
+                    <div id="file-info" class="hidden bg-gradient-to-r from-slate-50 to-indigo-50/50 p-4 rounded-xl text-sm border border-indigo-100/80 mb-6 flex items-center justify-between shadow-inner">
+                        <div class="flex items-center space-x-2 truncate">
+                            <span class="text-lg">📄</span>
+                            <span id="file-name" class="font-medium text-slate-700 truncate max-w-[180px]"></span>
+                        </div>
+                        <span id="char-count" class="text-xs font-bold bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-2.5 py-1 rounded-full shadow-sm"></span>
+                    </div>
+
+                    <!-- 문장 수 선택 슬라이더 -->
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-3">
+                            <label for="sentence-slider" class="text-sm font-semibold text-slate-700">요약할 문장 수</label>
+                            <span id="slider-value" class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 font-extrabold text-lg">3문장</span>
+                        </div>
+                        <input type="range" id="sentence-slider" min="1" max="5" value="3" step="1" class="w-full appearance-none bg-transparent cursor-pointer">
+                        <div class="flex justify-between text-xs font-medium text-slate-400 mt-2">
+                            <span>1문장 (핵심)</span>
+                            <span>3문장 (권장)</span>
+                            <span>5문장 (상세)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 요약 실행 버튼 (화려한 핑크/보라 그라데이션) -->
+                <button id="summarize-btn" disabled 
+                        class="w-full py-4 px-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 disabled:from-slate-300 disabled:to-slate-300 text-white font-bold rounded-2xl transition-all duration-300 shadow-lg shadow-purple-500/25 disabled:shadow-none hover:shadow-purple-500/40 hover:-translate-y-0.5 active:translate-y-0">
+                    🚀 핵심 요약 실행하기
+                </button>
+            </div>
+
+            <!-- 오른쪽 카드: 요약 결과 -->
+            <div class="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-xl shadow-purple-500/5 border border-white/60 flex flex-col">
+                <div class="flex items-center space-x-2 mb-6">
+                    <span class="w-3 h-3 rounded-full bg-pink-500"></span>
+                    <h2 class="text-lg font-bold text-slate-800">요약 결과</h2>
+                </div>
+                
+                <!-- 로딩 애니메이션 -->
+                <div id="loading" class="hidden flex-1 flex flex-col items-center justify-center py-20">
+                    <div class="relative w-12 h-12">
+                        <div class="absolute top-0 rounded-full w-12 h-12 bg-gradient-to-r from-indigo-500 to-pink-500 animate-ping opacity-75"></div>
+                        <div class="relative rounded-full w-12 h-12 bg-gradient-to-r from-indigo-600 to-pink-600 flex items-center justify-center text-white text-xs font-bold">AI</div>
+                    </div>
+                    <p class="text-slate-500 font-medium text-sm mt-4">문장 구조 및 중요도를 분석하고 있습니다...</p>
+                </div>
+
+                <!-- 결과 출력 컨테이너 -->
+                <div id="result-container" class="flex-1 flex items-center justify-center border border-dashed border-slate-200 rounded-2xl p-4 bg-slate-50/50">
+                    <p class="text-slate-400 text-sm text-center leading-relaxed" id="placeholder-text">
+                        왼쪽에서 문서 파일을 업로드하신 후<br>
+                        <strong class="text-indigo-500 font-semibold">[핵심 요약 실행하기]</strong> 버튼을 클릭하세요.
+                    </p>
+                    <div id="summary-content" class="hidden w-full space-y-4"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // PDF.js 워커 설정
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileInfo = document.getElementById('file-info');
+        const fileName = document.getElementById('file-name');
+        const charCount = document.getElementById('char-count');
+        const sentenceSlider = document.getElementById('sentence-slider');
+        const sliderValue = document.getElementById('slider-value');
+        const summarizeBtn = document.getElementById('summarize-btn');
+        const loading = document.getElementById('loading');
+        const resultContainer = document.getElementById('result-container');
+        const placeholderText = document.getElementById('placeholder-text');
+        const summaryContent = document.getElementById('summary-content');
+
+        let extractedText = "";
+
+        sentenceSlider.addEventListener('input', (e) => {
+            sliderValue.textContent = `${e.target.value}문장`;
+        });
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-purple-400'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-purple-400'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-purple-400');
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFile(e.target.files[0]);
+        });
+
+        async function handleFile(file) {
+            const ext = file.name.split('.').pop().toLowerCase();
+            fileName.textContent = file.name;
+            extractedText = "";
+
+            try {
+                if (ext === 'txt') {
+                    extractedText = await file.text();
+                } else if (ext === 'docx') {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+                    extractedText = result.value;
+                } else if (ext === 'pdf') {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    let text = "";
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const content = await page.getTextContent();
+                        text += content.items.map(item => item.str).join(" ") + "\n";
+                    }
+                    extractedText = text;
+                }
+
+                extractedText = extractedText.trim();
+                if (extractedText.length > 0) {
+                    charCount.textContent = `${extractedText.length.toLocaleString()}자`;
+                    fileInfo.classList.remove('hidden');
+                    summarizeBtn.disabled = false;
+                } else {
+                    alert("문서에서 텍스트를 추출할 수 없습니다.");
+                }
+            } catch (err) {
+                alert("파일 읽기 오류: " + err.message);
+            }
+        }
+
+        summarizeBtn.addEventListener('click', () => {
+            const targetSentences = parseInt(sentenceSlider.value);
+            placeholderText.classList.add('hidden');
+            summaryContent.classList.add('hidden');
+            loading.classList.remove('hidden');
+
+            setTimeout(() => {
+                const summary = runTextRank(extractedText, targetSentences);
+                
+                loading.classList.add('hidden');
+                summaryContent.innerHTML = "";
+                
+                summary.forEach((sentence, index) => {
+                    const div = document.createElement('div');
+                    // 결과 카드 내 그라데이션 및 숫자 배지 디자인 적용
+                    div.className = "p-4 bg-gradient-to-r from-purple-50/80 via-indigo-50/40 to-pink-50/80 border border-purple-100 rounded-2xl text-slate-700 text-sm leading-relaxed shadow-sm flex items-start space-x-3";
+                    div.innerHTML = `
+                        <span class="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-bold text-xs flex items-center justify-center shadow-sm mt-0.5">
+                            ${index + 1}
+                        </span>
+                        <p class="pt-0.5 font-medium">${sentence}</p>
+                    `;
+                    summaryContent.appendChild(div);
+                });
+
+                summaryContent.classList.remove('hidden');
+                resultContainer.classList.remove('border-dashed', 'bg-slate-50/50');
+                resultContainer.classList.add('bg-transparent', 'border-none');
+            }, 400);
+        });
+
+        // TextRank 알고리즘
+        function runTextRank(text, topN) {
+            let sentences = text.replace(/\r?\n|\r/g, " ")
+                                .split(/(?<=[.!?])\s+/)
+                                .map(s => s.trim())
+                                .filter(s => s.length > 5);
+
+            if (sentences.length === 0) return ["요약할 수 있는 문장이 부족합니다."];
+            if (sentences.length <= topN) return sentences;
+
+            const tokenize = (str) => str.toLowerCase().replace(/[^\w\s가-힣]/g, "").split(/\s+/).filter(w => w.length > 0);
+            const docs = sentences.map(tokenize);
+
+            const numDocs = docs.length;
+            const df = {};
+            docs.forEach(doc => {
+                const uniqueWords = new Set(doc);
+                uniqueWords.forEach(w => df[w] = (df[w] || 0) + 1);
+            });
+
+            const tfidfVectors = docs.map(doc => {
+                const tf = {};
+                doc.forEach(w => tf[w] = (tf[w] || 0) + 1);
+                const vec = {};
+                for (let w in tf) {
+                    const idf = Math.log(numDocs / (df[w] || 1));
+                    vec[w] = (tf[w] / doc.length) * idf;
+                }
+                return vec;
+            });
+
+            function cosineSimilarity(v1, v2) {
+                let dot = 0, norm1 = 0, norm2 = 0;
+                for (let k in v1) {
+                    dot += (v1[k] || 0) * (v2[k] || 0);
+                    norm1 += v1[k] * v1[k];
+                }
+                for (let k in v2) {
+                    norm2 += v2[k] * v2[k];
+                }
+                if (norm1 === 0 || norm2 === 0) return 0;
+                return dot / (Math.sqrt(norm1) * Math.sqrt(norm2));
+            }
+
+            const simMatrix = Array(numDocs).fill(0).map(() => Array(numDocs).fill(0));
+            for (let i = 0; i < numDocs; i++) {
+                for (let j = 0; j < numDocs; j++) {
+                    if (i !== j) {
+                        simMatrix[i][j] = cosineSimilarity(tfidfVectors[i], tfidfVectors[j]);
+                    }
+                }
+            }
+
+            const d = 0.85;
+            let scores = Array(numDocs).fill(1 / numDocs);
+            const iterations = 30;
+
+            for (let iter = 0; iter < iterations; iter++) {
+                let newScores = Array(numDocs).fill((1 - d) / numDocs);
+                for (let i = 0; i < numDocs; i++) {
+                    for (let j = 0; j < numDocs; j++) {
+                        if (i !== j && simMatrix[j][i] > 0) {
+                            let sumSim = simMatrix[j].reduce((a, b) => a + b, 0);
+                            if (sumSim > 0) {
+                                newScores[i] += d * (simMatrix[j][i] / sumSim) * scores[j];
+                            }
+                        }
+                    }
+                }
+                scores = newScores;
+            }
+
+            let ranked = scores.map((score, idx) => ({ score, idx, text: sentences[idx] }));
+            ranked.sort((a, b) => b.score - a.score);
+
+            let selected = ranked.slice(0, topN);
+            selected.sort((a, b) => a.idx - b.idx);
+
+            return selected.map(item => item.text);
+        }
+    </script>
+</body>
+</html>
