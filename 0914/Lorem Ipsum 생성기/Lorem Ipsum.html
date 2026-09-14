@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lorem Ipsum 생성기</title>
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --primary-hover: #4f46e5;
+      --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: var(--text-main);
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 680px;
+      padding: 32px;
+      border-radius: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    }
+
+    header {
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .control-panel {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .slider-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    .char-count-badge {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .slider-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slider-wrapper span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 8px;
+      border-radius: 4px;
+      background: #cbd5e1;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      cursor: pointer;
+      transition: transform 0.1s ease, background-color 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      background: var(--primary-hover);
+    }
+
+    .output-section {
+      position: relative;
+    }
+
+    .output-box {
+      width: 100%;
+      height: 260px;
+      padding: 18px;
+      background-color: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .copy-btn:active {
+      transform: translateY(0);
+    }
+
+    /* 스크롤바 디자인 */
+    .output-box::-webkit-scrollbar {
+      width: 8px;
+    }
+    .output-box::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 4px;
+    }
+    .output-box::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>✨ Lorem Ipsum Generator</h1>
+      <p>슬라이더를 조절하여 원하는 길이의 로렘 입숨 문장을 생성하세요.</p>
+    </header>
+
+    <div class="control-panel">
+      <div class="slider-header">
+        <span class="slider-title">글자 수 설정</span>
+        <span class="char-count-badge" id="countBadge">150자</span>
+      </div>
+      <div class="slider-wrapper">
+        <span>10</span>
+        <input type="range" id="charSlider" min="10" max="5000" value="150">
+        <span>5000</span>
+      </div>
+    </div>
+
+    <div class="output-section">
+      <div class="output-box" id="outputText"></div>
+      <div class="button-group">
+        <button class="copy-btn" id="copyBtn">
+          <span>📋</span> 텍스트 복사하기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 기본 Lorem Ipsum 시드 데이터 (충분히 긴 원문 준비)
+    const baseLorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tiddunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tidunt sapien risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam erat volutpat. Urna dui convallis scelerisque donec pretium vulputate sapien nec sagittis. Proin libero nunc consequat interdum varius sit amet mattis vulputate. Neque vitae tempus quam pellentesque nec nam aliquam sem et. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor. Fusce id velit ut tortor pretium viverra suspendisse potenti nullam. Turpis cursus in hac habitasse platea dictumst quisque sagittis purus. Sed nisi lacus sed viverra tellus in hac habitasse. Sociis natoque penatibus et magnis dis parturient montes nascetur. Odio eu feugiat pretium nibh ipsum consequat nisl vel pretium. Gravida arcu ac tortor dignissim convallis aenean et tortor at. Interdum velit euismod in pellentesque massa placerat duis ultricies lacus. Viverra aliquet eget sit amet tellus cras adipiscing enim. Pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae. Odio euismod lacinia at quis risus sed vulputate. Convallis a cras semper auctor neque vitae tempus. Sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium. Non diam phasellus vestibulum lorem sed risus ultricies tristique nulla. Dictumst quisque sagittis purus sit amet volutpat consequat. Nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque. Enim blandit volutpat maecenas volutpat blandit aliquam etiam erat. Neque laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt.`;
+
+    // 5000자 이상 확보하기 위해 시드 텍스트 반복 생성
+    function getFullLoremSource() {
+      let result = baseLorem;
+      while (result.length < 5500) {
+        result += " " + baseLorem;
+      }
+      return result;
+    }
+
+    const fullSource = getFullLoremSource();
+
+    // DOM 요소
+    const slider = document.getElementById('charSlider');
+    const countBadge = document.getElementById('countBadge');
+    const outputText = document.getElementById('outputText');
+    const copyBtn = document.getElementById('copyBtn');
+
+    // 텍스트 업데이트 함수
+    function updateText(length) {
+      countBadge.textContent = `${length.toLocaleString()}자`;
+      outputText.textContent = fullSource.slice(0, length);
+    }
+
+    // 슬라이더 이벤트 (실시간 반응)
+    slider.addEventListener('input', (e) => {
+      updateText(e.target.value);
+    });
+
+    // 클립보드 복사 기능
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(outputText.textContent).then(() => {
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<span>✅</span> 복사 완료!';
+        copyBtn.style.backgroundColor = '#10b981';
+
+        setTimeout(() => {
+          copyBtn.innerHTML = originalText;
+          copyBtn.style.backgroundColor = '';
+        }, 1500);
+      }).catch(err => {
+        alert('복사에 실패했습니다.');
+      });
+    });
+
+    // 초기 화면 실행 (150자)
+    updateText(150);
+  </script>
+</body>
+</html>
