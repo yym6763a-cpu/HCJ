@@ -73,4 +73,3 @@
 ## 🔗 관련 링크
 
 * **Nanalab**: [https://nanalab.kr](https://nanalab.kr)
-* **Gifshot 라이브러리**: [Yahoo Gifshot GitHub](https://github.com/yahoo/gifshot)
