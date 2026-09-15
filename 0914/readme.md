@@ -1,41 +1,39 @@
 # 🌐 Web Utilities & Apps Collection
 
 16가지 유용한 웹 애플리케이션 및 유틸리티 모음집입니다.  
-아래 표의 **'🌐 바로가기'** 링크를 누르면 웹 브라우저에서 서비스가 즉시 실행됩니다.
+아래 표의 **'🚀 실행하기'** 링크를 누르면 해당 웹 앱이 바로 열립니다.
 
-- **공식 사이트**: [nanalab.kr](https://nanalab.kr)
+- **대표 웹사이트**: [nanalab.kr](https://nanalab.kr)
 
 ---
 
 ## 🚀 프로젝트 목록 및 서비스 바로가기 (Project List)
 
-> 💡 **Tip**: 링크를 클릭하면 브라우저에서 바로 웹 앱이 실행됩니다.
-
-| 번호 | 프로젝트명 | 🌐 바로가기 | 설명 |
+| 번호 | 프로젝트명 | 🌐 웹사이트 바로가기 | 설명 |
 | :---: | :--- | :---: | :--- |
-| 01 | **BMI 계산기** | [🚀 실행하기](https://<username>.github.io/<repo-name>/BMI%20계산기/BMI%20계산기.html) | 신장과 체중을 입력하여 BMI 및 건강 상태 계산 |
-| 02 | **GIF 동영상 생성기** | [🚀 실행하기](https://<username>.github.io/<repo-name>/GIF%20동영상%20생성기/GIFvideo.html) | 동영상 파일을 GIF 애니메이션으로 변환 |
-| 03 | **GIF 편집 스튜디오** | [🚀 실행하기](https://<username>.github.io/<repo-name>/GIF%20편집%20스튜디오/GIFeditor.html) | GIF 프레임 조절, 자르기 및 필터 적용 |
-| 04 | **Lorem Ipsum 생성기** | [🚀 실행하기](https://<username>.github.io/<repo-name>/Lorem%20Ipsum%20생성기/Lorem%20Ipsum.html) | 디자인 및 퍼블리싱용 더미 텍스트 즉시 생성 |
-| 05 | **PDF문서 합치기** | [🚀 실행하기](https://<username>.github.io/<repo-name>/PDF문서%20합치기/PDF문서%20합치기.html) | 여러 개의 PDF 파일을 하나로 통합 병합 |
-| 06 | **Smart QR코드** | [🚀 실행하기](https://<username>.github.io/<repo-name>/Smart%20QR코드/QR.html) | 커스텀 디자인 QR 코드 생성 및 다운로드 |
-| 07 | **글자 수 세기** | [🚀 실행하기](https://<username>.github.io/<repo-name>/글자%20수%20세기/글자%20수%20세기.html) | 실시간 글자 수(공백 포함/제외) 및 바이트 계산 |
-| 08 | **모바일청첩장** | [🚀 실행하기](https://<username>.github.io/<repo-name>/모바일청첩장/wedding.html) | 모바일 최적화 디지털 청첩장 및 일정 안내 |
-| 09 | **문서 용량 압축기** | [🚀 실행하기](https://<username>.github.io/<repo-name>/문서%20용량%20압축기/compression.html) | PDF/Word/PPT/이미지 파일 용량 최적화 |
-| 10 | **문서 족집게 요약** | [🚀 실행하기](https://<username>.github.io/<repo-name>/문서%20족집게%20요약/문서%20족집게%20요약.html) | 긴 문서의 핵심 요점 스마트 자동 요약 |
-| 11 | **문서 파일 통계 분석** | [🚀 실행하기](https://<username>.github.io/<repo-name>/문서%20파일%20통계%20분석/DocumnetAnalyzer.html) | 문서 내 단어 빈도 및 구조 실시간 분석 |
-| 12 | **복불복 캐논 추첨기** | [🚀 실행하기](https://<username>.github.io/<repo-name>/복불복%20캐논%20추첨기/복불복%20캐논%20추첨기.html) | 이펙트 연출이 포함된 무작위 당첨자 추첨기 |
-| 13 | **부재 중 알리미** | [🚀 실행하기](https://<username>.github.io/<repo-name>/부재%20중%20알리미/부재%20중%20알리미.html) | 부재 일정 및 안내 카드 페이지 자동 생성 |
-| 14 | **오늘의 운세** | [🚀 실행하기](https://<username>.github.io/<repo-name>/오늘의%20운세/오늘의%20운세.html) | 생년월일/원소 기반 일일 운세 확인 |
-| 15 | **오디오 파일 편집** | [🚀 실행하기](https://<username>.github.io/<repo-name>/오디오%20파일%20편집/오디오%20파일%20편집.html) | 웹 브라우저 내 음원 자르기 및 페이드 편집 |
-| 16 | **이미지 일괄 리사이즈** | [🚀 실행하기](https://<username>.github.io/<repo-name>/이미지%20일괄%20리사이즈/ImageResizing.html) | 다중 이미지 크기 및 비율 일괄 조절 |
+| 01 | **BMI 계산기** | [🚀 실행하기](./BMI%20계산기/BMI%20계산기.html) | 신장과 체중을 입력하여 BMI 및 건강 상태 계산 |
+| 02 | **GIF 동영상 생성기** | [🚀 실행하기](./GIF%20동영상%20생성기/GIFvideo.html) | 동영상 파일을 GIF 애니메이션으로 변환 |
+| 03 | **GIF 편집 스튜디오** | [🚀 실행하기](./GIF%20편집%20스튜디오/GIFeditor.html) | GIF 프레임 조절, 자르기 및 필터 적용 |
+| 04 | **Lorem Ipsum 생성기** | [🚀 실행하기](./Lorem%20Ipsum%20생성기/Lorem%20Ipsum.html) | 디자인 및 퍼블리싱용 더미 텍스트 즉시 생성 |
+| 05 | **PDF문서 합치기** | [🚀 실행하기](./PDF문서%20합치기/PDF문서%20합치기.html) | 여러 개의 PDF 파일을 하나로 통합 병합 |
+| 06 | **Smart QR코드** | [🚀 실행하기](./Smart%20QR코드/QR.html) | 커스텀 디자인 QR 코드 생성 및 다운로드 |
+| 07 | **글자 수 세기** | [🚀 실행하기](./글자%20수%20세기/글자%20수%20세기.html) | 실시간 글자 수(공백 포함/제외) 및 바이트 계산 |
+| 08 | **모바일청첩장** | [🚀 실행하기](./모바일청첩장/wedding.html) | 모바일 최적화 디지털 청첩장 및 일정 안내 |
+| 09 | **문서 용량 압축기** | [🚀 실행하기](./문서%20용량%20압축기/compression.html) | PDF/Word/PPT/이미지 파일 용량 최적화 |
+| 10 | **문서 족집게 요약** | [🚀 실행하기](./문서%20족집게%20요약/문서%20족집게%20요약.html) | 긴 문서의 핵심 요점 스마트 자동 요약 |
+| 11 | **문서 파일 통계 분석** | [🚀 실행하기](./문서%20파일%20통계%20분석/DocumnetAnalyzer.html) | 문서 내 단어 빈도 및 구조 실시간 분석 |
+| 12 | **복불복 캐논 추첨기** | [🚀 실행하기](./복불복%20캐논%20추첨기/복불복%20캐논%20추첨기.html) | 이펙트 연출이 포함된 무작위 당첨자 추첨기 |
+| 13 | **부재 중 알리미** | [🚀 실행하기](./부재%20중%20알리미/부재%20중%20알리미.html) | 부재 일정 및 안내 카드 페이지 자동 생성 |
+| 14 | **오늘의 운세** | [🚀 실행하기](./오늘의%20운세/오늘의%20운세.html) | 생년월일/원소 기반 일일 운세 확인 |
+| 15 | **오디오 파일 편집** | [🚀 실행하기](./오디오%20파일%20편집/오디오%20파일%20편집.html) | 웹 브라우저 내 음원 자르기 및 페이드 편집 |
+| 16 | **이미지 일괄 리사이즈** | [🚀 실행하기](./이미지%20일괄%20리사이즈/ImageResizing.html) | 다중 이미지 크기 및 비율 일괄 조절 |
 
 ---
 
 ## 🛠️ 기술 스택 (Tech Stack)
 
-- **Frontend**: HTML5, CSS3 (Tailwind CSS, Custom CSS), JavaScript (ES6+)
-- **Libraries & Tools**: `JSZip`, `PDF.js`, `jsPDF`, `Mammoth.js`, `FontAwesome`
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Libraries**: `JSZip`, `PDF.js`, `jsPDF`, `Mammoth.js`, `FontAwesome`
 
 ---
 
