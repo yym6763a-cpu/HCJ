@@ -2,8 +2,6 @@
 
 > 브라우저 상에서 빠르고 간편하게 여러 장의 사진 비율을 변경하고 자르거나 여백을 추가할 수 있는 웹 기반 사진 편집 툴입니다.
 
-![Smart Image Resizer Preview](https://via.placeholder.com/800x400/6366f1/ffffff?text=Smart+Image+Resizer+UI)
-
 ---
 
 ## ✨ 주요 기능 (Features)
@@ -33,14 +31,14 @@
 | 구분 | 기술 |
 | --- | --- |
 | **Frontend** | HTML5, CSS3, JavaScript (ES6+) |
-| **Graphic Library** | HTML5 Canvas API |
-| **Archive Library** | [JSZip v3.10.1](https://stuk.github.io/jszip/) (CDN) |
+| **Graphic Engine** | HTML5 Canvas API |
+| **Archive Library** | [JSZip v3.10.1](https://stuk.github.io/jszip/) |
 
 ---
 
 ## 🚀 시작하기 (Getting Started)
 
-별도의 개발 환경이나 서버 설치 없이 브라우저에서 바로 실행 가능합니다.
+별도의 개발 환경이나 서버 구축 없이 브라우저에서 바로 실행 가능합니다.
 
 ### 1. Repository 클론 또는 파일 다운로드
 ```bash
@@ -49,7 +47,7 @@ cd smart-image-resizer
 ```
 
 ### 2. 실행 방법
-`index.html` 파일을 크롬, 엣지, 웨일 등 임의의 웹 브라우저로 엽니다.
+`index.html` 파일을 크롬(Chrome), 엣지(Edge) 등 웹 브라우저로 엽니다.
 
 ```bash
 # MacOS
@@ -83,7 +81,7 @@ smart-image-resizer/
 
 ## 📄 라이선스 (License)
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ---
 
