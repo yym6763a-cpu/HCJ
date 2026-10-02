@@ -2,6 +2,8 @@
 
 > **부산 감성 여행 웹 가이드 (Vite + React + TypeScript)**  
 > 일본인 여행객을 위한 세련된 타이포그래피 기반의 부산 여행 가이드 프론트엔드 팀 프로젝트입니다.
+> https://busan-guide-info.netlify.app/
+
 
 ---
 
