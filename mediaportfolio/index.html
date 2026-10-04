@@ -615,6 +615,23 @@
       .modal-content { padding: 18px; max-height: 92vh; }
       .modal-img { max-height: 58vh !important; }
     }
+
+    /* ---- 모바일(iPhone Safari) 줄바꿈/가로 넘침 방지 ---- */
+    html { overflow-x: clip; -webkit-text-size-adjust: 100%; }
+    html[lang="ja"] body { word-break: normal; line-break: strict; }
+    html[lang="ko"] body { word-break: keep-all; }
+    body { overflow-wrap: anywhere; }
+    .profile-info, .profile-card > *, .hero .container > *, .card-top, .card-bottom { min-width: 0; max-width: 100%; }
+    .profile-info p, .hero-desc, .article-title, .article-snippet { overflow-wrap: anywhere; }
+    .hero h1 { text-wrap: balance; }
+    @media (max-width: 768px) {
+      .profile-card { align-items: stretch; }
+      .profile-avatar-container { margin: 0 auto; }
+      .profile-info { width: 100%; }
+      .profile-tags { justify-content: center; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .stat-card { padding: 16px 10px; }
+    }
   </style>
 </head>
 <body>
