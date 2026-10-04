@@ -632,6 +632,26 @@
       .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .stat-card { padding: 16px 10px; }
     }
+
+    /* ---- 메뉴 이동(스크롤) + 폰용 메뉴 바 ---- */
+    h1, h2, h3 { text-wrap: balance; }
+    html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+    .nav-links a.active { color: var(--accent); font-weight: 700; }
+    @media (max-width: 768px) {
+      html { scroll-padding-top: 118px; }
+      .nav-inner { height: auto; flex-wrap: wrap; padding-top: 10px; row-gap: 8px; }
+      .nav-right { display: contents; }
+      .logo { order: 1; }
+      .lang-switcher { order: 2; }
+      .nav-links {
+        display: flex; order: 3; width: 100%; gap: 8px; margin: 0; padding: 0 0 10px;
+        overflow-x: auto; position: relative; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+      }
+      .nav-links::-webkit-scrollbar { display: none; }
+      .nav-links li { flex: 0 0 auto; }
+      .nav-links a { display: block; padding: 7px 14px; border-radius: 999px; background: #f1f5f9; font-size: 0.85rem; white-space: nowrap; }
+      .nav-links a.active { background: var(--accent); color: #fff; }
+    }
   </style>
 </head>
 <body>
@@ -1253,6 +1273,30 @@ const PDF_DATA={"인디자인 이미지/3단 리플렛 2023813029예윤미.pdf":
 
     // Initial render (기본 언어: 일본어)
     setLanguage('ja');
+
+    // 메뉴: 현재 위치 표시 + 모바일 메뉴 바 자동 스크롤
+    (function () {
+      const ul = document.querySelector('.nav-links');
+      const links = Array.from(document.querySelectorAll('.nav-links a'));
+      const secs = links.map(a => document.querySelector(a.getAttribute('href')));
+      let last = -1;
+      function spy() {
+        const hdr = document.querySelector('header');
+        const y = window.scrollY + (hdr ? hdr.offsetHeight : 80) + 40;
+        let cur = 0;
+        secs.forEach((sec, i) => { if (sec && sec.getBoundingClientRect().top + window.scrollY <= y) cur = i; });
+        if (cur === last) return;
+        last = cur;
+        links.forEach((a, i) => a.classList.toggle('active', i === cur));
+        if (ul && ul.scrollWidth > ul.clientWidth) {
+          const a = links[cur];
+          ul.scrollTo({ left: a.offsetLeft - (ul.clientWidth - a.offsetWidth) / 2, behavior: 'smooth' });
+        }
+      }
+      window.addEventListener('scroll', spy, { passive: true });
+      window.addEventListener('resize', spy);
+      spy();
+    })();
   </script>
 </body>
 </html>
