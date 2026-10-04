@@ -1,4 +1,3 @@
-[README.md.txt](https://github.com/user-attachments/files/33024496/README.md.txt)
 # 🚀 Web Development Portfolio & Utilities Collection
 
 웹 개발 학습 과정부터 다양한 프론트엔드 포트폴리오 스타일, 여행 가이드, 그리고 웹 유틸리티 앱 컬렉션까지의 기록을 담은 저장소입니다.
