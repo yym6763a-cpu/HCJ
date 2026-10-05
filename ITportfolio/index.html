@@ -6,10 +6,10 @@
 <title>ポートフォリオ | イェ・ユンミ</title>
 <style>
   :root {
-    --bg: #FBF8F4; --paper: #FFFFFF; --line: #E9E2F3;
-    --ink: #4A4358; --ink-soft: #8A8296;
-    --lavender: #C9BFE8; --lavender-deep: #9B8FCB;
-    --mint: #BFE6D4; --peach: #F7D9C4; --sky: #BFDCEE; --pill-bg: #F1ECFA;
+    --bg: #FBF8F4; --paper: #FFFFFF; --line: #DCEBF5;
+    --ink: #3F4A5A; --ink-soft: #7C8A9A;
+    --lavender: #BFDCEE; --lavender-deep: #4A94C4;
+    --mint: #BFE6D4; --peach: #F7D9C4; --sky: #BFDCEE; --pill-bg: #EAF4FB;
   }
   * { box-sizing: border-box; }
   body {
@@ -19,7 +19,7 @@
   }
   .wrap {
     max-width: 1400px; margin: 0 auto; background: var(--paper);
-    border-radius: 28px; box-shadow: 0 20px 60px rgba(155,143,203,.15);
+    border-radius: 28px; box-shadow: 0 20px 60px rgba(74,148,196,.15);
     padding: 56px 60px; position: relative; overflow: hidden;
   }
   .wrap::before {
@@ -29,7 +29,7 @@
   .wrap > * { position: relative; }
   
   header { margin-bottom: 40px; }
-  .header-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
+  .header-top { display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 20px; }
   .eyebrow { font-size: 13px; letter-spacing: 3px; color: var(--lavender-deep); font-weight: 700; }
   h1 { font-size: 32px; margin: 6px 0 4px; }
   .sub { color: var(--ink-soft); font-size: 14.5px; margin: 0 0 12px 0; }
@@ -44,7 +44,7 @@
   .contact-info a:hover { background: var(--lavender); color: #fff; }
 
   .summary-badge {
-    background: linear-gradient(135deg, var(--lavender-deep), #8273bd); color: #fff;
+    background: linear-gradient(135deg, var(--lavender-deep), #3F86B8); color: #fff;
     padding: 14px 22px; border-radius: 18px; font-size: 13.5px; text-align: right; line-height: 1.6;
   }
   .summary-badge strong { font-size: 15px; display: block; margin-bottom: 2px; }
@@ -65,7 +65,7 @@
     border: 1.5px solid var(--line); border-radius: 20px; padding: 22px 24px; background: #fff;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
-  .project:hover, .tool:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(155, 143, 203, 0.2); }
+  .project:hover, .tool:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(74, 148, 196, 0.2); }
   .project h3 { margin: 0 0 4px; font-size: 17px; }
   .project .meta { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 14px; }
   
@@ -112,9 +112,43 @@
   
   [data-lang="ja"] .ko, [data-lang="ko"] .ja { display: none !important; }
 
-  .lang { position: fixed; top: 16px; right: 20px; z-index: 100; display: flex; gap: 4px; background: #fff; padding: 4px; border-radius: 999px; box-shadow: 0 4px 16px rgba(155,143,203,.25); }
+  .lang { position: fixed; top: 16px; right: 20px; z-index: 100; display: flex; gap: 4px; background: #fff; padding: 4px; border-radius: 999px; box-shadow: 0 4px 16px rgba(74,148,196,.25); }
   .lang button { border: 0; background: transparent; font: 700 13px inherit; color: var(--lavender-deep); padding: 6px 16px; border-radius: 999px; cursor: pointer; }
   .lang button.on { background: var(--lavender-deep); color: #fff; }
+  html { scroll-behavior: smooth; }
+  h2.section-title { scroll-margin-top: 24px; }
+  .header-nav { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; justify-self: center; margin-top: 6px; }
+  .header-nav a, .float-nav a {
+    font-size: 13.5px; font-weight: 700; text-decoration: none; color: var(--lavender-deep);
+    border: 1.5px solid var(--lavender); background: #fff; padding: 8px 18px; border-radius: 999px; cursor: pointer;
+    transition: all .2s ease; white-space: nowrap;
+  }
+  .header-nav a:hover, .float-nav a:hover { background: var(--lavender-deep); border-color: var(--lavender-deep); color: #fff; transform: translateY(-1px); }
+  .float-nav {
+    position: fixed; top: 14px; left: 50%; transform: translate(-50%, -80px); z-index: 50; display: flex; gap: 8px;
+    background: rgba(255,255,255,.94); padding: 6px; border-radius: 999px; box-shadow: 0 6px 20px rgba(74,148,196,.25);
+    opacity: 0; pointer-events: none; transition: all .3s ease;
+  }
+  .float-nav.show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+  .float-nav a { padding: 6px 14px; font-size: 13px; border-color: transparent; background: transparent; }
+  .float-nav a.top-link { background: var(--pill-bg); }
+  .to-top {
+    position: fixed; right: 18px; bottom: 18px; width: 46px; height: 46px; border-radius: 50%; border: 0; z-index: 50;
+    background: var(--lavender-deep); color: #fff; font-size: 20px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 6px 18px rgba(74,148,196,.35); opacity: 0; pointer-events: none; transition: all .3s ease;
+  }
+  .to-top.show { opacity: 1; pointer-events: auto; }
+  .to-top:hover { background: #3F86B8; }
+  @media (max-width: 900px) {
+    .header-top { grid-template-columns: 1fr auto; }
+    .header-nav { grid-column: 1 / -1; order: 3; justify-self: start; justify-content: flex-start; margin-top: 0; }
+    .float-nav { top: auto; bottom: 14px; left: 12px; right: 76px; transform: translateY(80px); overflow-x: auto; border-radius: 24px; }
+    .float-nav.show { transform: translateY(0); }
+  }
+  .header-top .contact-info { grid-column: 1 / -1; margin-top: 0; flex-wrap: nowrap; }
+  .header-top .contact-info a { white-space: nowrap; }
+  .header-nav a { padding: 8px 15px; }
+  @media (max-width: 900px) { .header-top .contact-info { order: 3; flex-wrap: wrap; } .header-nav { order: 4; } }
 </style>
 </head>
 <body data-lang="ja">
@@ -124,7 +158,7 @@
   <button id="bk" onclick="setLang('ko')">韓國語</button>
 </div>
 
-<div class="wrap">
+<div class="wrap" id="top">
   <header>
     <div class="header-top">
       <div>
@@ -134,6 +168,21 @@
           <span class="ja">K-Move 日本IT＆AIコース（2026年7月〜12月11日）｜HTML / CSS / JavaScript（約3ヶ月学習）</span>
           <span class="ko">K-Move 일본 IT & AI 과정 (2026년 7월~12월 11일)｜HTML / CSS / JavaScript (약 3개월 학습)</span>
         </p>
+      </div>
+
+      <nav class="header-nav">
+      <a href="#works" onclick="goTo('works');return false"><span class="ja">Works</span><span class="ko">주요 작품</span></a>
+      <a href="#tools" onclick="goTo('tools');return false"><span class="ja">Web Tools &amp; Apps</span><span class="ko">웹 툴 &amp; 앱</span></a>
+      <a href="#skills" onclick="goTo('skills');return false">Skills</a>
+      </nav>
+
+      <div class="summary-badge">
+        <strong>
+          <span class="ja">計22件</span>
+          <span class="ko">총 22개</span>
+        </strong>
+      </div>
+
         
         <div class="contact-info">
           <a href="mailto:yeyunmi9@gmail.com">✉️ yeyunmi9@gmail.com</a>
@@ -143,14 +192,6 @@
             <span class="ko">🔗 미디어커뮤니케이션 포트폴리오</span>
           </a>
         </div>
-      </div>
-
-      <div class="summary-badge">
-        <strong>
-          <span class="ja">計22件</span>
-          <span class="ko">총 22개</span>
-        </strong>
-      </div>
     </div>
 
     <div class="intro">
@@ -168,11 +209,15 @@
         <span class="ja">※ K-Moveで制作した作品はすべて、上のGitHubリンクにまとめています。</span>
         <span class="ko">※ K-Move에서 제작한 작품은 모두 위의 GitHub 링크에 정리되어 있습니다.</span>
       </div>
+      <div class="notice-text">
+        <span class="ja">※ メディアコミュニケーション ポートフォリオには、学科での活動と作品をすべてまとめています。</span>
+        <span class="ko">※ 미디어커뮤니케이션 포트폴리오에는 학과에서 한 활동과 작업물을 모두 정리해 두었습니다.</span>
+      </div>
     </div>
   </header>
 
   <!-- Works (6개) -->
-  <h2 class="section-title">
+  <h2 class="section-title" id="works">
     <span>
       <span class="ja">Works</span>
       <span class="ko">주요 작품</span>
@@ -339,7 +384,7 @@
   </div>
 
   <!-- Web Tools & Apps (16개) -->
-  <h2 class="section-title">
+  <h2 class="section-title" id="tools">
     <span>
       <span class="ja">Web Tools &amp; Apps</span>
       <span class="ko">웹 툴 &amp; 앱</span>
@@ -362,8 +407,8 @@
       </p>
       <span class="pill">JavaScript</span><span class="pill">Tailwind</span><br>
       <a class="demo-link" href="#" data-page="doc-analyzer">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -379,8 +424,8 @@
       </p>
       <span class="pill">JavaScript</span><span class="pill">pdf.js</span><br>
       <a class="demo-link" href="#" data-page="doc-summary">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -396,8 +441,8 @@
       </p>
       <span class="pill">JavaScript</span><span class="pill">pdf-lib</span><br>
       <a class="demo-link" href="#" data-page="pdf-merge">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -413,8 +458,8 @@
       </p>
       <span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span><br>
       <a class="demo-link" href="#" data-page="char-count">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -430,8 +475,8 @@
       </p>
       <span class="pill">JavaScript</span><span class="pill">JSZip</span><br>
       <a class="demo-link" href="#" data-page="image-resize">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -447,8 +492,8 @@
       </p>
       <span class="pill">JavaScript</span><span class="pill">Tailwind</span><br>
       <a class="demo-link" href="#" data-page="compress">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -464,8 +509,8 @@
       </p>
       <span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span><br>
       <a class="demo-link" href="#" data-page="gif-editor">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -481,8 +526,8 @@
       </p>
       <span class="pill">JavaScript</span><span class="pill">gifshot</span><br>
       <a class="demo-link" href="#" data-page="video-to-gif">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -498,8 +543,8 @@
       </p>
       <span class="pill">JavaScript</span><span class="pill">wavesurfer.js</span><br>
       <a class="demo-link" href="#" data-page="audio-editor">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -515,8 +560,8 @@
       </p>
       <span class="pill">JavaScript</span><span class="pill">QRCode.js</span><br>
       <a class="demo-link" href="#" data-page="qr">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -532,8 +577,8 @@
       </p>
       <span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span><br>
       <a class="demo-link" href="#" data-page="lorem">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -549,8 +594,8 @@
       </p>
       <span class="pill">JavaScript</span><span class="pill">Tailwind</span><br>
       <a class="demo-link" href="#" data-page="bmi">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -566,8 +611,8 @@
       </p>
       <span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span><br>
       <a class="demo-link" href="#" data-page="fortune">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -584,8 +629,8 @@
       </p>
       <span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span><br>
       <a class="demo-link" href="#" data-page="lottery">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -601,8 +646,8 @@
       </p>
       <span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span><br>
       <a class="demo-link" href="#" data-page="away">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
 
@@ -618,27 +663,37 @@
       </p>
       <span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span><br>
       <a class="demo-link" href="#" data-page="wedding">
-        <span class="ja">デモを見る →</span>
-        <span class="ko">데모 보기 →</span>
+        <span class="ja">サイトを見る →</span>
+        <span class="ko">사이트 보기 →</span>
       </a>
     </div>
   </div>
 
-  <h2 class="section-title">Skills</h2>
+  <h2 class="section-title" id="skills">Skills</h2>
   <div>
     <span class="pill outline">HTML</span>
     <span class="pill outline">CSS</span>
     <span class="pill outline">JavaScript</span>
     <span class="pill">Google Apps Script</span>
+    <span class="pill">API</span>
     <span class="pill">GitHub</span>
+    <span class="pill">VS Code</span>
     <span class="pill">
-      <span class="ja">AIツールなど</span>
-      <span class="ko">AI 툴 등</span>
+      <span class="ja">AIツールなど (ChatGPT, Claude, Gemini等によるVibe Coding)</span>
+      <span class="ko">AI 툴 등 (ChatGPT, Claude, Gemini 등을 활용한 바이브 코딩)</span>
     </span>
   </div>
 
   <footer>© 2026 Ye Yun-mi ｜ yeyunmi9@gmail.com ｜ github.com/yym6763a-cpu/HCJ</footer>
 </div>
+
+<nav class="float-nav" id="floatNav">
+  <a href="#works" onclick="goTo('works');return false"><span class="ja">Works</span><span class="ko">주요 작품</span></a>
+      <a href="#tools" onclick="goTo('tools');return false"><span class="ja">Web Tools &amp; Apps</span><span class="ko">웹 툴 &amp; 앱</span></a>
+      <a href="#skills" onclick="goTo('skills');return false">Skills</a>
+  <a href="#top" class="top-link" onclick="goTo('top');return false"><span class="ja">↑ トップへ</span><span class="ko">↑ 맨 위로</span></a>
+</nav>
+<button class="to-top" id="toTop" type="button" onclick="goTo('top')" aria-label="Top">↑</button>
 
 <script>
 function setLang(l){
@@ -662,6 +717,12 @@ function toDataURL(u){
   });
   return IMGCACHE[u];
 }
+function withBackBtn(html,lang){
+  var T={ja:'\u2190 \u30dd\u30fc\u30c8\u30d5\u30a9\u30ea\u30aa\u306b\u623b\u308b',ko:'\u2190 \ud3ec\ud2b8\ud3f4\ub9ac\uc624\ub85c \ub3cc\uc544\uac00\uae30'};
+  var btn='<button id="pf-back" type="button" onclick="try{window.opener&&window.opener.focus()}catch(e){}window.close();setTimeout(function(){if(history.length>1)history.back()},250)" style="all:initial;position:fixed;left:16px;bottom:16px;z-index:2147483647;background:#4A94C4;color:#fff;font:700 14px/1 -apple-system,\'Noto Sans JP\',\'Noto Sans KR\',sans-serif;padding:12px 18px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;display:block">'+(T[lang]||T.ja)+'</button>';
+  var i=html.lastIndexOf('</body>');
+  return i<0?html+btn:html.slice(0,i)+btn+html.slice(i);
+}
 async function inlineImages(html){
   var urls=Array.from(new Set(html.match(/https:\/\/(?:images\.unsplash\.com|api\.qrserver\.com)\/[^"'()\s<>]+/g)||[]));
   if(!urls.length)return html;
@@ -671,7 +732,7 @@ async function inlineImages(html){
 }
 function openOverlay(html){
   var o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:9999;background:#fff;display:flex;flex-direction:column';
-  var bar=document.createElement('div');bar.style.cssText='padding:8px 12px;background:#9B8FCB;display:flex;justify-content:flex-end';
+  var bar=document.createElement('div');bar.style.cssText='padding:8px 12px;background:#4A94C4;display:flex;justify-content:flex-end';
   var x=document.createElement('button');x.textContent='\u2715 Close / \u9589\u3058\u308b / \ub2eb\uae30';x.style.cssText='border:0;border-radius:999px;padding:6px 14px;font-weight:700;cursor:pointer';x.onclick=function(){o.remove()};
   bar.appendChild(x);var f=document.createElement('iframe');f.style.cssText='flex:1;border:0;width:100%';f.srcdoc=html;o.appendChild(bar);o.appendChild(f);document.body.appendChild(o);
 }
@@ -682,12 +743,19 @@ document.addEventListener('click',async function(e){
   if(w){try{w.document.write('<p style="font:16px sans-serif;padding:24px">Loading\u2026</p>');}catch(err){}}
   var html=await inlineImages(pageHTML(k));
   if(w){
-    try{w.location.href=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));return;}
-    catch(err){try{w.document.open();w.document.write(html);w.document.close();return;}catch(e2){}}
+    var h2=withBackBtn(html,document.body.dataset.lang);
+    try{w.location.href=URL.createObjectURL(new Blob([h2],{type:'text/html;charset=utf-8'}));return;}
+    catch(err){try{w.document.open();w.document.write(h2);w.document.close();return;}catch(e2){}}
   }
   openOverlay(html);
 });
 
+</script>
+<script>
+function goTo(id){if(id==='top'){window.scrollTo({top:0,behavior:'smooth'});return;}var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+(function(){var f=document.getElementById('floatNav'),t=document.getElementById('toTop');
+function u(){var on=window.scrollY>360;f.classList.toggle('show',on);t.classList.toggle('show',on);}
+window.addEventListener('scroll',u,{passive:true});u();})();
 </script>
 </body>
 </html>
